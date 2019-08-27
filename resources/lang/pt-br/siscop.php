@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'solicitations.title' => 'Cadastrar ocorrência',
+    'solicitations.fields.phone' => 'Telefone',
+    'solicitations.fields.name' => 'Nome do solicitante',
+    'solicitations.fields.address' => 'Endereço',
+    'solicitations.fields.number' => 'Nº',
+    'solicitations.fields.corner' => 'Esquina com',
+    'solicitations.fields.description' => 'Descrição inicial',
+    'solicitations.fields.time' => "Tempo do ato",
+    'solicitations.fields.suspect' => "Agressor/Suspeito",
+    'solicitations.fields.risks' => "Riscos",
+    'solicitations.fields.victms' => "Total de vítimas",
+    'solicitations.fields.info' => "Informações diversas",
+    'solicitations.fields.city' => 'Município',
+    'solicitations.fields.neighborhood' => 'Bairro',
+    'solicitations.fields.reference' => 'Ponto de referência / Complemento',
+    'solicitations.fields.crime' => 'Possível natureza',
+    'solicitations.fields.map' => 'Mapa',
+    'solicitations.fields.unit' => 'Unidade a ser despachada',
+    'solicitations.fields.document' => 'BOU Nº',
+    'solicitations.fields.insert' => 'Registrar e concluir',
+    'solicitations.fields.complement' => 'Registrar e complementar',
+    'solicitations.fields.classify' => 'Classificar como chamada diversa',
+];

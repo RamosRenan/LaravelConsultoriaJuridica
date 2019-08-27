@@ -1,0 +1,82 @@
+@extends('layouts.app')
+
+@section('content_header')
+    <h1><i class="fa fa-shopping-cart"></i> @lang('global.dentist.supplies_stock.title') <small>@lang('global.app_list')</small></h1>
+@stop
+
+@section('js') 
+    <script>
+        var route = '{{ route('dentist.stock.mass_destroy') }}';
+        var msg   = '{{ trans("global.app_are_you_sure") }}';
+    </script>
+@stop
+
+@section('content')
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-8">
+                    <p>
+                        <a href="{{ route('dentist.stock.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> @lang('global.app_create')</a>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    {!! Form::open(['style' => 'display: inline-block;', 'method' => 'GET', 'route' => ['dentist.stock.index']]) !!}
+                    <div class="input-group pull-right">
+                        {!! Form::text('search', $search, ['class' => 'form-control', 'placeholder' => __('global.app_search'), 'required' => '']) !!}
+                        <span class="input-group-btn">
+                        {!! Form::button('<i class="fa fa-search"></i>', array('type' => 'submit', 'class' => 'btn btn-info btn-flat')) !!}
+                        </span>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table table-bordered table-striped dt-select">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
+                        <th>@lang('global.dentist.supplies.fields.unit')</th>
+                        <th>@lang('global.dentist.supplies.fields.name')</th>
+                        <th>@lang('global.dentist.supplies.fields.last_date')</th>
+                        <th>@lang('global.dentist.supplies.fields.quantity')</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    @if (count($items) > 0)
+                        @foreach ($items as $item)
+                            <tr data-entry-id="{{ $item->id }}">
+                                <td style="text-align:center;"><input type="checkbox" name="ids[]" value="{{ $item->id }}" /></td>
+                                <td>{{ $item->unit }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td>{{ $item->date }}</td>
+                                <td>{{ $item->quantity }}</td>
+                                <td>
+                                    <a href="{{ route('dentist.stock.edit',[$item->unit_id.','.$item->id]) }}" class="btn btn-xs btn-warning"><i class="fa fa-eye"></i> @lang('global.app_show')</a>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                            <tr>
+                                <td colspan="9">
+                                    <p>
+                                        <button class="btn btn-danger massDelete"><i class="fa fa-trash"></i> @lang('global.app_delete_selected')</button>
+                                    </p>
+                                </td>
+                            </tr>
+                    @else
+                            <tr>
+                                <td colspan="9"><p class='text-center'>@lang('global.app_no_entries_in_table')</p></td>
+                            </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer text-center">
+            {!! $items->links() !!}
+        </div>
+    </div>
+@endsection

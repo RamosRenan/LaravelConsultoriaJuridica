@@ -1,0 +1,36 @@
+<?php
+
+return [
+    'title' => 'Editor de menus',
+    'principal' => 'Principal',
+    'add_menu' => 'Inserir menu',
+    'add_menu_item' => 'Inserir item do menu',
+    'edit_menu' => 'Editar menu',
+    'edit_menu_item' => 'Editar item do menu',
+    'edit_menu_items' => 'Editar itens do menu',
+    'sort_menu' => 'Ordenar itens do menu',
+    'fields.name' => 'Título do menu',
+    'fields.call' => 'Nome de chamada do menu',
+    'fields.parent' => 'Menu a que este item será vinculado',
+    'fields.title' => 'Nome de exibição do item',
+    'fields.permission' => 'Permissão',
+    'fields.url' => 'URL',
+    'fields.route' => 'Rota',
+    'fields.icon' => 'Ícone',
+    'fields.color' => 'Cor',
+    'msg.store' => 'Menu adicionado com sucesso.',
+    'msg.storemenuitem' => 'Item do menu adicionado com sucesso.',
+    'msg.update' => 'Menu editado com sucesso.',
+    'msg.updatemenuitem' => 'Item do menu editado com sucesso.',
+    'msg.destroy' => 'Menu excluído com sucesso.',
+    'msg.destroymenuitem' => 'Item do menu excluído com sucesso.',
+    'msg.mass_destroy' => 'Menu(s) excluído(s) com sucesso.',
+    'msg.select_to_mass_destroy' => 'Selecione os menus que deseja apagar',
+    'msg.has_childs' => 'Esse item do menu possui hierarquia. Remova seus subitens para que seja possível excluí-lo.',
+    'msg.invalid_route' => 'A rota informada não pode ser utilizada no menu.',
+    'msg.inexistent_route' => 'A rota informada não existe.',
+/*
+    'msg.mass_destroy' => 'Item(s) do menu excluído(s) com sucesso.',
+    'msg.select_to_mass_destroy' => 'Selecione os itens do menu que deseja apagar',
+*/
+];
