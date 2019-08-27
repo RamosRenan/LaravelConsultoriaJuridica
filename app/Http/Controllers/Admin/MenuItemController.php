@@ -45,6 +45,8 @@ class MenuItemController extends Controller
             ->get()
             ->pluck('title', 'id');
 
+        $menuParent = collect([0 => __('menu.principal')] + $menuParent->all());
+
         $routeNames = Route::getRoutes();
         $routeNames = $routeNames->getRoutesByName();
 
