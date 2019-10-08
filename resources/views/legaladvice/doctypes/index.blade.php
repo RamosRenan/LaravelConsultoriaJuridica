@@ -23,6 +23,23 @@
                 }
             });
         });
+
+        $( "table tbody" ).sortable({
+            opacity: 0.4, 
+            cursor: 'move',
+            connectWith: ".item-order",
+            handle: '.order-handle',
+            update: function( event, ui ) {
+                $.ajax({
+                    url: '{{ route("legaladvice.doctypes.order") }}',
+                    type: 'get',
+                    data: 'q='+$(this).sortable('toArray').toString(),
+                    traditional: true,
+                    success: function (data) {
+                    },
+                });
+            }
+        }).disableSelection();
     });
 
     var route = '{{ route('legaladvice.doctypes.mass_destroy') }}';
@@ -67,26 +84,29 @@
                 </thead>
                 <tbody>
                 @foreach ($items as $item)
-                <tr data-entry-id="{{ $item->id }}">
-                    <td class="align-middle text-center">
-                        <div class="checkbox icheck-primary">
-                            {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }}
-                            {{ Form::label('selectId'.$item->id, '&nbsp;') }}
-                        </div>
-                    </td>
-                    <td class="align-middle">{{ $item->name }}</td>
-                    <td class="align-middle text-right">
-                        {{ Form::open(array(
-                            'id' => 'deleteItem'.$item->id,
-                            'method' => 'DELETE',
-                            'route' => ['legaladvice.doctypes.destroy', $item->id])) }}
-                        {{ Form::close() }}
-                        <div class="btn-group">
-                            <a href="{{ route('legaladvice.doctypes.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
-                            {{ Form::button('<i class="fa fa-trash"></i> ' . __('global.app_delete'), ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
-                        </div>
-                    </td>
-                </tr>
+                    <tr id="{{ $item->id }}" data-entry-id="{{ $item->id }}" class="item-order">
+                        <td class="align-middle text-center">
+                            <div class="checkbox icheck-primary">
+                                {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }}
+                                {{ Form::label('selectId'.$item->id, '&nbsp;') }}
+                            </div>
+                        </td>
+                        <td class="align-middle">{{ $item->name }}</td>
+                        <td class="align-middle">
+                        </td>
+                        <td class="align-middle text-right">
+                            {{ Form::open(array(
+                                'id' => 'deleteItem'.$item->id,
+                                'method' => 'DELETE',
+                                'route' => ['legaladvice.doctypes.destroy', $item->id])) }}
+                            {{ Form::close() }}
+                            <a href="#" class="btn btn-sm btn-secondary order-handle"><i class="fa fa-arrows-alt"></i></a>
+                            <div class="btn-group">
+                                <a href="{{ route('legaladvice.doctypes.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
+                                {{ Form::button('<i class="fa fa-trash"></i> ' . __('global.app_delete'), ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
+                            </div>
+                        </td>
+                    </tr>
                 @endforeach
                 </tbody>
             </table>

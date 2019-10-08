@@ -29,6 +29,23 @@ class PlacesController extends Controller
     }
 
     /**
+     * Update items order.
+     *
+     * @param  \App\Http\Requests\Order  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function order(Request $request)
+    {
+        $order = collect(explode(',', $request['q']));
+        $order = $order->each(function ($id, $order) {
+            $item = Place::find($id);
+            $item->order = $order;
+            $item->save();
+        });
+    }
+
+    /**
      * Show the form for creating new Unit.
      *
      * @return \Illuminate\Http\Response
