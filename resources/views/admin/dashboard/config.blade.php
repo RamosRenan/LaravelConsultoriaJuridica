@@ -68,7 +68,7 @@
         <div class="card-body">
             <div class="col-md-12">
             @if (count($authorizedWidgets) > 0)
-                <h4 class="text-center">@lang('dashboard.msg.authorized_widgets')<h4>
+                <h4 class="text-center">@lang('dashboard.msg.authorized_widgets')</h4>
                 <ul id="sortable">
                     @foreach ($authorizedWidgets as $item)
                     <li id="{{$item->id}}" style="width: {{100 * $item->grid / 12}}%">
@@ -84,7 +84,7 @@
                             {{ Form::close() }}
                             <b>{{$item->name}}</b><br />
                             {{$item->title}}
-                        <div>
+                        </div>
                     </li>
                     @endforeach
                 </ul>
@@ -92,7 +92,7 @@
             </div>
             <div class="col-md-12">
                 @if (count($unauthorizedWidgets) > 0)
-                <h4 class="text-center">@lang('dashboard.msg.unauthorized_widgets')<h4>
+                <h4 class="text-center">@lang('dashboard.msg.unauthorized_widgets')</h4>
                 <ul id="notsortable">
                     @foreach ($unauthorizedWidgets as $item)
                     <li class="btn btn-warning btn-block align-middle">
