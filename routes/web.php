@@ -111,8 +111,17 @@ Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'dentist
 });
 
 Route::group(['middleware' => ['auth', 'auth.unique.user', 'check.permissions'], 'prefix' => 'legaladvice', 'as' => 'legaladvice.'], function () {
-    Route::resource('doctypes', 'LegalAdvice\DoctypesController');
-    Route::post('doctypes_mass_destroy', ['uses' => 'LegalAdvice\DoctypesController@massDestroy', 'as' => 'doctypes.mass_destroy']);
+    Route::resource('doctypes', 'LegalAdvice\DocumentsController');
+    Route::post('doctypes_mass_destroy', ['uses' => 'LegalAdvice\DocumentsController@massDestroy', 'as' => 'doctypes.mass_destroy']);
+    
+    Route::resource('priorities', 'LegalAdvice\PrioritiesController');
+    Route::post('priorities_mass_destroy', ['uses' => 'LegalAdvice\PrioritiesController@massDestroy', 'as' => 'priorities.mass_destroy']);
+    
+    Route::resource('statuses', 'LegalAdvice\StatusesController');
+    Route::post('statuses_mass_destroy', ['uses' => 'LegalAdvice\StatusesController@massDestroy', 'as' => 'statuses.mass_destroy']);
+    
+    Route::resource('places', 'LegalAdvice\PlacesController');
+    Route::post('places_mass_destroy', ['uses' => 'LegalAdvice\PlacesController@massDestroy', 'as' => 'places.mass_destroy']);
     
     Route::resource('registries', 'LegalAdvice\RegistryController');
     Route::get('registries_search', ['uses' => 'LegalAdvice\RegistryController@search', 'as' => 'registries.search']);

@@ -40,7 +40,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="float-sm-right">
+                        @can('@@ superadmin @@')
                         {{ Form::open(['method' => 'GET', 'route' => ['admin.users.index']]) }}
+                        @endcan
+                        @can('@@ admin @@')
+                        {{ Form::open(['method' => 'GET', 'route' => ['manager.users.index']]) }}
+                        @endcan
                         <div class="input-group input-group-sm">
                             {{ Form::text('search', $search, ['class' => 'form-control', 'placeholder' => __('global.app_search')]) }}
                             <span class="input-group-append">

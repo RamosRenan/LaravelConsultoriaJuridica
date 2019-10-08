@@ -88,14 +88,25 @@
                         <span class="text-danger">{{ $errors->first('status') }}</span>
                     @endif
                 </div>
-                <div class="col-md-2 form-group">
+                <div class="col-md-3 form-group">
                     {{ Form::label('priority', __('legaladvice.registries.fields.priority').'*', ['class' => 'control-label']) }}
                     {{ Form::select('priority', $priorities, old('priority'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('priority'))
-                        <span class="text-danger">{{ $errors->first('priority') }}</span>
+                        <div class="form-group has-error">
+                            <span class="help-block">{{ $errors->first('priority') }}</span>
+                        </div>
                     @endif
                 </div>
-                <div class="col-md-8 form-group">
+                <div class="col-md-2 form-group">
+                    {{ Form::label('place', __('legaladvice.registries.fields.place'), ['class' => 'control-label']) }}
+                    {{ Form::select('place', $places, old('place'), ['class' => 'form-control', 'placeholder' => '']) }}
+                    @if($errors->has('place'))
+                        <div class="form-group has-error">
+                            <span class="help-block">{{ $errors->first('place') }}</span>
+                        </div>
+                    @endif
+                </div>
+                <div class="col-md-5 form-group">
                     {{ Form::label('interested', __('legaladvice.registries.fields.interested').'*', ['class' => 'control-label']) }}
                     {{ Form::text('interested', old('interested'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('interested'))

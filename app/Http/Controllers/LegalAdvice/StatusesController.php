@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\LegalAdvice;
 
-use App\Models\LegalAdvice\Doctype;
+use App\Models\LegalAdvice\Status;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class DoctypesController extends Controller
+class StatusesController extends Controller
 {
     public function __construct() {
         $this->middleware('check.permissions');
@@ -22,10 +22,10 @@ class DoctypesController extends Controller
     {
         $search = $request->query('search');
 
-        $items = Doctype::where('name', 'ilike', '%'.$search.'%')
-            ->orderby('name', 'asc')->paginate(50);
+        $items = Status::where('name', 'ilike', '%'.$search.'%')
+            ->orderby('order', 'asc')->paginate(50);
 
-        return view('legaladvice.doctypes.index', compact('items', 'search'));
+        return view('legaladvice.statuses.index', compact('items', 'search'));
     }
 
     /**
@@ -35,7 +35,7 @@ class DoctypesController extends Controller
      */
     public function create()
     {
-        return view('legaladvice.doctypes.create');
+        return view('legaladvice.statuses.create');
     }
 
     /**
@@ -46,14 +46,14 @@ class DoctypesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'=>'required|unique:legaladvice.doctypes|max:120',
+            'name'=>'required|unique:legaladvice.statuses|max:120',
         ], [], [
-            'name' => __('legaladvice.doctypes.fields.name'),
+            'name' => __('legaladvice.statuses.fields.name'),
         ]);
 
-        Doctype::create($request->all());
+        Status::create($request->all());
 
-        return redirect()->route('legaladvice.doctypes.index')->with('success', __('global.app_msg_store_success'));
+        return redirect()->route('legaladvice.statuses.index')->with('success', __('global.app_msg_store_success'));
     }
 
     /**
@@ -64,9 +64,9 @@ class DoctypesController extends Controller
      */
     public function edit($id)
     {
-        $item = Doctype::findOrFail($id);
+        $item = Status::findOrFail($id);
 
-        return view('legaladvice.doctypes.edit', compact('id', 'item'));
+        return view('legaladvice.statuses.edit', compact('id', 'item'));
     }
 
     /**
@@ -78,15 +78,15 @@ class DoctypesController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name'=>'required|unique:legaladvice.doctypes,name,'.$id.'|max:120',
+            'name'=>'required|unique:legaladvice.statuses,name,'.$id.'|max:120',
         ], [], [
-            'name' => __('legaladvice.doctypes.fields.name'),
+            'name' => __('legaladvice.statuses.fields.name'),
         ]);
 
-        $item = Doctype::findOrFail($id);
+        $item = Status::findOrFail($id);
         $item->update($request->all());
 
-        return redirect()->route('legaladvice.doctypes.index')->with('success', __('global.app_msg_update_success'));
+        return redirect()->route('legaladvice.statuses.index')->with('success', __('global.app_msg_update_success'));
     }
 
 
@@ -98,10 +98,10 @@ class DoctypesController extends Controller
      */
     public function destroy($id)
     {
-        $item = Doctype::findOrFail($id);
+        $item = Status::findOrFail($id);
         $item->delete();
 
-        return redirect()->route('legaladvice.doctypes.index')->with('success', __('global.app_msg_destroy_success'));
+        return redirect()->route('legaladvice.statuses.index')->with('success', __('global.app_msg_destroy_success'));
     }
 
     /**
@@ -112,14 +112,14 @@ class DoctypesController extends Controller
     public function massDestroy(Request $request)
     {
         if ($request->input('ids')) {
-            $entries = Doctype::whereIn('id', $request->input('ids'))->get();
+            $entries = Status::whereIn('id', $request->input('ids'))->get();
 
             foreach ($entries as $entry) {
                 $entry->delete();
             }
-            return redirect()->route('legaladvice.doctypes.index')->with('success', __('global.app_msg_mass_destroy_success'));
+            return redirect()->route('legaladvice.statuses.index')->with('success', __('global.app_msg_mass_destroy_success'));
         } else {
-            return redirect()->route('legaladvice.doctypes.index')->with('error', __('global.app_msg_mass_destroy_error'));
+            return redirect()->route('legaladvice.statuses.index')->with('error', __('global.app_msg_mass_destroy_error'));
         }
     }
 }
