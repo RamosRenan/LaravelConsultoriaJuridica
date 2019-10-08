@@ -76,8 +76,8 @@
     </div>
     <div class="row">
         <div class="col-md-12 form-group">
-            {!! Form::label('files', __('legaladvice.registries.fields.files').'*', ['class' => 'control-label']) !!}<br />
-            {!! Form::select('files', $files, old('files'), ['style' => 'width: 100%;', 'class' => 'form-control select2', 'required' => '', 'multiple' => '']) !!}
+            {!! Form::label('files', __('legaladvice.registries.fields.files'), ['class' => 'control-label']) !!}<br />
+            {!! Form::select('files', $files, old('files'), ['style' => 'width: 100%;', 'class' => 'form-control select2', 'multiple' => '']) !!}
             @if($errors->has('files'))
                 <div class="form-group has-error">
                     <span class="help-block">{{ $errors->first('files') }}</span>

@@ -68,7 +68,6 @@ class ProcedureController extends Controller
             'document_number' => 'required',
             'source' => 'required',
             'date' => 'date',
-            'files' => 'required',
             'subject' => 'required',
         ];
 
@@ -88,7 +87,7 @@ class ProcedureController extends Controller
         }
 
         $form = $request->all();
-        $form['files'] = collect($form['files'])->toJson();
+        @$form['files'] = collect(@$form['files'])->toJson();
 
         Procedure::create( $form );
 
@@ -136,7 +135,6 @@ class ProcedureController extends Controller
             'document_number' => 'required',
             'source' => 'required',
             'date' => 'date',
-            'files' => 'required',
             'subject' => 'required',
         ];
 
@@ -158,7 +156,7 @@ class ProcedureController extends Controller
         $item = Procedure::findOrFail($id);
 
         $form = $request->all();
-        $form['files'] = collect($form['files'])->toJson();
+        @$form['files'] = collect(@$form['files'])->toJson();
 
         $item->update( $form );
 

@@ -20,7 +20,7 @@
                 <td class="align-middle">{{ $item->source }}</td>
                 <td class="align-middle">{{ $item->subject }}</td>
                 <td class="align-middle">
-                    @if ($item->files)
+                    @if ($item->files <> '[]')
                     @foreach ($item->files as $file)
                     <a href="{{ asset($file->filename) }}"><span class="badge badge-warning">{{ $file->title }}</span></a>
                     @endforeach
