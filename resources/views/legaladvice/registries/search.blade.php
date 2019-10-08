@@ -51,7 +51,11 @@
                         {{ Form::label('priority', __('legaladvice.registries.fields.priority'), ['class' => 'control-label']) }}<br />
                         {{ Form::select('priority[]', $priorities, old('priority'), ['style' => 'width: 100%', 'class' => 'form-control select2', 'multiple' => '']) }}
                     </div>
-                    <div class="col-md-7 form-group">
+                    <div class="col-md-2 form-group">
+                        {{ Form::label('place', __('legaladvice.registries.fields.place'), ['class' => 'control-label']) }}<br />
+                        {{ Form::select('place[]', $places, old('place'), ['style' => 'width: 100%', 'class' => 'form-control select2', 'multiple' => '']) }}
+                    </div>
+                    <div class="col-md-5 form-group">
                         {{ Form::label('interested', __('legaladvice.registries.fields.interested'), ['class' => 'control-label']) }}
                         {{ Form::text('interested', old('interested'), ['class' => 'form-control', 'placeholder' => '']) }}
                     </div>

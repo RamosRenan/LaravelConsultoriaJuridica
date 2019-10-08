@@ -16,32 +16,38 @@ class CreateLegaladviceTable extends Migration
         Schema::connection('legaladvice')->create('doctypes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('order');
             $table->timestamps();
         });
 
         DB::connection('legaladvice')->table('doctypes')->insert([
             [
                 'name' => 'Ofício',
+                'order' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'name' => 'Parte',
+                'order' => 2,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'name' => 'Despacho',
+                'order' => 3,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'name' => 'Informação',
+                'order' => 4,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'name' => 'Solução de requerimento',
+                'order' => 5,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
@@ -70,6 +76,12 @@ class CreateLegaladviceTable extends Migration
             [
                 'name' => 'Administrativo',
                 'order' => 3,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Ordem judicial com multa impetrada',
+                'order' => 4,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
@@ -107,8 +119,42 @@ class CreateLegaladviceTable extends Migration
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
+            [
+                'name' => 'Outros',
+                'order' => 5,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
         ]);
 
+        Schema::connection('legaladvice')->create('places', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('order');
+            $table->timestamps();
+        });
+
+        DB::connection('legaladvice')->table('places')->insert([
+            [
+                'name' => 'Entrada na CJ',
+                'order' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Arquivo',
+                'order' => 2,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Saída para ...',
+                'order' => 3,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+        ]);
+        
         Schema::connection('legaladvice')->create('registries', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('protocol');
@@ -120,6 +166,8 @@ class CreateLegaladviceTable extends Migration
             $table->foreign('status')->references('id')->on('doctypes')->onDelete('cascade');
             $table->integer('priority')->unsigned();
             $table->foreign('priority')->references('id')->on('priorities')->onDelete('cascade');
+            $table->integer('place')->unsigned()->nullable();
+            $table->foreign('place')->references('id')->on('places')->onDelete('cascade');
             $table->string('interested');
             $table->date('date_in');
             $table->date('deadline');
@@ -173,24 +221,24 @@ class CreateLegaladviceTable extends Migration
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'title'      => 'Tipos de documento',
-                'menu_id'    => $menuId,
-                'parent_id'  => $submenuId,
-                'icon'       => 'file',
-                'permission' => 'legaladvice.doctypes.index',
-                'route'      => 'legaladvice.doctypes.index',
-                'order'      => 0,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-            [
                 'title'      => 'Consulta',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
                 'icon'       => 'search',
                 'permission' => 'legaladvice.registries.search',
                 'route'      => 'legaladvice.registries.search',
-                'order'      => 0,
+                'order'      => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'title'      => 'Tipos de documento',
+                'menu_id'    => $menuId,
+                'parent_id'  => $submenuId,
+                'icon'       => 'file',
+                'permission' => 'legaladvice.doctypes.index',
+                'route'      => 'legaladvice.doctypes.index',
+                'order'      => 2,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
@@ -206,6 +254,7 @@ class CreateLegaladviceTable extends Migration
     {
         Schema::connection('legaladvice')->dropIfExists('procedures');
         Schema::connection('legaladvice')->dropIfExists('registries');
+        Schema::connection('legaladvice')->dropIfExists('places');
         Schema::connection('legaladvice')->dropIfExists('statuses');
         Schema::connection('legaladvice')->dropIfExists('priorities');
         Schema::connection('legaladvice')->dropIfExists('doctypes');

@@ -5,6 +5,7 @@ use App\Models\LegalAdvice\Doctype;
 use App\Models\LegalAdvice\Procedure;
 use App\Models\LegalAdvice\Status;
 use App\Models\LegalAdvice\Priority;
+use App\Models\LegalAdvice\Place;
 use App\Models\LegalAdvice\Registry;
 use App\Models\Admin\FileManager;
 
@@ -73,6 +74,7 @@ class RegistryController extends Controller {
                     if (@$this->request['document_number'] <> null ) $query->where('document_number', 'ilike', '%'.$this->request['document_number'].'%');
                     if (@$this->request['source'] <> null ) $query->where('source', 'ilike', '%'.$this->request['source'].'%');
                     if (@$this->request['status'] <> null ) $query->whereIn('status', $this->request['status']);
+                    if (@$this->request['place'] <> null ) $query->whereIn('place', $this->request['place']);
                     if (@$this->request['priority'] <> null ) $query->whereIn('priority', $this->request['priority']);
                     if (@$this->request['interested'] <> null ) $query->where('interested', 'ilike', '%'.$this->request['interested'].'%');
                     if (@$this->request['date_in'] <> null ) $query->where('date_in', $this->request['date_in_condition'], '%'.$this->request['date_in'].'%');
@@ -95,11 +97,12 @@ class RegistryController extends Controller {
             $items = [];
         }
 
-        $doctypes = Doctype::orderBy('name')->get()->pluck('name', 'id');
+        $doctypes = Doctype::orderBy('order')->get()->pluck('name', 'id');
         $statuses = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $priorities = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $places = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
 
-        return view('legaladvice.registries.search', compact('form', 'items', 'conditions', 'doctypes', 'statuses', 'priorities'));
+        return view('legaladvice.registries.search', compact('form', 'items', 'conditions', 'doctypes', 'statuses', 'priorities', 'places'));
     }
 
     /**
@@ -108,11 +111,12 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $doctypes = Doctype::orderBy('name')->get()->pluck('name', 'id');
+        $doctypes = Doctype::orderBy('order')->get()->pluck('name', 'id');
         $statuses = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $priorities = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $places = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
 
-        return view('legaladvice.registries.create', compact('doctypes', 'statuses', 'priorities'));
+        return view('legaladvice.registries.create', compact('doctypes', 'statuses', 'priorities', 'places'));
     }
 
     /**
@@ -187,9 +191,10 @@ class RegistryController extends Controller {
     public function edit($id) {
         $registry = Registry::findOrFail($id);
         $procedures = Procedure::where('registry_id', $id)->orderBy('date', 'desc')->get();
-        $doctypes = Doctype::orderBy('name')->get()->pluck('name', 'id');
+        $doctypes = Doctype::orderBy('order')->get()->pluck('name', 'id');
         $statuses = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $priorities = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $places = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
 
         $procedures->each( function($item) {
             $item->dateBR = date("d/m/Y", strtotime($item->date));
@@ -198,7 +203,7 @@ class RegistryController extends Controller {
         $userId = \Auth::user()->id;
         $registryRoute = 'legaladvice.registries.edit';
 
-        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'files', 'userId', 'registryRoute'));
+        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'files', 'userId', 'registryRoute'));
     }
 
     /**

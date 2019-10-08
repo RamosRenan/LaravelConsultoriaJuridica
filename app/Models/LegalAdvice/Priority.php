@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Priority extends Model
 {
     protected $connection = 'legaladvice';
+
+    protected $fillable = ['name', 'order'];
 }

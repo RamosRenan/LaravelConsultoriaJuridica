@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Siscop;
 
 use App\Models\Siscop\City;
 
+use App\Models\Meta4\Zeta;
+
 use App\Models\Siscop\Time;
 use App\Models\Siscop\Suspect;
 use App\Models\Siscop\Risks;
@@ -68,6 +70,10 @@ class SolicitationController extends Controller
      */
     public function create()
     {
+        $m4 = Zeta::offset(10)
+            ->limit(5)
+            ->get();
+
         $time = Time::orderBy('order')->get();
         $suspects = Suspect::orderBy('order')->get();
         $risks = Risks::orderBy('order')->get();

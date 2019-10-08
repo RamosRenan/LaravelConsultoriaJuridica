@@ -8,5 +8,5 @@ class Doctype extends Model
 {
     protected $connection = 'legaladvice';
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'order'];
 }
