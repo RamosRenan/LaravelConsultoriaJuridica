@@ -156,6 +156,7 @@ class ProcedureController extends Controller
         $item = Procedure::findOrFail($id);
 
         $form = $request->all();
+                            
         @$form['files'] = collect(@$form['files'])->toJson();
 
         $item->update( $form );
