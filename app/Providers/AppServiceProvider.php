@@ -44,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
             foreach ($menuTree as $item) {
                 if ($item['url']) {
                     $lista[] = [
+                        'parent_id' => $item['parent_id'],
                         'text' => $item['text'],
                         'icon' => $item['icon'],
                         'url' => $item['url'],
@@ -60,6 +61,7 @@ class AppServiceProvider extends ServiceProvider
                     foreach ($item['submenu'] as $submenu) {
     
                         $lista[] = [
+                            'parent_id' => $submenu['parent_id'],
                             'text' => $submenu['text'],
                             'icon' => $submenu['icon'],
                             'url' => $submenu['url'],
@@ -112,6 +114,7 @@ class AppServiceProvider extends ServiceProvider
                     || $row->permission === null && count($submenu) > 0
                     
                 ) {
+                    $menu[$id]['parent_id'] = $row->parent_id;
                     $menu[$id]['text'] = $row->title;
                     $menu[$id]['icon'] = $row->icon;
                     $menu[$id]['url'] = $url;
