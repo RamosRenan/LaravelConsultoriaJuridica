@@ -1,7 +1,7 @@
 # bood4l
 ## Plataforma Padrão DDTQ com login do Expresso (Laravel)
 
-> As dependências **`LDAP`** e **`FILEINFO`** do PHP devem estar ativas
+> As dependências **`LDAP (no Linux resolve com 'php-ldap')`** e **`FILEINFO (no Linux resolve com 'php-xml' e 'php-mbstring')`** do PHP devem estar ativas
 
 Dentro da pasta em que foi descompactado o App, execute:
 ```
