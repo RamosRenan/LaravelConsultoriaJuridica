@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Refectory;
 
-use App\Models\Refectory\Unit;
+use App\Models\Admin\Unit;
 use App\Models\Refectory\Specialty;
 use App\Models\Refectory\Employee;
 use App\Models\Refectory\EmployeeHasSpecialty;

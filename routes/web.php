@@ -19,6 +19,9 @@ Route::delete('file-upload/destroy', 'FileUpload\FileUploadController@destroy')-
 Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/meta4', ['uses' => 'Admin\Meta4Controller@index', 'as' => 'meta4']);
 
+    Route::resource('units', 'Admin\UnitsController');
+    Route::post('units_mass_destroy', ['uses' => 'Admin\UnitsController@massDestroy', 'as' => 'units.mass_destroy']);
+
     Route::resource('users', 'Admin\UsersController');
     Route::post('users_mass_destroy', ['uses' => 'Admin\UsersController@massDestroy', 'as' => 'users.mass_destroy']);
 

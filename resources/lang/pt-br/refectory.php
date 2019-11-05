@@ -1,11 +1,6 @@
 <?php
 
 return [
-    'units.icon' => 'building',
-    'units.title' => 'Unidades',
-    'units.fields.name' => 'Unidade',
-    'units.fields.code' => 'Código',
-
     'specialties.icon' => 'hand-holding',
     'specialties.title' => 'Especialidades',
     'specialties.fields.name' => 'Especialidade',

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Models\Refectory;
+namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Unit extends Model
 {
-    protected $connection = 'refectory';
-
     protected $fillable = ['name', 'code'];
 }

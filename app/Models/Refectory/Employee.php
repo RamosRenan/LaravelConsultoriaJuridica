@@ -2,6 +2,7 @@
 
 namespace App\Models\Refectory;
 
+use App\Models\Admin\Unit;
 use App\Models\Refectory\EmployeeHasUnit;
 use App\Models\Refectory\EmployeeHasSpecialty;
 
@@ -14,8 +15,12 @@ class Employee extends Model
     protected $fillable = ['specialty_id', 'name', 'rg', 'cpf'];
 
     public function units($id) {
-        return EmployeeHasUnit::where('employee_id', $id)
-            ->join('units', 'units.id', '=', 'employee_has_units.unit_id')
+        $units = EmployeeHasUnit::select('unit_id')
+            ->where('employee_id', $id)
+            ->pluck('unit_id');
+
+        return Unit::whereIn('id', $units)
+            ->orderBy('name')
             ->get();
     }
 

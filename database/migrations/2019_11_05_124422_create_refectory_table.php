@@ -19,13 +19,6 @@ class CreateRefectoryTable extends Migration
      */
     public function up()
     {
-        Schema::connection('refectory')->create('units', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('code');
-            $table->timestamps();
-        });
-
         Schema::connection('refectory')->create('specialties', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
@@ -44,15 +37,13 @@ class CreateRefectoryTable extends Migration
         Schema::connection('refectory')->create('employee_has_units', function (Blueprint $table) {
             $table->integer('employee_id')->unsigned();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->integer('unit_id')->unsigned();
-            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
+            $table->integer('unit_id')->nullable();
         });
 
         Schema::connection('refectory')->create('employee_has_specialties', function (Blueprint $table) {
             $table->integer('employee_id')->unsigned();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->integer('specialty_id')->unsigned();
-            $table->foreign('specialty_id')->references('id')->on('specialties')->onDelete('cascade');
+            $table->integer('specialty_id')->nullable();
         });
 
         Schema::connection('refectory')->create('procedures', function (Blueprint $table) {
@@ -78,8 +69,7 @@ class CreateRefectoryTable extends Migration
 
         Schema::connection('refectory')->create('supply_items', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('unit_id')->unsigned();
-            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
+            $table->integer('unit_id')->nullable();
             $table->integer('supply_id')->unsigned();
             $table->foreign('supply_id')->references('id')->on('supplies')->onDelete('cascade');
             $table->integer('lot')->nullable();
@@ -155,9 +145,10 @@ class CreateRefectoryTable extends Migration
         $submenuId = DB::table('menu_items')->insertGetId(
             [
                 'title'      => 'Refeitório',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => 0,
-                'icon'       => 'tooth',
+                'icon'       => 'utensils',
                 'permission' => null,
                 'url'        => '#',
                 'order'      => $menuIdOrder,
@@ -168,21 +159,11 @@ class CreateRefectoryTable extends Migration
 
         DB::table('menu_items')->insert([
             [
-                'title'      => 'Unidades',
-                'menu_id'    => $menuId,
-                'parent_id'  => $submenuId,
-                'icon'       => 'hospital',
-                'permission' => 'refectory.units.index',
-                'route'      => 'refectory.units.index',
-                'order'      => 0,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-            [
                 'title'      => 'Especialidades',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
-                'icon'       => 'stethoscope',
+                'icon'       => 'hand-holding',
                 'permission' => 'refectory.specialties.index',
                 'route'      => 'refectory.specialties.index',
                 'order'      => 1,
@@ -190,29 +171,32 @@ class CreateRefectoryTable extends Migration
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'title'      => 'Empregados',
+                'title'      => 'Cozinheiros',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
-                'icon'       => 'user-md',
-                'permission' => 'refectory.dentists.index',
-                'route'      => 'refectory.dentists.index',
+                'icon'       => 'user-tie',
+                'permission' => 'refectory.employees.index',
+                'route'      => 'refectory.employees.index',
                 'order'      => 2,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'title'      => 'Refeições',
+                'title'      => 'Cardápios',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
-                'icon'       => 'procedures',
+                'icon'       => 'drumstick-bite',
                 'permission' => 'refectory.procedures.index',
                 'route'      => 'refectory.procedures.index',
-                'order'      => 3,
+                'order'      => 4,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'title'      => 'Relatorios',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
                 'icon'       => 'clipboard',
@@ -227,12 +211,13 @@ class CreateRefectoryTable extends Migration
         $submenuId2 = DB::table('menu_items')->insertGetId(
             [
                 'title'      => 'Suprimentos',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
                 'icon'       => 'shopping-cart',
                 'permission' => null,
                 'url'        => null,
-                'order'      => 4,
+                'order'      => 3,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]
@@ -241,6 +226,7 @@ class CreateRefectoryTable extends Migration
         DB::table('menu_items')->insert([
             [
                 'title'      => 'Itens',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId2,
                 'icon'       => 'list',
@@ -252,6 +238,7 @@ class CreateRefectoryTable extends Migration
             ],
             [
                 'title'      => 'Estoque',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId2,
                 'icon'       => 'shopping-cart',
@@ -265,7 +252,8 @@ class CreateRefectoryTable extends Migration
 
         $submenuId3 = DB::table('menu_items')->insertGetId(
             [
-                'title'      => 'Consumidores',
+                'title'      => 'Clientes',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
                 'icon'       => 'user',
@@ -280,17 +268,19 @@ class CreateRefectoryTable extends Migration
         DB::table('menu_items')->insert([
             [
                 'title'      => 'Cadastro',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId3,
                 'icon'       => 'user-plus',
-                'permission' => 'refectory.patients.index',
-                'route'      => 'refectory.patients.index',
+                'permission' => 'refectory.costumers.index',
+                'route'      => 'refectory.costumers.index',
                 'order'      => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'title'      => 'Agendamento',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId3,
                 'icon'       => 'calendar-plus',
@@ -302,6 +292,7 @@ class CreateRefectoryTable extends Migration
             ],
             [
                 'title'      => 'Atendimento',
+                'controller' => 'refectory',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId3,
                 'icon'       => 'phone',
@@ -321,6 +312,8 @@ class CreateRefectoryTable extends Migration
      */
     public function down()
     {
+        DB::table('menu_items')->where('controller', 'refectory')->delete();
+
         Schema::connection('refectory')->dropIfExists('schedule_items');
         Schema::connection('refectory')->dropIfExists('schedules');
         Schema::connection('refectory')->dropIfExists('costumer_procedures');
@@ -333,6 +326,5 @@ class CreateRefectoryTable extends Migration
         Schema::connection('refectory')->dropIfExists('employee_has_units');
         Schema::connection('refectory')->dropIfExists('employees');
         Schema::connection('refectory')->dropIfExists('specialties');
-        Schema::connection('refectory')->dropIfExists('units');
     }
 }
