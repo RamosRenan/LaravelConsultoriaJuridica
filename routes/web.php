@@ -132,6 +132,8 @@ Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'refecto
     Route::resource('stock', 'Refectory\StockController');
     Route::post('stock_mass_destroy', ['uses' => 'Refectory\StockController@massDestroy', 'as' => 'stock.mass_destroy']);
 
+    Route::resource('stockitems', 'Refectory\StockItemsController');
+
     Route::resource('patients', 'Refectory\PatientController');
     Route::post('patients_mass_destroy', ['uses' => 'Refectory\PatientController@massDestroy', 'as' => 'patients.mass_destroy']);
 

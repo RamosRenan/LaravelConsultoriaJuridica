@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content_header')
-    <h1><i class="fa fa-@lang('refectory.stocks.icon')"></i> @lang('refectory.supplies_stock.title')</h1>
+    <h1><i class="fa fa-@lang('refectory.stocks.icon')"></i> @lang('refectory.stocks.title')</h1>
 @stop
 
 @section('js') 
@@ -42,10 +42,9 @@
                                 {{ Form::label('select-all', '&nbsp;') }}
                             </div>
                         </th>
-                        <th>@lang('refectory.supplies.fields.name')</th>
-                        <th>@lang('refectory.supplies.fields.unit')</th>
-                        <th>@lang('refectory.supplies.fields.last_date')</th>
-                        <th>@lang('refectory.supplies.fields.quantity')</th>
+                        <th>@lang('refectory.stocks.fields.contract')</th>
+                        <th>@lang('refectory.stocks.fields.unit')</th>
+                        <th>@lang('refectory.stocks.fields.date')</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -58,12 +57,20 @@
                                 {{ Form::label('selectId'.$item->id, '&nbsp;') }}
                             </div>
                         </td>
-                        <td class="align-middle">{{ $item->name }}</td>
+                        <td class="align-middle">{{ $item->contract }}</td>
                         <td class="align-middle">{{ $item->unit }}</td>
                         <td class="align-middle">{{ $item->date }}</td>
-                        <td class="align-middle">{{ $item->quantity }}</td>
                         <td class="align-middle text-right">
-                            <a href="{{ route('refectory.stock.edit',[$item->unit_id.','.$item->id]) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i> @lang('global.app_show')</a>
+                            {{ Form::open([
+                                'id' => 'deleteItem'.$item->id,
+                                'method' => 'DELETE',
+                                'route' => ['refectory.stock.destroy', $item->id]
+                            ]) }}
+                            <div class="btn-group">
+                                <a href="{{ route('refectory.stock.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
+                                {{ Form::button('<i class="fa fa-trash"></i> ' . __('global.app_delete'), ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
+                            </div>
+                            {{ Form::close() }}
                         </td>
                     </tr>
                 @endforeach

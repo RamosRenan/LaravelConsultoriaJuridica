@@ -10,7 +10,7 @@ use App\Models\Refectory\StockItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class StockController extends Controller
+class StockItemsController extends Controller
 {
     public function __construct() {
         $this->middleware('check.permissions');
@@ -25,20 +25,11 @@ class StockController extends Controller
     {
         $search = $request->query('search');
 
-        $this->units = Unit::get()->pluck('name', 'id');
-
-        $items = StockContract::select('*')
-            ->where('stock_contracts.contract', 'ilike', '%'.$search.'%')
-            ->orderby('stock_contracts.contract', 'asc')
-            ->paginate(50);
-
-/*
         $items2 = StockItem::select('supplies.name', 'stock_items.*')
             ->join('supplies', 'stock_items.supply_id', '=', 'supplies.id')
             ->where('supplies.name', 'ilike', '%'.$search.'%')
             ->orderby('supplies.name', 'asc')
             ->paginate(50);
-*/
 
         $items->each( function($item) {
             $item->unit = $this->units[$item->unit_id];
@@ -56,9 +47,9 @@ class StockController extends Controller
      */
     public function create()
     {
-        $units = Unit::orderby('name', 'asc')->get()->pluck('name', 'id');
+        $supplies = Supply::orderby('name', 'asc')->get()->pluck('name', 'id');
 
-        return view('refectory.stock.create', compact('units'));
+        return view('refectory.stockitems.create', compact('supplies'));
     }
 
     /**
@@ -69,13 +60,17 @@ class StockController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'contract'=>'required',
-            'unit_id'=>'required',
-            'date'=>'required|date',
+            'supply_id'=>'required',
+            'lot'=>'required',
+            'expiration'=>'required|date',
+            'quantity'=>'required',
+            'price'=>'required',
         ], [], [
-            'contract' => __('refectory.supplies.fields.contract'),
-            'unit_id' => __('refectory.supplies.fields.name'),
-            'date' => __('refectory.supplies.fields.date'),
+            'supply_id'=>'refectory.stockitems.supply',
+            'lot'=>'refectory.stockitems.lot',
+            'expiration'=>'refectory.stockitems.expiration',
+            'quantity'=>'refectory.stockitems.quantity',
+            'price'=>'refectory.stockitems.price',
         ]);
 
         $id = StockContract::create($request->all())->id;

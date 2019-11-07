@@ -203,7 +203,7 @@ class RegistryController extends Controller {
         $userId = \Auth::user()->id;
         $registryRoute = 'legaladvice.registries.edit';
 
-        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'files', 'userId', 'registryRoute'));
+        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute'));
     }
 
     /**

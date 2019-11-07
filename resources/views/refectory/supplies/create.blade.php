@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content_header')
-    <h1><i class="fa fa-@lang('refectory.supplies.icon')"></i> @lang('refectory.supplies_items.title')</h1>
+    <h1><i class="fa fa-@lang('refectory.supplies.icon')"></i> @lang('refectory.supplies.title')</h1>
     @stop
 
 @section('content')

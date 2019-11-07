@@ -1,107 +1,88 @@
 @extends('layouts.app')
 
 @section('content_header')
-    <h1><i class="fa fa-@lang('refectory.stocks.icon')"></i> @lang('refectory.supplies_stock.title')</h1>
+    <h1><i class="fa fa-@lang('refectory.stocks.icon')"></i> @lang('refectory.stocks.title')</h1>
 @stop
 
 @section('js') 
 <script>
-    $(function() {
-        $('.deleteItem').click(function() {
-            Swal.fire({
-                title: '{{ __("global.app_are_you_sure") }}',
-                text: '{{ __("global.app_that_wont_be_undone") }}',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: '{{ __("global.app_cancel") }}',
-                confirmButtonText: '{{ __("global.app_confirm") }}'
-            }).then((result) => {
-                if (result.value) {
-                    $('#' + $(this).attr("data-form")).submit();
-                }
+    $(document).ready(function() {
+        loadCalls = function() {
+            $.ajax("{{ route('legaladvice.procedures.index') }}?id={{ $id }}").done(function(data) {
+                $("#stockItemsBox").html(data);
             });
+        }
+
+        loadCalls();
+
+        $('#modalBox').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var modal = $(this)
+
+            $('#modalBoxContent').load(button.data('url'), function(){
+                $('#myModal').modal({ show:true });
+            });
+        });
+
+        $('#modalBox').on('hide.bs.modal', function (event) {
+            loadCalls();
         });
     });
 </script>
 @stop
 
 @section('content')
+    <div class="modal fade" id="modalBox" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-body" id="modalBoxContent"></div>
+            </div>
+        </div>
+    </div>
+    {{ Form::model($item, ['method' => 'PUT', 'route' => ['refectory.stock.update', $id]]) }}
+    {{ Form::hidden('supply_id', $id ) }}
     <div class="card card-default">
         <div class="card-header">
-            <h3 class="card-title">{{ $supply->name }}</h3>
+            <h3 class="card-title">@lang('global.app_edit')</h3>
         </div>
-        <div class="card-body table-responsive p-0">
-            @if (count($stock) > 0)
-            <table class="table table-head-fixed table-hover">
-                <thead>
-                    <tr>
-                        <th>@lang('refectory.supplies.fields.unit')</th>
-                        <th>@lang('refectory.supplies.fields.date')</th>
-                        <th>@lang('refectory.supplies.fields.lot')</th>
-                        <th>@lang('refectory.supplies.fields.quantity')</th>
-                        <th>@lang('refectory.supplies.fields.price')</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach ($stock as $item)
-                    {{ Form::model($item, ['id' => 'editItem_'. $item->id, 'method' => 'PUT', 'route' => ['refectory.stock.update', $id]]) }}
-                    {{ Form::hidden('item_id', $item->id) }}
-                    <tr data-entry-id="{{ $item->id }}">
-                        <td>
-                            {{ $units->where('id', $item->unit_id)->pluck('name')->first() }}
-                        </td>
-                        <td>
-                            {{ Form::date('date', old('date'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                            @if($errors->has('date'))
-                                <span class="text-danger">{{ $errors->first('date') }}</span>
-                            @endif
-                        </td>
-                        <td>
-                            {{ Form::number('lot', old('lot'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                            @if($errors->has('lot'))
-                                <span class="text-danger">{{ $errors->first('lot') }}</span>
-                            @endif
-                        </td>
-                        <td>
-                            {{ Form::number('quantity', old('quantity'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                            @if($errors->has('quantity'))
-                                <span class="text-danger">{{ $errors->first('quantity') }}</span>
-                            @endif
-                        </td>
-                        <td>
-                            {{ Form::number('price', old('price'), ['class' => 'form-control', 'step' => '0.01', 'placeholder' => '', 'required' => '']) }}
-                            @if($errors->has('price'))
-                                <span class="text-danger">{{ $errors->first('price') }}</span>
-                            @endif
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                {{ Form::button('<i class="fa fa-edit"></i> ' . __('global.app_edit'), ['id' => "buttonEdit",'onClick' => '$("#editItem_'.$item->id.'").submit();',  'class' => 'btn btn-sm btn-primary']) }}
-                                {{ Form::button('<i class="fa fa-trash"></i> ' . __('global.app_delete'), ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
-                            </div>
-                        </td>
-                    </tr>
-                {{ Form::close() }}
-
-                {{ Form::open([
-                    'id' => "deleteItem".$item->id,
-                    'style' => 'display: inline-block;',
-                    'method' => 'DELETE',
-                    'route' => ['refectory.stock.destroy', $id]
-                ]) }}
-                    {{ Form::hidden('item_id', $item->id) }}
-                {{ Form::close() }}
-                @endforeach
-                </tbody>
-            </table>
-            @else
-            <div class="m-3">
-            @lang('global.app_no_entries_in_table')
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    {{ Form::label('contract', __('refectory.stocks.fields.contract').'*', ['class' => 'control-label']) }}
+                    {{ Form::text('contract', old('contract'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                    @if($errors->has('contract'))
+                        <span class="text-danger">{{ $errors->first('lot') }}</span>
+                    @endif
+                </div>
+                <div class="col-md-6 form-group">
+                    {{ Form::label('unit_id', __('refectory.stocks.fields.unit').'*', ['class' => 'control-label']) }}
+                    {{ Form::select('unit_id', $units, old('unit_id'), ['class' => 'form-control select2', 'placeholder' => '', 'required' => '']) }}
+                    @if($errors->has('unit_id'))
+                        <span class="text-danger">{{ $errors->first('unit_id') }}</span>
+                    @endif
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ Form::label('date', __('refectory.stocks.fields.date').'*', ['class' => 'control-label']) }}
+                    {{ Form::date('date', old('date'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                    @if($errors->has('date'))
+                        <span class="text-danger">{{ $errors->first('date') }}</span>
+                    @endif
+                </div>
             </div>
-            @endif
+        </div>
+        <div class="card-footer text-right">
+            {{ Form::submit(trans('global.app_edit'), ['class' => 'btn btn-primary']) }}
+        </div>
+    </div>
+    {{ Form::close() }}
+    <div class="card card-default">
+        <div class="card-header">
+            <button type="button" class="float-left btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('refectory.stockitems.create') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create')</button>
+        </div>
+        <div class="card-body">
+            <div id="stockItemsBox"></div>
+        </div>
+        <div class="card-footer text-right">
         </div>
     </div>
 @stop
