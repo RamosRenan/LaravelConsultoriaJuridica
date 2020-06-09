@@ -56,7 +56,7 @@ class DashboardController extends Controller
         $roles = Role::get()->pluck('name', 'name')->prepend('');
         $grids = ['', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         
-        return view('admin.dashboard.create', compact('roles', 'dirs', 'route', 'grids'));
+        return view('admin.dashboard.create', compact('roles', 'dirs', 'grids'));
     }
 
     /**

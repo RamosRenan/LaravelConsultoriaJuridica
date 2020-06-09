@@ -136,20 +136,26 @@ class CreateLegaladviceTable extends Migration
 
         DB::connection('legaladvice')->table('places')->insert([
             [
-                'name' => 'Entrada na CJ',
+                'name' => 'Secretaria',
                 'order' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'name' => 'Arquivo',
+                'name' => 'Gabinete',
                 'order' => 2,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'name' => 'Saída para ...',
+                'name' => 'Remetido a local fora da CJ',
                 'order' => 3,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Arquivado',
+                'order' => 4,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
@@ -173,7 +179,7 @@ class CreateLegaladviceTable extends Migration
             $table->date('deadline');
             $table->string('date_out')->nullable();
             $table->string('date_return')->nullable();
-            $table->string('subject');
+            $table->text('subject');
             $table->timestamps();
         });
 

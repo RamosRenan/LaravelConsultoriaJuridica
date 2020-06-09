@@ -25,26 +25,48 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-        $search = $request->query('search');
+        $search = @$_GET['search'];
 
-        $this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
+	$this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
 
-        $items = Registry::select('registries.*')
-            ->leftJoin('procedures', 'registries.id', '=', 'procedures.registry_id')
-            ->selectRaw('(SELECT COUNT(id) FROM procedures WHERE registry_id = registries.id) AS procedures')
-            ->where('registries.protocol', 'ilike', '%'.$search.'%')
-            ->orWhere('registries.document_number', 'ilike', '%'.$search.'%')
-            ->orWhere('registries.source', 'ilike', '%'.$search.'%')
-            ->orWhere('registries.interested', 'ilike', '%'.$search.'%')
-            ->orWhere('registries.subject', 'ilike', '%'.$search.'%')
-            ->orWhere('procedures.document_number', 'ilike', '%'.$search.'%')
-            ->orWhere('procedures.source', 'ilike', '%'.$search.'%')
-            ->orWhere('procedures.subject', 'ilike', '%'.$search.'%')
-            ->orderBy('registries.deadline', 'ASC')
-            ->distinct()
-            ->paginate(50);
+	$query = Registry::query();
+		
+	    $query->select('registries.*', 'priorities.name AS priority', 'priorities.id AS priority_id');
+            $query->join('priorities', 'priorities.id', '=', 'registries.priority');
+            $query->leftJoin('procedures', 'registries.id', '=', 'procedures.registry_id');
+            $query->selectRaw('(SELECT COUNT(id) FROM procedures WHERE registry_id = registries.id) AS procedures');
+	    $query->when(@$_GET['priority'], function ($q) {
+		return $q->where('priority', $_GET['priority']);
+            });
+	    $query->when(@$_GET['see'] == 'uptodate', function ($q) {
+		return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 > 3');
+            });
+	    $query->when(@$_GET['see'] == 'deadline', function ($q) {
+		return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 <= 3 AND EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 >= 0');
+            });
+	    $query->when(@$_GET['see'] == 'late', function ($q) {
+		return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) < 0');
+            });
+            $query->where(function ($q) {
+                $search = @$_GET['search'];
 
-        $items->each( function($item) {
+		$q->orwhere('registries.protocol', 'ilike', '%'.$search.'%');
+                $q->orWhere('registries.document_number', 'ilike', '%'.$search.'%');
+                $q->orWhere('registries.source', 'ilike', '%'.$search.'%');
+                $q->orWhere('registries.interested', 'ilike', '%'.$search.'%');
+                $q->orWhere('registries.subject', 'ilike', '%'.$search.'%');
+                $q->orWhere('procedures.document_number', 'ilike', '%'.$search.'%');
+                $q->orWhere('procedures.source', 'ilike', '%'.$search.'%');
+                $q->orWhere('procedures.subject', 'ilike', '%'.$search.'%');
+                $q->orderBy('registries.deadline', 'ASC');
+            });
+            $query->distinct();
+	    $items = $query->paginate(50);
+
+	$this->maxSize = 200;
+
+	$items->each( function($item) {
+	    $item->subject = substr($item->subject, 0, $this->maxSize) . (strlen($item->subject) > $this->maxSize ? '...' : '');
             $item->date_in = date("d/m/Y", strtotime($item->date_in));
             $item->deadline = date("d/m/Y", strtotime($item->deadline));
             $item->files = isset($this->files[$item->id]) ? $this->files[$item->id] : 0;
@@ -133,10 +155,8 @@ class RegistryController extends Controller {
             'status' => 'nullable|numeric',
             'priority' => 'numeric',
             'interested' => 'required',
-            'date_in' => 'date',
-            'deadline' => 'date',
-            'date_out' => 'nullable|date',
-            'date_return' => 'nullable|date',
+            'date_in' => 'required',
+            'deadline' => 'required',
             'subject' => 'required',
         ], [], [
             'protocol' => __('legaladvice.registries.fields.protocol'),
@@ -148,12 +168,25 @@ class RegistryController extends Controller {
             'interested' => __('legaladvice.registries.fields.interested'),
             'date_in' => __('legaladvice.registries.fields.date_in'),
             'deadline' => __('legaladvice.registries.fields.deadline'),
-            'date_out' => __('legaladvice.registries.fields.date_out'),
-            'date_return' => __('legaladvice.registries.fields.date_return'),
             'subject' => __('legaladvice.registries.fields.subject'),
         ]);
 
-        $id = Registry::create($request->except('source_file'));
+        $date_in = $request->date_in ? $this->dateBR($request->date_in) : '';
+        $deadline = $request->deadline ? $this->dateBR($request->deadline) : '';
+        $date_out = $request->date_out ? $this->dateBR($request->date_out) : '';
+        $date_return = $request->date_return ? $this->dateBR($request->date_return) : '';
+
+        $form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return');
+        $form += [ 
+                'date_in' => $date_in,
+                'deadline' => $deadline,
+                'date_out' => $date_out,
+                'date_return' => $date_return,
+        ];
+
+        //dd($request->date_in, $form);
+	
+        $id = Registry::create($form);
 
         return redirect()->route('legaladvice.registries.edit', $id->id)->with('success', __('global.app_msg_store_success'));
     }
@@ -196,7 +229,12 @@ class RegistryController extends Controller {
         $priorities = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $places = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
 
-        $procedures->each( function($item) {
+        $registry->date_in = $registry->date_in ? date("d/m/Y", strtotime($registry->date_in)) : '';
+        $registry->deadline = $registry->deadline ? date("d/m/Y", strtotime($registry->deadline)) : '';
+        $registry->date_out = $registry->date_out ? date("d/m/Y", strtotime($registry->date_out)) : '';
+        $registry->date_return = $registry->date_return ? date("d/m/Y", strtotime($registry->date_return)) : '';
+    
+	$procedures->each( function($item) {
             $item->dateBR = date("d/m/Y", strtotime($item->date));
         });
 
@@ -270,10 +308,10 @@ class RegistryController extends Controller {
             'status' => 'nullable|numeric',
             'priority' => 'numeric',
             'interested' => 'required',
-            'date_in' => 'date',
-            'deadline' => 'date',
-            'date_out' => 'nullable|date',
-            'date_return' => 'nullable|date',
+            'date_in' => 'required',
+            'deadline' => 'required',
+            'date_out' => 'nullable',
+            'date_return' => 'nullable',
             'subject' => 'required',
         ], [], [
             'protocol' => __('legaladvice.registries.fields.protocol'),
@@ -290,8 +328,24 @@ class RegistryController extends Controller {
             'subject' => __('legaladvice.registries.fields.subject'),
         ]);
 
-        $item = Registry::findOrFail($id);
-        $item->update($request->except('source_file'));
+	$item = Registry::findOrFail($id);
+
+        $date_in = $request->date_in ? $this->dateBR($request->date_in) : '';
+        $deadline = $request->deadline ? $this->dateBR($request->deadline) : '';
+        $date_out = $request->date_out ? $this->dateBR($request->date_out) : '';
+        $date_return = $request->date_return ? $this->dateBR($request->date_return) : '';
+	
+	$form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return');
+	$form['urgent'] = $request->urgent;
+	$form += [ 
+		'date_in' => $date_in, 
+		'deadline' => $deadline, 
+		'date_out' => $date_out, 
+		'date_return' => $date_return,
+	];
+
+	//dd($request->date_in, $form);
+	$item->update($form);
 
         return redirect()->route('legaladvice.registries.index')->with('success', __('global.app_msg_update_success'));
     }
@@ -325,5 +379,12 @@ class RegistryController extends Controller {
         } else {
             return redirect()->route('legaladvice.registries.index')->with('error', __('global.app_msg_mass_destroy_error'));
         }
+    }
+
+    public function dateBR($input) {
+        $d = explode('/', $input);
+	$date = $d[2].'-'.$d[1].'-'.$d[0];
+
+        return $date;
     }
 }

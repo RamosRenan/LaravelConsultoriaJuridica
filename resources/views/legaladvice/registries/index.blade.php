@@ -62,6 +62,7 @@
                             </div>
                         </th>
                         <th>@lang('legaladvice.registries.fields.protocol')</th>
+                        <th>Prioridade</th>
                         <th>@lang('legaladvice.registries.fields.interested')</th>
                         <th>@lang('legaladvice.registries.fields.subject')</th>
                         <th>@lang('legaladvice.registries.fields.date_in')</th>
@@ -74,20 +75,24 @@
                 <tbody>
                 @foreach ($items as $item)
                 <tr data-entry-id="{{ $item->id }}">
-                    <td class="align-middle text-center">
+                    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }} text-center">
                         <div class="checkbox icheck-primary">
                             {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }}
                             {{ Form::label('selectId'.$item->id, '&nbsp;') }}
                         </div>
                     </td>
-                    <td class="align-middle">{{ $item->protocol }}</td>
-                    <td class="align-middle">{{ $item->interested }}</td>
-                    <td class="align-middle">{{ $item->subject }}</td>
-                    <td class="align-middle">{{ $item->date_in }}</td>
-                    <td class="align-middle">{{ $item->deadline }}</td>
-                    <td class="align-middle">{{ $item->files }}</td>
-                    <td class="align-middle">{{ $item->procedures }}</td>
-                    <td class="align-middle text-right">
+                    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->protocol }}</td>
+		    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">
+			 <a href="{{ route('legaladvice.registries.index') }}?priority={{ $item->priority_id  }}&see={{ @$_GET['see'] }}">
+                         {{ $item->priority }}</a>
+                    </td>
+                    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->interested }}</td>
+		    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->subject }}</td>
+                    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->date_in }}</td>
+                    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->deadline }}</td>
+                    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->files }}</td>
+                    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->procedures }}</td>
+                    <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }} text-right">
                         {{ Form::open(array(
                             'id' => 'deleteItem'.$item->id,
                             'method' => 'DELETE',

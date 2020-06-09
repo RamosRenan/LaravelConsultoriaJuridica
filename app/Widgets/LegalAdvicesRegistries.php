@@ -21,7 +21,7 @@ class LegalAdvicesRegistries extends AbstractWidget
     public function run() {
         $this->files = FileManager::getFiles(null, 'LegalAdvice\RegistryController')->pluck('route_id', 'id')->countBy();
 
-        $items = Registry::selectRaw("*, DATE_PART('day', deadline - timestamp '". date('Y-m-d') ."') AS remainingdays")
+        $items = Registry::selectRaw("*, DATE_PART('day', deadline - now()) AS remainingdays")
             ->selectRaw('(SELECT COUNT(id) FROM procedures WHERE registry_id = registries.id) AS procedures')
             ->orderBy('deadline', 'DESC')
             ->get();

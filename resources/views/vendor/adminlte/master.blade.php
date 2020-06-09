@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{{ asset('/dist/plugins/daterangepicker/daterangepicker.css') }}">
     <!-- iCheck for checkboxes and radio inputs -->
     <link rel="stylesheet" href="{{ asset('/dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    <!-- Bootstrap Date Picker -->
+    <link rel="stylesheet" href="{{ asset('/dist/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css') }}">
     <!-- Bootstrap Color Picker -->
     <link rel="stylesheet" href="{{ asset('/dist/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') }}">
     <!-- Tempusdominus Bbootstrap 4 -->
@@ -52,6 +54,8 @@
     <script src="{{ asset('/dist/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
     <!-- InputMask -->
     <script src="{{ asset('/dist/plugins/inputmask/jquery.inputmask.bundle.js') }}"></script>
+    <!-- bootstrap datepicker -->
+    <script src="{{ asset('/dist/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     <!-- date-range-picker -->
     <script src="{{ asset('/dist/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- bootstrap color picker -->

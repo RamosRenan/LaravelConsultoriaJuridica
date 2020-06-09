@@ -16,7 +16,7 @@ return [
     'places.title' => "Locais",
     'places.fields.name' => "Nome do local",
 
-    'registries.title' => "Ordens judiciais",
+    'registries.title' => "Protocolos",
     'registries.fields.interested' => 'Interessado',
     'registries.fields.place' => 'Local',
     'registries.fields.subject' => 'Assunto',

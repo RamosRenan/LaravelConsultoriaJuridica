@@ -10,3 +10,6 @@ npm-debug.log
 yarn-error.log
 !.gitignore
 
+/public/upload/**/*
+.env
+composer.phar

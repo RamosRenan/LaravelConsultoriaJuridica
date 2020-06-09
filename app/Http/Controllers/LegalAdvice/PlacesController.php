@@ -68,7 +68,8 @@ class PlacesController extends Controller
             'name' => __('legaladvice.places.fields.name'),
         ]);
 
-        Place::create($request->all());
+	$order = Place::orderBy('order', 'desc')->first()->order + 1;
+        Place::create($request->all() + ['order' => $order]);
 
         return redirect()->route('legaladvice.places.index')->with('success', __('global.app_msg_store_success'));
     }

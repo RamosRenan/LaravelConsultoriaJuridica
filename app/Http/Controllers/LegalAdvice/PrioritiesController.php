@@ -68,7 +68,8 @@ class PrioritiesController extends Controller
             'name' => __('legaladvice.priorities.fields.name'),
         ]);
 
-        Priority::create($request->all());
+        $order = Priority::orderBy('order', 'desc')->first()->order + 1;
+        Priority::create($request->all() + ['order' => $order]);
 
         return redirect()->route('legaladvice.priorities.index')->with('success', __('global.app_msg_store_success'));
     }
