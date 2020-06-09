@@ -12,6 +12,14 @@
         </div>
         <div class="card-body">
             <div class="row">
+                <div class="col-md-12 form-group">
+                    <div class="checkbox icheck-danger d-inline float-left">
+                        {{ Form::checkbox('urgent', true, old('urgent'), ['id' => 'urgent']) }}
+                        {{ Form::label('urgent', 'URGENTE') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3 form-group">
                     {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}
                     {{ Form::text('protocol', old('protocol'), ['class' => 'form-control', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '', 'required' => '']) }}
@@ -90,7 +98,7 @@
             <div class="row">
                 <div class="col-md-3 form-group">
                     {{ Form::label('date_in', __('legaladvice.registries.fields.date_in').'*', ['class' => 'control-label']) }}
-                    {{ Form::date('date_in', old('date_in'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                    {{ Form::text('date_in', old('date_in'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('date_in'))
                         <div class="form-group has-error">
                             <span class="help-block">{{ $errors->first('date_in') }}</span>
@@ -99,7 +107,7 @@
                 </div>
                 <div class="col-md-3 form-group">
                     {{ Form::label('deadline', __('legaladvice.registries.fields.deadline').'*', ['class' => 'control-label']) }}
-                    {{ Form::date('deadline', old('deadline'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                    {{ Form::text('deadline', old('deadline'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('deadline'))
                         <div class="form-group has-error">
                             <span class="help-block">{{ $errors->first('deadline') }}</span>
@@ -108,7 +116,7 @@
                 </div>
                 <div class="col-md-3 form-group">
                     {{ Form::label('date_out', __('legaladvice.registries.fields.date_out'), ['class' => 'control-label']) }}
-                    {{ Form::date('date_out', old('date_out'), ['class' => 'form-control', 'placeholder' => '']) }}
+                    {{ Form::text('date_out', old('date_out'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
                     @if($errors->has('date_out'))
                         <div class="form-group has-error">
                             <span class="help-block">{{ $errors->first('date_out') }}</span>
@@ -117,7 +125,7 @@
                 </div>
                 <div class="col-md-3 form-group">
                     {{ Form::label('date_return', __('legaladvice.registries.fields.date_return'), ['class' => 'control-label']) }}
-                    {{ Form::date('date_return', old('date_return'), ['class' => 'form-control', 'placeholder' => '']) }}
+                    {{ Form::text('date_return', old('date_return'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
                     @if($errors->has('date_return'))
                         <div class="form-group has-error">
                             <span class="help-block">{{ $errors->first('date_return') }}</span>

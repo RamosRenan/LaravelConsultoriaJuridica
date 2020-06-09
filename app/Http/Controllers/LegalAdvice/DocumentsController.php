@@ -68,7 +68,8 @@ class DocumentsController extends Controller
             'name' => __('legaladvice.doctypes.fields.name'),
         ]);
 
-        Doctype::create($request->all());
+        $order = Doctype::orderBy('order', 'desc')->first()->order + 1;
+        Doctype::create($request->all() + ['order' => $order]);
 
         return redirect()->route('legaladvice.doctypes.index')->with('success', __('global.app_msg_store_success'));
     }

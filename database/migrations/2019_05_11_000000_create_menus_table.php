@@ -30,6 +30,7 @@ class CreateMenusTable extends Migration {
 
         Schema::create('menu_items', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('controller')->nullable();
             $table->integer('menu_id')->unsigned();
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
             $table->integer('parent_id')->unsigned();
@@ -46,6 +47,7 @@ class CreateMenusTable extends Migration {
         $submenuId = DB::table('menu_items')->insertGetId(
             [
                 'title'      => 'Administração',
+                'controller' => 'admin',
                 'menu_id'    => $menuId,
                 'parent_id'  => 0,
                 'icon'       => 'cogs',
@@ -59,57 +61,74 @@ class CreateMenusTable extends Migration {
 
         DB::table('menu_items')->insert([
             [
-                'title'      => 'Usuários',
+                'title'      => 'Unidades',
+                'controller' => 'admin',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
-                'icon'       => 'user',
+                'icon'       => 'building',
                 'permission' => '@@ superadmin @@',
-                'route'      => 'admin.users.index',
+                'route'      => 'admin.units.index',
                 'order'      => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'title'      => 'Funções',
+                'title'      => 'Usuários',
+                'controller' => 'admin',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
-                'icon'       => 'suitcase',
+                'icon'       => 'user',
                 'permission' => '@@ superadmin @@',
-                'route'      => 'admin.roles.index',
+                'route'      => 'admin.users.index',
                 'order'      => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'title'      => 'Permissões',
+                'title'      => 'Funções',
+                'controller' => 'admin',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
-                'icon'       => 'key',
+                'icon'       => 'suitcase',
                 'permission' => '@@ superadmin @@',
-                'route'      => 'admin.permissions.index',
+                'route'      => 'admin.roles.index',
                 'order'      => 2,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'title'      => 'Menu',
+                'title'      => 'Permissões',
+                'controller' => 'admin',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
-                'icon'       => 'bars',
+                'icon'       => 'key',
                 'permission' => '@@ superadmin @@',
-                'route'      => 'admin.menu.index',
+                'route'      => 'admin.permissions.index',
                 'order'      => 3,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
+                'title'      => 'Menu',
+                'controller' => 'admin',
+                'menu_id'    => $menuId,
+                'parent_id'  => $submenuId,
+                'icon'       => 'bars',
+                'permission' => '@@ superadmin @@',
+                'route'      => 'admin.menu.index',
+                'order'      => 4,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
                 'title'      => 'Dashboard',
+                'controller' => 'admin',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId,
                 'icon'       => 'tachometer-alt',
                 'permission' => '@@ superadmin @@',
                 'route'      => 'admin.dashboard.index',
-                'order'      => 4,
+                'order'      => 5,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
@@ -118,6 +137,7 @@ class CreateMenusTable extends Migration {
         $submenuId2 = DB::table('menu_items')->insertGetId(
             [
                 'title'      => 'Gestão',
+                'controller' => 'manager',
                 'menu_id'    => $menuId,
                 'parent_id'  => 0,
                 'icon'       => 'cog',
@@ -132,6 +152,7 @@ class CreateMenusTable extends Migration {
         DB::table('menu_items')->insert([
             [
                 'title'      => 'Usuários',
+                'controller' => 'manager',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId2,
                 'icon'       => 'user',
@@ -143,6 +164,7 @@ class CreateMenusTable extends Migration {
             ],
             [
                 'title'      => 'Funções',
+                'controller' => 'manager',
                 'menu_id'    => $menuId,
                 'parent_id'  => $submenuId2,
                 'icon'       => 'suitcase',

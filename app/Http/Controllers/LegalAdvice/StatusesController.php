@@ -68,7 +68,8 @@ class StatusesController extends Controller
             'name' => __('legaladvice.statuses.fields.name'),
         ]);
 
-        Status::create($request->all());
+        $order = Status::orderBy('order', 'desc')->first()->order + 1;
+        Status::create($request->all() + ['order' => $order]);
 
         return redirect()->route('legaladvice.statuses.index')->with('success', __('global.app_msg_store_success'));
     }

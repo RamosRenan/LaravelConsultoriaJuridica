@@ -51,7 +51,15 @@
         <div class="card-body">
             {{ Form::model($registry, ['id' => 'editForm', 'method' => 'PUT', 'route' => ['legaladvice.registries.update', $id]]) }}
             <div class="row">
-                <div class="col-md-3 form-group">
+                <div class="col-md-12 form-group">
+                    <div class="checkbox icheck-danger d-inline float-left">
+                        {{ Form::checkbox('urgent', true, old('urgent'), ['id' => 'urgent']) }}
+                        {{ Form::label('urgent', 'URGENTE') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+		<div class="col-md-3 form-group">
                     {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}
                     {{ Form::text('protocol', old('protocol'), ['class' => 'form-control', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('protocol'))
@@ -117,28 +125,28 @@
             <div class="row">
                 <div class="col-md-3 form-group">
                     {{ Form::label('date_in', __('legaladvice.registries.fields.date_in').'*', ['class' => 'control-label']) }}
-                    {{ Form::date('date_in', old('date_in'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                    {{ Form::text('date_in', old('date_in'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('date_in'))
                         <span class="text-danger">{{ $errors->first('date_in') }}</span>
                     @endif
                 </div>
                 <div class="col-md-3 form-group">
                     {{ Form::label('deadline', __('legaladvice.registries.fields.deadline').'*', ['class' => 'control-label']) }}
-                    {{ Form::date('deadline', old('deadline'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                    {{ Form::text('deadline', old('deadline'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('deadline'))
                         <span class="text-danger">{{ $errors->first('deadline') }}</span>
                     @endif
                 </div>
                 <div class="col-md-3 form-group">
                     {{ Form::label('date_out', __('legaladvice.registries.fields.date_out'), ['class' => 'control-label']) }}
-                    {{ Form::date('date_out', old('date_out'), ['class' => 'form-control', 'placeholder' => '']) }}
+                    {{ Form::text('date_out', old('date_out'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
                     @if($errors->has('date_out'))
                         <span class="text-danger">{{ $errors->first('date_out') }}</span>
                     @endif
                 </div>
                 <div class="col-md-3 form-group">
                     {{ Form::label('date_return', __('legaladvice.registries.fields.date_return'), ['class' => 'control-label']) }}
-                    {{ Form::date('date_return', old('date_return'), ['class' => 'form-control', 'placeholder' => '']) }}
+                    {{ Form::text('date_return', old('date_return'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
                     @if($errors->has('date_return'))
                         <span class="text-danger">{{ $errors->first('date_return') }}</span>
                     @endif
@@ -156,7 +164,7 @@
             {{ Form::close() }}
             <div class="row">
                 <div class="col-md-12 form-group">
-                    {{ Form::label('source_file', __('legaladvice.registries.fields.files'), ['class' => 'control-label']) }}
+                    {{ Form::label('source_file', __('legaladvice.registries.fields.files') . ' (tamanho máximo por arquivo: ' . ini_get('upload_max_filesize') . 'B)', ['class' => 'control-label']) }}
                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create')</button>
                     <div id="filesBox"></div>
                 </div>

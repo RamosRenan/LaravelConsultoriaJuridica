@@ -19,6 +19,9 @@ Route::delete('file-upload/destroy', 'FileUpload\FileUploadController@destroy')-
 Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/meta4', ['uses' => 'Admin\Meta4Controller@index', 'as' => 'meta4']);
 
+    Route::resource('units', 'Admin\UnitsController');
+    Route::post('units_mass_destroy', ['uses' => 'Admin\UnitsController@massDestroy', 'as' => 'units.mass_destroy']);
+
     Route::resource('users', 'Admin\UsersController');
     Route::post('users_mass_destroy', ['uses' => 'Admin\UsersController@massDestroy', 'as' => 'users.mass_destroy']);
 
@@ -108,6 +111,40 @@ Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'dentist
     Route::post('attendances_mass_destroy', ['uses' => 'Dentist\AttendanceController@massDestroy', 'as' => 'attendances.mass_destroy']);
 
     Route::resource('reports', 'Dentist\ReportsController');
+});
+
+Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'refectory', 'as' => 'refectory.'], function () {
+    Route::resource('units', 'Refectory\UnitController');
+    Route::post('units_mass_destroy', ['uses' => 'Refectory\UnitController@massDestroy', 'as' => 'units.mass_destroy']);
+    
+    Route::resource('specialties', 'Refectory\SpecialtyController');
+    Route::post('specialties_mass_destroy', ['uses' => 'Refectory\SpecialtyController@massDestroy', 'as' => 'specialties.mass_destroy']);
+    
+    Route::resource('employees', 'Refectory\EmployeeController');
+    Route::post('employees_mass_destroy', ['uses' => 'Refectory\EmployeeController@massDestroy', 'as' => 'employees.mass_destroy']);
+    
+    Route::resource('procedures', 'Refectory\ProcedureController');
+    Route::post('procedures_mass_destroy', ['uses' => 'Refectory\ProcedureController@massDestroy', 'as' => 'procedures.mass_destroy']);
+
+    Route::resource('supplies', 'Refectory\SupplyController');
+    Route::post('supplies_mass_destroy', ['uses' => 'Refectory\SupplyController@massDestroy', 'as' => 'supplies.mass_destroy']);
+
+    Route::resource('stock', 'Refectory\StockController');
+    Route::post('stock_mass_destroy', ['uses' => 'Refectory\StockController@massDestroy', 'as' => 'stock.mass_destroy']);
+
+    Route::resource('stockitems', 'Refectory\StockItemsController');
+
+    Route::resource('patients', 'Refectory\PatientController');
+    Route::post('patients_mass_destroy', ['uses' => 'Refectory\PatientController@massDestroy', 'as' => 'patients.mass_destroy']);
+
+    Route::resource('schedules', 'Refectory\ScheduleController');
+    Route::get('schedules_list', ['uses' => 'Refectory\ScheduleController@ScheduleListAjax', 'as' => 'schedules.list']);
+    Route::post('schedule_mass_destroy', ['uses' => 'Refectory\ScheduleController@massDestroy', 'as' => 'schedules.mass_destroy']);
+
+    Route::resource('attendances', 'Refectory\AttendanceController');
+    Route::post('attendances_mass_destroy', ['uses' => 'Refectory\AttendanceController@massDestroy', 'as' => 'attendances.mass_destroy']);
+
+    Route::resource('reports', 'Refectory\ReportsController');
 });
 
 Route::group(['middleware' => ['auth', 'auth.unique.user', 'check.permissions'], 'prefix' => 'legaladvice', 'as' => 'legaladvice.'], function () {
