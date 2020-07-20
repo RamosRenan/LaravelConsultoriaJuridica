@@ -164,6 +164,7 @@ class CreateLegaladviceTable extends Migration
         Schema::connection('legaladvice')->create('registries', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('protocol');
+            $table->boolean('urgent');
             $table->integer('document_type')->unsigned();
             $table->foreign('document_type')->references('id')->on('doctypes')->onDelete('cascade');
             $table->string('document_number');

@@ -176,6 +176,32 @@
                     <div id="proceduresBox"></div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <span> <strong> Anotações. </strong> Total.: {{count($note_registry)}} </span>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">Nota de.:</th>
+                            <th scope="col">Date     </th>
+                            <th scope="col">Contain  </th>
+                            <th scope="col">         </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach($note_registry as $key => $value)
+                                <tr>
+                                    <td> {{$value->inserted_by}} </td>
+                                    <td> {{$value->created_at}}              </td>
+                                    <td colspan="2">{{$value->contain}}      </td>
+                                    <td>                                     </td>
+                                </tr>  
+                            @endforeach                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="card-footer text-right">
             {{ Form::button(__('global.app_edit'), ['onclick' => "event.preventDefault(); document.getElementById('editForm').submit();", 'class' => 'btn btn-primary']) }}

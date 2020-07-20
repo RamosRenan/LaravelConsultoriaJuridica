@@ -7,12 +7,15 @@ use App\Models\LegalAdvice\Status;
 use App\Models\LegalAdvice\Priority;
 use App\Models\LegalAdvice\Place;
 use App\Models\LegalAdvice\Registry;
+use App\Models\LegalAdvice\note;
 use App\Models\Admin\FileManager;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Validate\pregmatch;
+use App\Http\Controllers\Validate\boolean;
+use Illuminate\Support\Facades\Validator;
 
 class RegistryController extends Controller {
     public function __construct() {
@@ -24,58 +27,98 @@ class RegistryController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index(Request $request){
+         
         $search = @$_GET['search'];
 
-	$this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
+        $this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
 
-	$query = Registry::query();
-		
-	    $query->select('registries.*', 'priorities.name AS priority', 'priorities.id AS priority_id');
-            $query->join('priorities', 'priorities.id', '=', 'registries.priority');
-            $query->leftJoin('procedures', 'registries.id', '=', 'procedures.registry_id');
-            $query->selectRaw('(SELECT COUNT(id) FROM procedures WHERE registry_id = registries.id) AS procedures');
-	    $query->when(@$_GET['priority'], function ($q) {
-		return $q->where('priority', $_GET['priority']);
-            });
-	    $query->when(@$_GET['see'] == 'uptodate', function ($q) {
-		return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 > 3');
-            });
-	    $query->when(@$_GET['see'] == 'deadline', function ($q) {
-		return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 <= 3 AND EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 >= 0');
-            });
-	    $query->when(@$_GET['see'] == 'late', function ($q) {
-		return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) < 0');
-            });
-            $query->where(function ($q) {
-                $search = @$_GET['search'];
+        /*
+         **********************************************
+         * @ Código comentado abaixo - Modo 1
+         * ********************************************
+         * ° Versão que busca os protocolos.
+         * ° Versão criada por 1° Ten Budal.
+         * ° Comentado por Sd. Renan, DDTQ 23/06/2020.
+         * --------------------------------------------
+         */ 
+        // $query = Registry::query();
+        // $query->select('registries.*', 'priorities.name AS priority', 'priorities.id AS priority_id');
+        // $query->join('priorities', 'priorities.id', '=', 'registries.priority');
+        // $query->leftJoin('procedures', 'registries.id', '=', 'procedures.registry_id');
+        // $query->selectRaw('(SELECT COUNT(id) FROM procedures WHERE registry_id = registries.id) AS procedures');
+                
+        // return $query->paginate(50);
 
-		$q->orwhere('registries.protocol', 'ilike', '%'.$search.'%');
-                $q->orWhere('registries.document_number', 'ilike', '%'.$search.'%');
-                $q->orWhere('registries.source', 'ilike', '%'.$search.'%');
-                $q->orWhere('registries.interested', 'ilike', '%'.$search.'%');
-                $q->orWhere('registries.subject', 'ilike', '%'.$search.'%');
-                $q->orWhere('procedures.document_number', 'ilike', '%'.$search.'%');
-                $q->orWhere('procedures.source', 'ilike', '%'.$search.'%');
-                $q->orWhere('procedures.subject', 'ilike', '%'.$search.'%');
-                $q->orderBy('registries.deadline', 'ASC');
-            });
-            $query->distinct();
-	    $items = $query->paginate(50);
+        // $query->when(@$_GET['priority'], function ($q) {
+        //     return $q->where('priority', $_GET['priority']);
+        // });
+        // $query->when(@$_GET['see'] == 'uptodate', function ($q) {
+        //     return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 > 3');
+        // });
+        // $query->when(@$_GET['see'] == 'deadline', function ($q) {
+        //     return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 <= 3 AND EXTRACT( EPOCH FROM (deadline - now()) ) / 60 / 60 / 24 >= 0');
+        // });
+        // $query->when(@$_GET['see'] == 'late', function ($q) {
+        //     return $q->whereRaw('EXTRACT( EPOCH FROM (deadline - now()) ) < 0');
+        // });
+        // $query->where(function ($q){
+        //     $search = @$_GET['search'];
+        //     $q->orwhere('registries.protocol', 'ilike', '%'.$search.'%');
+        //     $q->orWhere('registries.document_number', 'ilike', '%'.$search.'%');
+        //     $q->orWhere('registries.source', 'ilike', '%'.$search.'%');
+        //     $q->orWhere('registries.interested', 'ilike', '%'.$search.'%');
+        //     $q->orWhere('registries.subject', 'ilike', '%'.$search.'%');
+        //     $q->orWhere('procedures.document_number', 'ilike', '%'.$search.'%');
+        //     $q->orWhere('procedures.source', 'ilike', '%'.$search.'%');
+        //     $q->orWhere('procedures.subject', 'ilike', '%'.$search.'%');
+        //     $q->orderBy('registries.deadline', 'ASC');
+        // });
 
-	$this->maxSize = 200;
+        // $query->distinct();
 
-	$items->each( function($item) {
-	    $item->subject = substr($item->subject, 0, $this->maxSize) . (strlen($item->subject) > $this->maxSize ? '...' : '');
-            $item->date_in = date("d/m/Y", strtotime($item->date_in));
-            $item->deadline = date("d/m/Y", strtotime($item->deadline));
-            $item->files = isset($this->files[$item->id]) ? $this->files[$item->id] : 0;
-            $item->date_out = date("d/m/Y", strtotime($item->date_out));
-            $item->date_return = date("d/m/Y", strtotime($item->date_return));
-        });
-    
+        // $this->maxSize = 200;
+
+        // $items->each(function($item){
+        //     $item->subject = substr($item->subject, 0, $this->maxSize) . (strlen($item->subject) > $this->maxSize ? '...' : '');
+        //     $item->date_in = date("d/m/Y", strtotime($item->date_in));
+        //     $item->deadline = date("d/m/Y", strtotime($item->deadline));
+        //     $item->files = isset($this->files[$item->id]) ? $this->files[$item->id] : 0;
+        //     $item->date_out = date("d/m/Y", strtotime($item->date_out));
+        //     $item->date_return = date("d/m/Y", strtotime($item->date_return));
+        // });
+
+
+        /*
+         **********************************************
+         * @ Código comentado abaixo - Modo 2
+         * ********************************************
+         * ° Versão que busca os protocolos.
+         * ° Versão criada por Sd. Renan.
+         * ° Comentado por Sd. Renan, DDTQ 23/06/2020.
+         * --------------------------------------------
+         */ 
+        $results = DB::select( DB::raw("SELECT DISTINCT ON (r.protocol, n.registries_id) r.protocol, r.id,  r.urgent, r.document_type, r.document_number, r.source, r.status, /* select tuplas registries */  
+                        r.priority, r.place, r.interested, r.date_in as r_date_in, r.deadline, r.date_out, r.date_return, r.subject as r_subject,  /* select tuplas registries */
+                        n.registries_id, n.created_at, n.contain, n.inserted_by, n.date_in,                     /* select tuplas  notes */
+                        pi.name, pi.order, pi.id as priority_id,                                                /* select tuplas priorities */
+                        po.registry_id, po.document_type, po.document_number, po.source, po.date, po.subject,   /* select tuplas procedures */
+
+                        count(po.files) as qtd_procedures_files             /* conta qtd de files   */
+                        FROM registries r                                   /* da tabela registries */
+                        join priorities pi on pi.id=r.priority              /* junta com priorities */
+                        left join procedures po on po.registry_id=r.id      /* junta com procedures */
+                        left outer join notes n on n.registries_id=r.id     /* junta com notes, busca fora relação */
+                        group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agurpa r e n */
+                        po.document_type, po.document_number,  po.source, po.date, po.subject
+                        order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
+                        // return $results; 
+
+	    $items = $results;
+	    
         return view('legaladvice.registries.index', compact('items', 'search'));
-    }
+
+    }//index()
 
     /**
      * Display a listing of Procedures.
@@ -184,8 +227,6 @@ class RegistryController extends Controller {
                 'date_return' => $date_return,
         ];
 
-        //dd($request->date_in, $form);
-	
         $id = Registry::create($form);
 
         return redirect()->route('legaladvice.registries.edit', $id->id)->with('success', __('global.app_msg_store_success'));
@@ -222,26 +263,28 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        $registry = Registry::findOrFail($id);
+        $registry   = Registry::findOrFail($id);
         $procedures = Procedure::where('registry_id', $id)->orderBy('date', 'desc')->get();
-        $doctypes = Doctype::orderBy('order')->get()->pluck('name', 'id');
-        $statuses = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $doctypes   = Doctype::orderBy('order')->get()->pluck('name', 'id');
+        $statuses   = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $priorities = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
-        $places = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $places     = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $note_registry   = DB::select(DB::raw("SELECT * FROM public.registries join notes on notes.registries_id=$id and registries.id=$id"));
+        // return $note_registry ;
 
         $registry->date_in = $registry->date_in ? date("d/m/Y", strtotime($registry->date_in)) : '';
         $registry->deadline = $registry->deadline ? date("d/m/Y", strtotime($registry->deadline)) : '';
         $registry->date_out = $registry->date_out ? date("d/m/Y", strtotime($registry->date_out)) : '';
         $registry->date_return = $registry->date_return ? date("d/m/Y", strtotime($registry->date_return)) : '';
     
-	$procedures->each( function($item) {
+	    $procedures->each( function($item){
             $item->dateBR = date("d/m/Y", strtotime($item->date));
         });
 
         $userId = \Auth::user()->id;
         $registryRoute = 'legaladvice.registries.edit';
 
-        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute'));
+        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry'));
     }
 
     /**
@@ -386,5 +429,39 @@ class RegistryController extends Controller {
 	$date = $d[2].'-'.$d[1].'-'.$d[0];
 
         return $date;
+    }
+
+    public function note(Request $request){
+        // return Auth::user()->name;
+        $validator = Validator::make($request->all(), [
+            'id_registries' => 'required|integer',
+            'eProtocolo' => 'required|string',
+            'contain' => 'required|string',
+        ]);        
+
+        if ($validator->fails()) {
+            return "erro de validação";
+        }
+
+        $getPreg = pregmatch::bPregmatch($request->input('contain'));
+        if($getPreg){
+                try {
+                    //code...
+                    $newNote = new note;
+                    $newNote->registries_id=$request->input('id_registries');
+                    $newNote->date_in=date('d/m/Y H:i:s');
+                    $newNote->inserted_by=Auth::user()->name;
+                    $newNote->contain=$request->input('contain');
+                    $newNote->save();
+
+                } catch (\Throwable $th) {
+                    throw $th;
+                }
+                
+            return redirect($_SERVER['HTTP_REFERER'])->with(['bnoteInsert'=>true]);
+         }else{
+            return "Não foi possível realizar o cadastro. nâo use caracteres especiais.";
+        }
+        
     }
 }
