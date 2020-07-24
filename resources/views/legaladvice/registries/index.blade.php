@@ -1,7 +1,26 @@
 @extends('layouts.app')
 
 @section('content_header')
-    <h1><i class="fa fa-list"></i> @lang('legaladvice.registries.title')</h1>
+    <h1 style="color: #339af0;">
+        <i class="fa fa-list"></i> 
+        @lang('legaladvice.registries.title')  
+        
+        @if((isset($outCg)))
+            Fora do CG
+        @endif
+
+        @if((isset($gabinet)))
+            Gabinete
+        @endif
+
+        @if((isset($arquivado)))
+            Arquivados
+        @endif
+
+        @if((isset($secretaria)))
+            Secretaria
+        @endif
+    </h1>
 @stop
 
 @section('js') 

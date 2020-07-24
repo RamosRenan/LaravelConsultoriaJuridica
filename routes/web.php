@@ -175,4 +175,10 @@ Route::group(['middleware' => ['auth', 'auth.unique.user', 'check.permissions'],
     Route::resource('procedures', 'LegalAdvice\ProcedureController');
     Route::resource('uploads', 'LegalAdvice\UploadController');
     Route::post('registry_mass_destroy', ['uses' => 'LegalAdvice\RegistryController@massDestroy', 'as' => 'registries.mass_destroy']);
+
+    Route::resource('outOfCg', 'SearchInPlaces\SearchOutCgController');
+    Route::resource('gabinet', 'SearchInPlaces\SearchInGabinetController');
+    Route::resource('arquivado', 'SearchInPlaces\ArquivadoController');
+    Route::resource('secretaria', 'SearchInPlaces\SecretariaController');
+
 });

@@ -30,7 +30,7 @@ class RegistryController extends Controller {
     public function index(Request $request){
          
         $search = @$_GET['search'];
-
+  
         $this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
 
         /*
@@ -432,7 +432,7 @@ class RegistryController extends Controller {
     }
 
     public function note(Request $request){
-        // return Auth::user()->name;
+        // return $request->input('contain');
         $validator = Validator::make($request->all(), [
             'id_registries' => 'required|integer',
             'eProtocolo' => 'required|string',
@@ -449,7 +449,7 @@ class RegistryController extends Controller {
                     //code...
                     $newNote = new note;
                     $newNote->registries_id=$request->input('id_registries');
-                    $newNote->date_in=date('d/m/Y H:i:s');
+                    $newNote->date_in=date('Y-m-d');
                     $newNote->inserted_by=Auth::user()->name;
                     $newNote->contain=$request->input('contain');
                     $newNote->save();
@@ -458,8 +458,8 @@ class RegistryController extends Controller {
                     throw $th;
                 }
                 
-            return redirect($_SERVER['HTTP_REFERER'])->with(['bnoteInsert'=>true]);
-         }else{
+                return redirect($_SERVER['HTTP_REFERER'])->with(['bnoteInsert'=>true]);
+        }else{
             return "Não foi possível realizar o cadastro. nâo use caracteres especiais.";
         }
         
