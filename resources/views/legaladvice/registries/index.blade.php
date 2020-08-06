@@ -45,9 +45,6 @@
     });
 
     var route = '{{ route('legaladvice.registries.mass_destroy') }}';
-
-    
-    
 </script>
 
 
@@ -57,8 +54,28 @@
     *-->
 <script>
 
+    function note(e){
+        var elementClick = e.offsetParent.parentElement.parentElement.nextElementSibling.ch;
+
+        if(elementClick == ""){
+            e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: contents";
+            e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "false";
+        }else{
+            e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: none";
+            e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "";
+        }
+
+        console.log(e.offsetParent.parentElement.parentElement.nextElementSibling);
+        console.log(e.offsetParent.parentElement.parentElement.nextElementSibling.ch);
+    }
+        /*
+
     $(document).ready(function(){
         var verify = false;
+
+        $(".btn-light").on("click", function(){
+            console.log($(".btn-light"));
+        });
         $(".protocol").on("mouseenter", function(){
             //console.log(this.nextSibling);
             //$("myo").slideDown();
@@ -75,8 +92,9 @@
                 $(".myo").slideUp("slow");
             });      
               
-        });      
+        }); 
     }); 
+        */     
      
 </script>
 @stop
@@ -138,6 +156,7 @@
 
                 <tbody>
                     @foreach ($items as $item)
+                        @if($item->place != 4)
                         <tr data-entry-id="{{ $item->id }}" class="protocol">
                             <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }} text-center">
                                 <div class="checkbox icheck-primary">
@@ -145,10 +164,9 @@
                                     {{ Form::label('selectId'.$item->id, '&nbsp;') }}
                                 </div>
                             </td>
-                            
                             <td value="{{ $item->protocol }}" class=" align-middle {{ ($item->urgent) ? 'table-danger' : '' }}"><a  href="#">{{ $item->protocol }}</a></td>
                             <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">
-                            <a href="{{ route('legaladvice.registries.index') }}?priority={{ $item->priority_id  }}&see={{ @$_GET['see'] }}"> {{ $item->priority }}</a>
+                                <a href="{{ route('legaladvice.registries.index') }}?priority={{ $item->priority_id  }}&see={{ @$_GET['see'] }}"> {{ $item->name }}</a>
                             </td>
                             <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->interested }}    </td>
                             <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->r_subject }}     </td>
@@ -166,27 +184,30 @@
                                     <a href="{{ route('legaladvice.registries.show',[$item->id]) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i> </a>
                                     <a href="{{ route('legaladvice.registries.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>  </a>
                                     {{ Form::button('<i class="fa fa-trash"></i> ', ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
+                                    <!-- open note() -->
+                                    <a onclick="note(this)" class="btn btn-sm btn-light"> <i class="far fa-folder-open"></i>  </a>
                                 </div>
                             </td> 
-
-                            <tr style="display:none;" class="myo">
-                                <td colspan="5" class="{{ $item->protocol }}"> 
-                                    <strong> Ultima atualização:{{ $item->date_in }} -- Responsável: {{ $item->inserted_by }}  </strong> 
-                                    <br> 
-                                    <strong> Descrição: </strong> {{ $item->contain }}  
-                                </td>
+                            <tr style="display: none;" class="myo">
+                                <td colspan="9" class="{{ $item->protocol }}">
+                                <strong> <u> Ultima atualização:{{ $item->date_in }} --> Responsável: {{ $item->inserted_by }} </u> </strong> 
+                                <br> 
+                                <strong> Descrição: </strong> {{ $item->contain }}
+                                
+                                <hr>
+                                
                                 {{Form::open(['method'=>'POST', 'route'=>['legaladvice.registries.note']])}}
-                                    <td colspan="5">
                                         <input type="hidden" value="{{ $item->id }}" name="id_registries">
                                         <input type="hidden"  value="{{ $item->protocol }}" name="eProtocolo">
-                                        <textarea style="display:inline-block;" type="text" name="contain" class="form-control" rows="1" required>
+                                        <textarea style="display:inline-block;" type="text" name="contain" class="form-control" rows="2" required>
                                             {{$item->contain}}                  
                                         </textarea>
                                         <button type="submit" style="display:inline-block; margin-left:-60px;" class="btn btn-primary" > <i class="fa fa-plus"></i> </button>
-                                    </td>
                                 {{Form::close()}}
+                                </td >
                             </tr>                
                         </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>

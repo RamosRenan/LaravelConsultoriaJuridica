@@ -30,7 +30,7 @@ class RegistryController extends Controller {
     public function index(Request $request){
          
         $search = @$_GET['search'];
-  
+        
         $this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
 
         /*
@@ -114,7 +114,9 @@ class RegistryController extends Controller {
                         order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
                         // return $results; 
 
-	    $items = $results;
+        $items = $results;
+        
+        // return $items;
 	    
         return view('legaladvice.registries.index', compact('items', 'search'));
 
