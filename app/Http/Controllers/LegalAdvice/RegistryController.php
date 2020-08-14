@@ -30,6 +30,8 @@ class RegistryController extends Controller {
     public function index(Request $request){
          
         $search = @$_GET['search'];
+
+        $res = isset($_GET['see'], $_GET['priority']) ? 'true' || true : false; if($res) return  $this->findPriority($_GET['priority']);
         
         $this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
 
@@ -98,29 +100,59 @@ class RegistryController extends Controller {
          * ° Comentado por Sd. Renan, DDTQ 23/06/2020.
          * --------------------------------------------
          */ 
-        $results = DB::select( DB::raw("SELECT DISTINCT ON (r.protocol, n.registries_id) r.protocol, r.id,  r.urgent, r.document_type, r.document_number, r.source, r.status, /* select tuplas registries */  
+        $items = DB::select( DB::raw("SELECT DISTINCT ON (r.protocol, n.registries_id) r.protocol, r.id,  r.urgent, r.document_type, r.document_number, r.source, r.status, /* select tuplas registries */  
                         r.priority, r.place, r.interested, r.date_in as r_date_in, r.deadline, r.date_out, r.date_return, r.subject as r_subject,  /* select tuplas registries */
                         n.registries_id, n.created_at, n.contain, n.inserted_by, n.date_in,                     /* select tuplas  notes */
                         pi.name, pi.order, pi.id as priority_id,                                                /* select tuplas priorities */
                         po.registry_id, po.document_type, po.document_number, po.source, po.date, po.subject,   /* select tuplas procedures */
 
-                        count(po.files) as qtd_procedures_files             /* conta qtd de files   */
+                        count(po.files) as qtd_procedures_files,             /* conta qtd de files   */
+                        count(fm) as qtd_file_managers                      /* conta qtd de files   */
                         FROM registries r                                   /* da tabela registries */
                         join priorities pi on pi.id=r.priority              /* junta com priorities */
                         left join procedures po on po.registry_id=r.id      /* junta com procedures */
+                        left join file_managers fm on r.id=fm.route_id      /* junta com file_managers */
                         left outer join notes n on n.registries_id=r.id     /* junta com notes, busca fora relação */
-                        group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agurpa r e n */
+                        group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agrupa r e n */
                         po.document_type, po.document_number,  po.source, po.date, po.subject
                         order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
                         // return $results; 
-
-        $items = $results;
-        
+                         
         // return $items;
 	    
         return view('legaladvice.registries.index', compact('items', 'search'));
 
     }//index()
+
+
+    public function findPriority($priority){
+
+        $search = @$_GET['search'];
+
+        $items = DB::select( DB::raw("SELECT DISTINCT ON (r.protocol, n.registries_id) r.protocol, r.id,  r.urgent, r.document_type, r.document_number, r.source, r.status, /* select tuplas registries */  
+        r.priority, r.place, r.interested, r.date_in as r_date_in, r.deadline, r.date_out, r.date_return, r.subject as r_subject,  /* select tuplas registries */
+        n.registries_id, n.created_at, n.contain, n.inserted_by, n.date_in,                     /* select tuplas  notes */
+        pi.name, pi.order, pi.id as priority_id,                                                /* select tuplas priorities */
+        po.registry_id, po.document_type, po.document_number, po.source, po.date, po.subject,   /* select tuplas procedures */
+
+        count(po.files) as qtd_procedures_files,                /* conta qtd de files       */
+        count(fm) as qtd_file_managers                          /* conta qtd de files       */
+        FROM registries r                                       /* da tabela registries     */
+        join priorities pi on pi.id=r.priority                  /* junta com priorities     */
+        left join procedures po on po.registry_id=r.id          /* junta com procedures     */
+        left join file_managers fm on r.id=fm.route_id          /* junta com file_managers  */
+        left outer join notes n on n.registries_id=r.id         /* junta com notes, busca fora relação */
+        where r.priority = $priority
+        group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agrupa r e n */
+        po.document_type, po.document_number,  po.source, po.date, po.subject
+        order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
+        // return $results; 
+
+        // return $items;
+         
+        return view('legaladvice.registries.index', compact('items', 'search'));
+
+    }
 
     /**
      * Display a listing of Procedures.

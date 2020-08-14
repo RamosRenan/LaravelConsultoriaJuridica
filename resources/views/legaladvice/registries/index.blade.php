@@ -163,13 +163,13 @@
                             </td>
                             <td value="{{ $item->protocol }}" class=" align-middle {{ ($item->urgent) ? 'table-danger' : '' }}"><a  href="#">{{ $item->protocol }}</a></td>
                             <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">
-                                <a href="{{ route('legaladvice.registries.index') }}?priority={{ $item->priority_id  }}&see={{ @$_GET['see'] }}"> {{ $item->name }}</a>
+                                <a href="{{ route('legaladvice.registries.index') }}?priority={{ $item->priority_id  }}&see=true"> {{ $item->name }}</a>
                             </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->interested }}    </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->r_subject }}     </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->r_date_in }}     </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->deadline }}      </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->qtd_procedures_files }}         </td>
+                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->interested }}        </td>
+                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->r_subject }}         </td>
+                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{implode("/",array_reverse(explode("-",$item->r_date_in)))}}  </td>
+                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{implode("/",array_reverse(explode("-",$item->deadline)))}}   </td>
+                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->qtd_file_managers }} </td>
                             <!-- <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}"> chave $item->procedures chave </td> -->
                             <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }} text-right">
                                 {{ Form::open(array(
@@ -197,7 +197,7 @@
                                         <input type="hidden" value="{{ $item->id }}" name="id_registries">
                                         <input type="hidden"  value="{{ $item->protocol }}" name="eProtocolo">
                                         <textarea style="display:inline-block;" type="text" name="contain" class="form-control" rows="2" required>
-                                            {{$item->contain}}                  
+                                                               
                                         </textarea>
                                         <button type="submit" style="display:inline-block; margin-left:-60px;" class="btn btn-primary" > <i class="fa fa-plus"></i> </button>
                                 {{Form::close()}}
