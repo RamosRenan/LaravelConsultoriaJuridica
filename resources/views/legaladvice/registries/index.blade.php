@@ -116,6 +116,7 @@
                 <div class="col-md-6">
                     <div class="float-sm-right">
                         {{ Form::open(['method' => 'GET', 'route' => ['legaladvice.registries.index']]) }}
+                        @csrf
                         <div class="input-group input-group-sm">
                             {{ Form::text('search', $search, ['class' => 'form-control', 'placeholder' => __('global.app_search')]) }}
                             <span class="input-group-append">
@@ -187,20 +188,21 @@
                             </td> 
                             <tr style="display: none;" class="myo">
                                 <td colspan="9" class="{{ $item->protocol }}">
-                                <strong> <u> Ultima atualização:{{ $item->date_in }} --> Responsável: {{ $item->inserted_by }} </u> </strong> 
-                                <br> 
-                                <strong> Descrição: </strong> {{ $item->contain }}
-                                
-                                <hr>
-                                
-                                {{Form::open(['method'=>'POST', 'route'=>['legaladvice.registries.note']])}}
-                                        <input type="hidden" value="{{ $item->id }}" name="id_registries">
-                                        <input type="hidden"  value="{{ $item->protocol }}" name="eProtocolo">
-                                        <textarea style="display:inline-block;" type="text" name="contain" class="form-control" rows="2" required>
-                                                               
-                                        </textarea>
-                                        <button type="submit" style="display:inline-block; margin-left:-60px;" class="btn btn-primary" > <i class="fa fa-plus"></i> </button>
-                                {{Form::close()}}
+                                    <span>      <strong> Ultima atualização: </strong> &nbsp {{ $item->date_in }}     </span>  
+                                    <br>     
+                                    <span>      <strong> Responsável:        </strong> &nbsp {{ $item->inserted_by }} </span> 
+                                    <p>      <strong> Descrição:          </strong> <span style="width:auto; height:auto; background: #eceff4;"> &nbsp {{ $item->contain }} </span>     </p> 
+                                    
+                                    <hr>
+                                    
+                                    {{Form::open(['method'=>'POST', 'route'=>['legaladvice.registries.note']])}}
+                                            <input type="hidden" value="{{ $item->id }}" name="id_registries">
+                                            <input type="hidden"  value="{{ $item->protocol }}" name="eProtocolo">
+                                            <textarea style="display:inline-block;" type="text" name="contain" class="form-control" rows="2" required>
+                                                                
+                                            </textarea>
+                                            <button type="submit" style="display:inline-block; margin-left:-60px;" class="btn btn-primary" > <i class="fa fa-plus"></i> </button>
+                                    {{Form::close()}}
                                 </td >
                             </tr>                
                         </tr>
