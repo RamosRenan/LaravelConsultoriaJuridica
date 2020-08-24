@@ -31,6 +31,8 @@ class RegistryController extends Controller {
          
         $search = @$_GET['search'];
 
+        // return $search;
+
         $res = isset($_GET['see'], $_GET['priority']) ? 'true' || true : false; if($res) return  $this->findPriority($_GET['priority']);
         
         $this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
@@ -113,6 +115,9 @@ class RegistryController extends Controller {
                         left join procedures po on po.registry_id=r.id      /* junta com procedures */
                         left join file_managers fm on r.id=fm.route_id      /* junta com file_managers */
                         left outer join notes n on n.registries_id=r.id     /* junta com notes, busca fora relação */
+
+                        where r.protocol like '$search%' or pi.name like '%$search' /* busca personalizada */
+
                         group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agrupa r e n */
                         po.document_type, po.document_number,  po.source, po.date, po.subject
                         order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
@@ -122,6 +127,11 @@ class RegistryController extends Controller {
         return view('legaladvice.registries.index', compact('items', 'search'));
 
     }//index()
+
+
+    public function findEprotocolEspecifc(){
+        
+    }
 
 
     public function findPriority($priority){
