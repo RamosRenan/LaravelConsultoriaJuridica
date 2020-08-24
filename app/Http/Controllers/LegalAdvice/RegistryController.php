@@ -116,9 +116,8 @@ class RegistryController extends Controller {
                         group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agrupa r e n */
                         po.document_type, po.document_number,  po.source, po.date, po.subject
                         order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
-                        // return $results; 
                          
-        // return $items;
+        // return $items; teste
 	    
         return view('legaladvice.registries.index', compact('items', 'search'));
 
@@ -151,7 +150,6 @@ class RegistryController extends Controller {
         // return $items;
          
         return view('legaladvice.registries.index', compact('items', 'search'));
-
     }
 
     /**
