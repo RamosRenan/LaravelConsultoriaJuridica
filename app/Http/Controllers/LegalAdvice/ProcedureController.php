@@ -129,7 +129,7 @@ class ProcedureController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id){
         $rules = [
             'document_type' => 'numeric',
             'document_number' => 'required',

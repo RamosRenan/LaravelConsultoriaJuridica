@@ -31,6 +31,7 @@ class FileManager extends Model
                 ->where('route_id', $id)
                 ->orderBy('updated_at', 'DESC')
                 ->get();
+
         }
 
         $files = $files->each(function($item) {
@@ -76,7 +77,11 @@ class FileManager extends Model
 
         $path = 'upload/'.$file->getClientMimeType();
         $filename = hash('ripemd160', date(DATE_ATOM) . rand()). '.' . $file->getClientOriginalExtension();
-        
+
+        /* |-----------------------------------------------------| 
+         * | Descomentado por Sd. Renan, 26/08/20,               |
+         * | para permitir inclusão de arquivo com mesmo nome.   |
+         * |-----------------------------------------------------|
         if ($fileExists = FileManager::where('hash', $hash)->first()) {
             $fileName = $fileExists->filename;
 
@@ -85,6 +90,7 @@ class FileManager extends Model
                 'registry' => $fileExists
             ]);
         }
+        */
 
         if ($file->move(public_path($path), $filename)) {
             $user = FileManager::create(array_merge($request->except(['fileUpload']), [
