@@ -188,10 +188,10 @@
                             </td> 
                             <tr style="display: none;" class="myo">
                                 <td colspan="9" class="{{ $item->protocol }}">
-                                    <span>      <strong> Ultima atualização: </strong> &nbsp {{ $item->date_in }}     </span>  
+                                    <span>  <strong> Ultima atualização: </strong> &nbsp {{ $item->date_in }}     </span>  
                                     <br>     
-                                    <span>      <strong> Responsável:        </strong> &nbsp {{ $item->inserted_by }} </span> 
-                                    <p>      <strong> Descrição:          </strong> <span style="width:auto; height:auto; background: #eceff4;"> &nbsp {{ $item->contain }} </span>     </p> 
+                                    <span>  <strong> Responsável:        </strong> &nbsp {{ $item->inserted_by }} </span> 
+                                    <p>     <strong> Descrição:          </strong> <span style="width:auto; height:auto; background: #eceff4;"> &nbsp {{ $item->contain }} &nbsp &nbsp</span>     </p> 
                                     
                                     <hr>
                                     
