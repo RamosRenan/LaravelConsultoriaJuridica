@@ -81,6 +81,7 @@ class FileManager extends Model
         /* |-----------------------------------------------------| 
          * | Descomentado por Sd. Renan, 26/08/20,               |
          * | para permitir inclusão de arquivo com mesmo nome.   |
+         * | a pedido da CJ Ten. Moreira.                        |
          * |-----------------------------------------------------|
         if ($fileExists = FileManager::where('hash', $hash)->first()) {
             $fileName = $fileExists->filename;

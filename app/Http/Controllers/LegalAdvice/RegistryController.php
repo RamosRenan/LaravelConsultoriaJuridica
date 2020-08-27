@@ -281,8 +281,15 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
+
         $nobreadcrumbs = true;
         $item = Registry::findOrFail($id);
+
+        $notes = DB::select(DB::raw("select * from notes where registries_id = $id"));
+        // return $notes;
+
+        $file_managers = DB::select(DB::raw("select * from file_managers where route_id = $id"));
+        // return $file_managers;
 
         $item->date_in = date("d/m/Y", strtotime($item->date_in));
         $item->deadline = date("d/m/Y", strtotime($item->deadline));
@@ -295,7 +302,7 @@ class RegistryController extends Controller {
             $item->dateBR = date("d/m/Y", strtotime($item->date));
         });
 
-        return view('legaladvice.registries.show', compact('nobreadcrumbs', 'id', 'item', 'procedures', 'doctypes'));
+        return view('legaladvice.registries.show', compact('nobreadcrumbs', 'id', 'item', 'procedures', 'doctypes', 'notes', 'file_managers'));
     }
 
     /**
