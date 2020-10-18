@@ -116,7 +116,7 @@ class RegistryController extends Controller {
                         left join file_managers fm on r.id=fm.route_id      /* junta com file_managers */
                         left outer join notes n on n.registries_id=r.id     /* junta com notes, busca fora relação */
 
-                        where r.protocol like '$search%' or pi.name like '%$search' /* busca personalizada */
+                        where r.protocol like '$search%' or r.interested like '%$search%' /* busca personalizada */
 
                         group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agrupa r e n */
                         po.document_type, po.document_number,  po.source, po.date, po.subject

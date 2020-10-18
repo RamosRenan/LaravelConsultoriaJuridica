@@ -103,7 +103,7 @@
                         <div class="input-group input-group-sm">
                             {{ Form::text('search', $search, ['class' => 'form-control', 'placeholder' => __('global.app_search')]) }}
                             <span class="input-group-append">
-                                {{ Form::button('<i class="fa fa-search"></i>', ['type' => 'submit', 'class' => 'btn btn-info btn-flat']) }}
+                                {{ Form::button('<i class="fa fa-search"></i>', ['type' => 'submit', 'class' => 'btn btn-info btn-flat']) }} busque
                             </span>
                         </div>
                         {{ Form::close() }}
