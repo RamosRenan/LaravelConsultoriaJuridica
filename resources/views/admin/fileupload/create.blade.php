@@ -26,6 +26,9 @@
                     $('.progress-bar').css('width', '100%');
                     $('#message').html('<div class="alert alert-success alert-dismissible">'+data.success+'</div>');
                 }
+                $('#modalBox').delay( 800 ).hide( 'slow', function(){
+                    $('#modalBox').modal('hide');
+                } );
             }
         });
 
@@ -42,9 +45,10 @@
         {!! Form::label('title', __('global.app_file_title').'*', ['class' => 'control-label']) !!}
         {!! Form::text('title', old('title'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
         <br />
-        <div class="progress">
+        <!-- Até o momento não há necessidade de barra de progresso 16/10/20 -->
+        <!-- <div class="progress">
             <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
-        </div>
+        </div> -->
         {!! Form::label('fileUpload', __('global.app_file_select'), ['class' => 'btn btn-warning btn-sm mt-2']) !!}
         {!! Form::file('fileUpload', ['style' => 'display: none']) !!}
         <span id='file-name'></span>
