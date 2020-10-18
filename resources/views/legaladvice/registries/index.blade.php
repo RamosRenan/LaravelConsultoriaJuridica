@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content_header')
+<link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
+
+<script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+
     <h1 style="color: #339af0;">
         <i class="fa fa-list"></i> 
         @lang('legaladvice.registries.title')  
@@ -105,8 +115,8 @@
 
         <div class="card-body table-responsive p-0">
             @if (count($items) > 0)
-            <table class="table table-head-fixed table-hover">
-                <thead>
+            <table class="table  table-hover table-bordered sortable">
+                <thead class="thead-dark">
                     <tr>
                         <th class="text-center">
                             <div class="checkbox icheck-primary">
