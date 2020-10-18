@@ -171,7 +171,7 @@
                 <div class="col-md-12 form-group">
                     {{ Form::label('source_file', __('legaladvice.registries.fields.files') . ' (tamanho máximo por arquivo: ' . ini_get('upload_max_filesize') . 'B)', ['class' => 'control-label']) }}
                     <!-- button aciona modal -->
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') # botão do inserir</button>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') </button>
                     <div id="filesBox"></div> 
                 </div>
             </div>
@@ -180,7 +180,7 @@
             <div class="row">
                 <div class="col-md-12 form-group">
                     {{ Form::label('procedures', __('legaladvice.registries.fields.procedures'), ['class' => 'control-label']) }} Aqui é procedures
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.procedures.create') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create')sdfvdsfgsdgsdgf</button>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.procedures.create') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') </button>
                     <div id="proceduresBox"></div>
                 </div>
             </div>
