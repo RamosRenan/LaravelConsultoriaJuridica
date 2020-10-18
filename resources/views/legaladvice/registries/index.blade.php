@@ -138,23 +138,25 @@
                 <tbody>
                     @foreach ($items as $item)
                         <tr data-entry-id="{{ $item->id }}" class="protocol">
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }} text-center">
+                            <td class="align-middle   text-center">
                                 <div class="checkbox icheck-primary">
                                     {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }}
                                     {{ Form::label('selectId'.$item->id, '&nbsp;') }}
                                 </div>
                             </td>
-                            <td value="{{ $item->protocol }}" class=" align-middle {{ ($item->urgent) ? 'table-danger' : '' }}"><a  href="#">{{ $item->protocol }}</a></td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">
+                            <td value="{{ $item->protocol }}" class=" align-middle ">
+                                @if(($item->urgent)) <i class="fas fa-exclamation-triangle" style="color: red;"></i> @endif 
+                                <a  href="#"> &nbsp; {{ $item->protocol }} </a></td>
+                            <td class="align-middle ">
                                 <a href="{{ route('legaladvice.registries.index') }}?priority={{ $item->priority_id  }}&see=true"> {{ $item->name }}</a>
                             </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->interested }}        </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->r_subject }}         </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{implode("/",array_reverse(explode("-",$item->r_date_in)))}}  </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{implode("/",array_reverse(explode("-",$item->deadline)))}}   </td>
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}">{{ $item->qtd_file_managers }} </td>
-                            <!-- <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }}"> chave $item->procedures chave </td> -->
-                            <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }} text-right">
+                            <td class="align-middle ">{{ $item->interested }}        </td>
+                            <td class="align-middle ">{{ $item->r_subject }}         </td>
+                            <td class="align-middle ">{{implode("/",array_reverse(explode("-",$item->r_date_in)))}}  </td>
+                            <td class="align-middle ">{{implode("/",array_reverse(explode("-",$item->deadline)))}}   </td>
+                            <td class="align-middle ">{{ $item->qtd_file_managers }} </td>
+                            <!-- <td class="align-middle "> chave $item->procedures chave </td> -->
+                            <td class="align-middle  text-right">
                                 {{ Form::open(array(
                                     'id' => 'deleteItem'.$item->id,
                                     'method' => 'DELETE',
