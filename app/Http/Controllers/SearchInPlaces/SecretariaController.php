@@ -38,7 +38,7 @@ class SecretariaController extends Controller
             po.registry_id, po.document_type, po.document_number, po.source, po.date, po.subject,   /* select tuplas procedures */
                     
             count(po.files) as qtd_procedures_files,             /* conta qtd de files   */
-            count(fm) as qtd_file_managers                          /* conta qtd de files       */
+            count(fm) as qtd_file_managers                       /* conta qtd de files   */
 
             FROM registries r                                   /* da tabela registries */
             join priorities pi on pi.id=r.priority              /* junta com priorities */

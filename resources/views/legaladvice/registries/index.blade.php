@@ -14,7 +14,7 @@
         @endif
 
         @if((isset($arquivado)))
-            Arquivados
+            Arquivados eitaaaa
         @endif
 
         @if((isset($secretaria)))
@@ -68,34 +68,7 @@
 
         console.log(e.offsetParent.parentElement.parentElement.nextElementSibling);
         console.log(e.offsetParent.parentElement.parentElement.nextElementSibling.ch);
-    }
-        /*
-
-    $(document).ready(function(){
-        var verify = false;
-
-        $(".btn-light").on("click", function(){
-            console.log($(".btn-light"));
-        });
-        $(".protocol").on("mouseenter", function(){
-            //console.log(this.nextSibling);
-            //$("myo").slideDown();
-            $(this.nextSibling).slideDown("slow");
-            console.log("solide down: "+this.nextSibling);
-            console.log(this.nextSibling);
-        }).on("mouseleave", function(event){
-            //console.log(this.nextSibling);
-            $(this.nextSibling).slideUp("slow");
-            //console.log(event);
-            $(".myo").on("mouseenter", function(){
-                $(this).slideDown("slow");
-            }).on("mouseleave", function(){
-                $(".myo").slideUp("slow");
-            });      
-              
-        }); 
-    }); 
-        */     
+    }  
      
 </script>
 @stop
@@ -154,7 +127,6 @@
 
                 <tbody>
                     @foreach ($items as $item)
-                        @if($item->place != 4)
                         <tr data-entry-id="{{ $item->id }}" class="protocol">
                             <td class="align-middle {{ ($item->urgent) ? 'table-danger' : '' }} text-center">
                                 <div class="checkbox icheck-primary">
@@ -206,7 +178,6 @@
                                 </td >
                             </tr>                
                         </tr>
-                        @endif
                     @endforeach
                 </tbody>
             </table>

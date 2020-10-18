@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content_header')
-    <h1><i class="fa fa-list"></i> @lang('legaladvice.registries.title')</h1>
+    <h5><i class="fa fa-list"></i> @lang('legaladvice.registries.title')</h5>
 @stop
 
 @section('js')
@@ -16,13 +16,7 @@
 {{ Form::model($form, ['method' => 'GET', 'route' => ['legaladvice.registries.search']]) }}
     {{ Form::hidden('dosearch', true) }}
     <div class="card card-default">
-        <div class="card-header">
-            <a data-toggle="collapse" href="#collapseOne">
-                <h3 class="card-title">@lang('global.app_search')</h3>
-            </a>
-        </div>
-
-        <div id="collapseOne" @if (count($items) > 0) class="panel-collapse collapse in" @endif >
+         <div id="collapseOne" @if (count($items) > 0) class="panel-collapse collapse in" @endif >
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3 form-group">
@@ -120,7 +114,7 @@
     </div>
     @if (count($items) > 0)
     <div class="text-center">
-        <h3>@lang('global.app_search_results')</h3>
+        <h5>@lang('global.app_search_results')</h5>
     </div>
     <div class="card card-default">
         <div class="card-body table-responsive p-0">

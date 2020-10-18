@@ -298,9 +298,11 @@ class RegistryController extends Controller {
 
         $procedures = Procedure::where('registry_id', $id)->orderBy('date', 'desc')->get();
 
-        $procedures->each( function($item) {
+        $procedures->each( function($item){
             $item->dateBR = date("d/m/Y", strtotime($item->date));
         });
+
+        // return $file_managers;
 
         return view('legaladvice.registries.show', compact('nobreadcrumbs', 'id', 'item', 'procedures', 'doctypes', 'notes', 'file_managers'));
     }

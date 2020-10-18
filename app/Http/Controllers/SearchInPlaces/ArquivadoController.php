@@ -11,18 +11,20 @@ class ArquivadoController extends Controller
 {
     //code ...
 
-    public $refererNumPlace;
-    const refererNum = 4;
+    //Define constante do id do lugar, 'Arquivado'  = 4
+    const refererNumPlaceArquivado = 4;
 
     function __construct(){
-        $this->refererNumPlace = ArquivadoController::refererNum;
+
     }//__construct
 
     //
-    public function index(Request $request){
+    public function index(){
         $call = new ArquivadoController;
         $search = @$_GET['search'];
-        $items = $call->show($this->refererNumPlace);
+        $items = $call->show(self::refererNumPlaceArquivado);
+        //testa retorno sem retorna algo
+        // return $items;
         $arquivado = true;
         return view('legaladvice.registries.index', compact('items', 'search', 'arquivado'));
     }//index()
@@ -46,7 +48,7 @@ class ArquivadoController extends Controller
             left join file_managers fm on r.id=fm.route_id      /* junta com file_managers */
             left outer join notes n on n.registries_id=r.id     /* junta com notes, busca fora relação */
 
-            where r.place=$id /* busca somente fora do cg = 4 */
+            where r.place=$id /* busca somente arquivado = 4 */
             
             group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, 
             pi.name, pi.order, priority_id, po.registry_id, /* agurpa r e n */

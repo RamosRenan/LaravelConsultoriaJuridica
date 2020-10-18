@@ -126,10 +126,10 @@
             <table style="width: 100%;">
                 <thead>
                     <tr align="left">
-                        <th>#</th>
-                        <th>title</th>
+                        <th>º</th>
+                        <th>Título</th>
                         <th>Nome</th>
-                        <th>extension</th>
+                        <th>Exten</th>
                         <th>Entrada</th>
                     </tr>
                 </thead>
