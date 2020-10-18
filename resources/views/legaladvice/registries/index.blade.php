@@ -103,15 +103,20 @@
                         <div class="input-group input-group-sm">
                             {{ Form::text('search', $search, ['class' => 'form-control', 'placeholder' => __('global.app_search')]) }}
                             <span class="input-group-append">
-                                {{ Form::button('<i class="fa fa-search"></i>', ['type' => 'submit', 'class' => 'btn btn-info btn-flat']) }} busque
+                                {{ Form::button('<i class="fa fa-search"></i>', ['type' => 'submit', 'class' => 'btn btn-info btn-flat']) }}
                             </span>
                         </div>
                         {{ Form::close() }}
                     </div>
                 </div>
+                <i class="fas fa-circle" style="color:red;">   <span style="color:black"> <small>Pedeu o prazo</small> </span> </i> &nbsp; &nbsp;
+                <i class="fas fa-circle" style="color:orange;">   <span style="color:black"> <small>Vencendo</small> </span> </i> &nbsp; &nbsp;
+                <i class="fas fa-circle" style="color:lightgray;">   <span style="color:black"> <small>Dentro do prazo </small></span> </i> &nbsp; &nbsp;&nbsp;
+                <i class="fas fa-exclamation-triangle" style="color: red;"></i>   <span style="color:black"> <small> &nbsp; Urgente </small></span> </i> &nbsp; &nbsp;
+                &nbsp; &nbsp;  &nbsp; <span style="color:black"> <small> (Base de cálculo 3 dias.) </small></span> </i>  
             </div>
         </div>
-
+        
 
         <div class="card-body table-responsive p-0">
             @if (count($items) > 0)
@@ -138,25 +143,34 @@
                 <tbody>
                     @foreach ($items as $item)
                         <tr data-entry-id="{{ $item->id }}" class="protocol">
-                            <td class="align-middle   text-center">
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }} text-center">
                                 <div class="checkbox icheck-primary">
-                                    {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }}
+                                    {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }} 
                                     {{ Form::label('selectId'.$item->id, '&nbsp;') }}
                                 </div>
                             </td>
-                            <td value="{{ $item->protocol }}" class=" align-middle ">
+
+                            <td value="{{ $item->protocol }}" class=" align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">
                                 @if(($item->urgent)) <i class="fas fa-exclamation-triangle" style="color: red;"></i> @endif 
-                                <a  href="#"> &nbsp; {{ $item->protocol }} </a></td>
-                            <td class="align-middle ">
+                                <a  href="#"> &nbsp; {{ $item->protocol }} </a>
+                            </td>
+
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">
                                 <a href="{{ route('legaladvice.registries.index') }}?priority={{ $item->priority_id  }}&see=true"> {{ $item->name }}</a>
                             </td>
-                            <td class="align-middle ">{{ $item->interested }}        </td>
-                            <td class="align-middle ">{{ $item->r_subject }}         </td>
-                            <td class="align-middle ">{{implode("/",array_reverse(explode("-",$item->r_date_in)))}}  </td>
-                            <td class="align-middle ">{{implode("/",array_reverse(explode("-",$item->deadline)))}}   </td>
-                            <td class="align-middle ">{{ $item->qtd_file_managers }} </td>
-                            <!-- <td class="align-middle "> chave $item->procedures chave </td> -->
-                            <td class="align-middle  text-right">
+
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{ $item->interested }}        </td>
+
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{ $item->r_subject }}         </td>
+
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{implode("/",array_reverse(explode("-",$item->r_date_in)))}}  </td>
+                            
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{implode("/",array_reverse(explode("-",$item->deadline)))}}   </td>
+                            
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{ $item->qtd_file_managers }} </td>
+                            
+                            <!-- <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> chave $item->procedures chave </td> -->
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }} text-right">
                                 {{ Form::open(array(
                                     'id' => 'deleteItem'.$item->id,
                                     'method' => 'DELETE',
@@ -170,6 +184,7 @@
                                     <a onclick="note(this)" class="btn btn-sm btn-light"> <i class="far fa-folder-open"></i>  </a>
                                 </div>
                             </td> 
+
                             <tr style="display: none;" class="myo">
                                 <td colspan="9" class="{{ $item->protocol }}">
                                     <span>  <strong> Ultima atualização: </strong> &nbsp {{ $item->date_in }}     </span>  
