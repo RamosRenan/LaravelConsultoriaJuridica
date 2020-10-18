@@ -232,7 +232,11 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $id = null) {
-        $this->validate($request, [
+        $existeProtocolo = Registry::where('protocol', $request->protocol)->count();
+        if($existeProtocolo>0)
+            return back()->withErrors('eProtocolo já existe');
+
+            $this->validate($request, [
             'protocol' => 'required|unique:legaladvice.registries|max:120',
             'document_type' => 'numeric',
             'document_number' => 'required',
