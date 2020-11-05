@@ -102,7 +102,7 @@
                 <tbody>
                 @foreach ($notes as $key => $notes)
                     <tr data-entry-id="{{ $item->id }}">
-                        <td><small>{{$key +=1 }}</small></td>
+                        <td><small> </small></td>
                         <td>{{ $notes->inserted_by }}</td>
                         <td>{{ $notes->contain }}</td>
                         <td>{{ $notes->date_in }}</td>
@@ -126,10 +126,9 @@
             <table style="width: 100%;">
                 <thead>
                     <tr align="left">
-                        <th>º</th>
+                        <th>#</th>
                         <th>Título</th>
                         <th>Nome</th>
-                        <th>Exten</th>
                         <th>Entrada</th>
                     </tr>
                 </thead>
@@ -139,7 +138,6 @@
                         <td><small>{{$key_ +=1 }}</small></td>
                         <td>{{ $file_managers->title }}</td>
                         <td>{{ $file_managers->originalfilename }}</td>
-                        <td>{{ $file_managers->extension }}</td>
                         <td>{{ $file_managers->created_at }}</td>
                     </tr>
                 @endforeach

@@ -179,7 +179,7 @@
 
             <div class="row">
                 <div class="col-md-12 form-group">
-                    {{ Form::label('procedures', __('legaladvice.registries.fields.procedures'), ['class' => 'control-label']) }} Aqui é procedures
+                    {{ Form::label('procedures', __('legaladvice.registries.fields.procedures'), ['class' => 'control-label']) }}
                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.procedures.create') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') </button>
                     <div id="proceduresBox"></div>
                 </div>

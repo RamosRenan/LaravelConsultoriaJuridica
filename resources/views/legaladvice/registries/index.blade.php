@@ -1,93 +1,94 @@
 @extends('layouts.app')
 
-@section('content_header')
-<link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
+    @section('content_header')
+        <link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
 
-<script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+        <script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
 
-    <h1 style="color: #339af0;">
-        <i class="fa fa-list"></i> 
-        @lang('legaladvice.registries.title')  
-        
-        @if((isset($outCg)))
-            Fora do CG
-        @endif
+        <h1 style="color: #339af0;">
+            <i class="fa fa-list"></i> 
+            @lang('legaladvice.registries.title')  
+            
+            @if((isset($outCg)))
+                Fora da CG
+            @endif
 
-        @if((isset($gabinet)))
-            Gabinete
-        @endif
+            @if((isset($gabinet)))
+                Gabinete
+            @endif
 
-        @if((isset($arquivado)))
-            Arquivados eitaaaa
-        @endif
+            @if((isset($arquivado)))
+                Arquivados  
+            @endif
 
-        @if((isset($secretaria)))
-            Secretaria
-        @endif
-    </h1>
-@stop
+            @if((isset($secretaria)))
+                Secretaria
+            @endif
+        </h1>
+    @stop
 
-@section('js') 
-<script>
-    $(function() {
-        $('.deleteItem').click(function() {
-            Swal.fire({
-                title: '{{ __("global.app_are_you_sure") }}',
-                text: '{{ __("global.app_that_wont_be_undone") }}',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: '{{ __("global.app_cancel") }}',
-                confirmButtonText: '{{ __("global.app_confirm") }}'
-            }).then((result) => {
-                if (result.value) {
-                    $('#' + $(this).attr("data-form")).submit();
-                }
+    @section('js') 
+        <script>
+            $(function() {
+                $('.deleteItem').click(function() {
+                    Swal.fire({
+                        title: '{{ __("global.app_are_you_sure") }}',
+                        text: '{{ __("global.app_that_wont_be_undone") }}',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: '{{ __("global.app_cancel") }}',
+                        confirmButtonText: '{{ __("global.app_confirm") }}'
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#' + $(this).attr("data-form")).submit();
+                        }
+                    });
+                });   
             });
-        });   
-    });
 
-    var route = '{{ route('legaladvice.registries.mass_destroy') }}';
-</script>
+            var route = '{{ route('legaladvice.registries.mass_destroy') }}';
 
+            $(document).ready(function() {
+                $('#example').DataTable();
+            } );
+        </script>
 
+        <!--
+            * script responsável por detectar cursor do mouse 
+            * quando deslizar sobre as barras dos protocolos. 
+        -->
+        <script>
 
-<!--
-    * script responsável por detectar cursor do mouse 
-    * quando deslizar sobre as barras dos protocolos. 
--->
-<script>
+            function note(e){
+                var elementClick = e.offsetParent.parentElement.parentElement.nextElementSibling.ch;
 
-    function note(e){
-        var elementClick = e.offsetParent.parentElement.parentElement.nextElementSibling.ch;
+                if(elementClick == ""){
+                    e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: contents";
+                    e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "false";
+                }else{
+                    e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: none";
+                    e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "";
+                }
+                // console.log(e.offsetParent.parentElement.parentElement.nextElementSibling);
+                // console.log(e.offsetParent.parentElement.parentElement.nextElementSibling.ch);
+            }  
+            
+        </script>
+    @stop
 
-        if(elementClick == ""){
-            e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: contents";
-            e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "false";
-        }else{
-            e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: none";
-            e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "";
+    <style> 
+        td{
+            font-size:12.5px;
         }
-
-        console.log(e.offsetParent.parentElement.parentElement.nextElementSibling);
-        console.log(e.offsetParent.parentElement.parentElement.nextElementSibling.ch);
-    }  
-     
-</script>
-@stop
-
-<style> 
-    td{
-        font-size:12.5px;
-    }
-</style>
+    </style>
 
 @section('content')
     <div class="card card-default">
@@ -109,11 +110,11 @@
                         {{ Form::close() }}
                     </div>
                 </div>
-                <i class="fas fa-circle" style="color:red;">   <span style="color:black"> <small>Pedeu o prazo</small> </span> </i> &nbsp; &nbsp;
+                <i class="fas fa-circle" style="color:red;">   <span style="color:black"> <small>Perdeu o prazo</small> </span> </i> &nbsp; &nbsp;
                 <i class="fas fa-circle" style="color:orange;">   <span style="color:black"> <small>Vencendo</small> </span> </i> &nbsp; &nbsp;
                 <i class="fas fa-circle" style="color:lightgray;">   <span style="color:black"> <small>Dentro do prazo </small></span> </i> &nbsp; &nbsp;&nbsp;
                 <i class="fas fa-exclamation-triangle" style="color: red;"></i>   <span style="color:black"> <small> &nbsp; Urgente </small></span> </i> &nbsp; &nbsp;
-                &nbsp; &nbsp;  &nbsp; <span style="color:black"> <small> (Base de cálculo 3 dias.) </small></span> </i>  
+                &nbsp; &nbsp;  &nbsp; <span style="color:black"> <small> <b>(Base de cálculo 3 dias.)</b> </small></span> </i>  
             </div>
         </div>
         
@@ -121,7 +122,7 @@
         <div class="card-body table-responsive p-0">
             @if (count($items) > 0)
             <table class="table  table-hover table-bordered sortable">
-                <thead class="thead-dark">
+                <thead class=" ">
                     <tr>
                         <th class="text-center">
                             <div class="checkbox icheck-primary">
@@ -140,7 +141,7 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody style=" ">
                     @foreach ($items as $item)
                         <tr data-entry-id="{{ $item->id }}" class="protocol">
                             <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }} text-center">
@@ -151,23 +152,22 @@
                             </td>
 
                             <td value="{{ $item->protocol }}" class=" align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">
-                                @if(($item->urgent)) <i class="fas fa-exclamation-triangle" style="color: red;"></i> @endif 
-                                <a  href="#"> &nbsp; {{ $item->protocol }} </a>
+                                <a  href="#"> @if(($item->urgent)) <i class="fas fa-exclamation-triangle" style="color: red;"></i> @endif  {{ $item->protocol }} </a>
                             </td>
 
                             <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">
                                 <a href="{{ route('legaladvice.registries.index') }}?priority={{ $item->priority_id  }}&see=true"> {{ $item->name }}</a>
                             </td>
 
-                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{ $item->interested }}        </td>
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> {{ $item->interested }} </td>
 
-                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{ $item->r_subject }}         </td>
+                            <td style="word-wrap: break-word; word-break: break-all;" class=" {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> {{ $item->r_subject }} </td>
 
-                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{implode("/",array_reverse(explode("-",$item->r_date_in)))}}  </td>
+                            <td data-dateformat="DD-M-YYY" class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> {{implode("/",array_reverse(explode("-",$item->r_date_in)))}} </td>
                             
-                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{implode("/",array_reverse(explode("-",$item->deadline)))}}   </td>
+                            <td data-dateformat="DD-M-YYY" class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> {{implode("/",array_reverse(explode("-",$item->deadline)))}} </td>
                             
-                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">{{ $item->qtd_file_managers }} </td>
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> {{ $item->qtd_file_managers }} </td>
                             
                             <!-- <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> chave $item->procedures chave </td> -->
                             <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }} text-right">
@@ -225,12 +225,10 @@
                 </div>
                 <div class="col-md-9">
                     <div class="float-right"> 
-                    <!-- chave $items->links() chave -->
-                     
+                        <!-- chave $items->links() chave -->
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

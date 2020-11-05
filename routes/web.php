@@ -135,6 +135,7 @@ Route::group(['middleware' => ['auth', 'auth.unique.user', 'check.permissions'],
     Route::get('places_order', ['uses' => 'LegalAdvice\PlacesController@order', 'as' => 'places.order']);
     
     Route::resource('registries', 'LegalAdvice\RegistryController');
+    Route::get('registries_verify_eProtocol', 'LegalAdvice\RegistryController@verifyIfExistProtocolWithAjax');
     Route::post('registries_note', ['uses' => 'LegalAdvice\RegistryController@note', 'as' => 'registries.note']);
     Route::get('registries_search', ['uses' => 'LegalAdvice\RegistryController@search', 'as' => 'registries.search']);
     Route::get('registries_uploadindex', ['uses' => 'LegalAdvice\RegistryController@uploadIndex', 'as' => 'registries.uploadindex']);

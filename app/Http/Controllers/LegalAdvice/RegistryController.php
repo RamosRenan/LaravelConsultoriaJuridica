@@ -232,9 +232,10 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $id = null) {
-        $existeProtocolo = Registry::where('protocol', $request->protocol)->count();
+        $existeProtocolo = Registry::where('protocol', 'like', $request->protocol.'%')->count();
+
         if($existeProtocolo>0)
-            return back()->withErrors('eProtocolo já existe');
+            return back()->withErrors('eProtocolo já existe', ["full"=>true]);
 
             $this->validate($request, [
             'protocol' => 'required|unique:legaladvice.registries|max:120',
@@ -276,6 +277,15 @@ class RegistryController extends Controller {
         $id = Registry::create($form);
 
         return redirect()->route('legaladvice.registries.edit', $id->id)->with('success', __('global.app_msg_store_success'));
+    }
+
+    public function verifyIfExistProtocolWithAjax(Request $request)
+    {
+        $existeProtocolo = Registry::where('protocol', 'like', $request->protocol.'%')->get();
+        $lookingForProtocol = json_decode(json_encode($existeProtocolo));
+
+        // se desejar retornar o json passe $roo
+        return $arr = ["resp"=>count($lookingForProtocol)];
     }
 
     /**
