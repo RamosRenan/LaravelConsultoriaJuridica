@@ -26,7 +26,7 @@
             </div>
             <div class="row">
                 <div class="col-md-3 form-group">
-                    {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}
+                    {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}<small> &nbsp; Dica: Crtl + Space. </small>
                     {{ Form::text('protocol', old('protocol'), ['class' => 'form-control eprotocolkeypress', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '', 'required' => '', 'id'=>'eprotocolkeypress', 'data-toggle'=>'popover', 'data-trigger'=>'focus', 'title'=>'eProtocolo existente !', 'data-content'=>'Este protocolo já existe em nossa base de dados. Comece novamente !']) }}
                     @if($errors->has('protocol'))
                         <div class="form-group has-error">
