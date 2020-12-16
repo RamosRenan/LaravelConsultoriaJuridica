@@ -150,6 +150,7 @@
                 </div>
             </div>
             <div class="row">
+                <!--
                 <div class="col-md-6 form-group">
                     <label> Redator &nbsp; <small> campo ainda não implementado * </small> </label>
                     {{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
@@ -168,6 +169,7 @@
                         </div>
                     @endif
                 </div>
+                -->
             </div>
         </div>
         <div class="card-footer text-right">

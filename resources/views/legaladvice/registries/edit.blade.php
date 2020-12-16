@@ -30,9 +30,7 @@
 
         $('#modalBox').on('hide.bs.modal', function (event) {
             loadCalls();
-        });
-
-       
+        });       
     });
  
 </script>
@@ -169,9 +167,9 @@
             <!-- Insere um novo documento -->
             <div class="row">
                 <div class="col-md-12 form-group">
-                    {{ Form::label('source_file', __('legaladvice.registries.fields.files') . ' (tamanho máximo por arquivo: ' . ini_get('upload_max_filesize') . 'B)', ['class' => 'control-label']) }}
+                    {{ Form::label('source_file', __('legaladvice.registries.fields.files'). '  ', ['class' => 'control-label']) }}
                     <!-- button aciona modal -->
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') </button>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') treste</button>
                     <div id="filesBox"></div> 
                 </div>
             </div>

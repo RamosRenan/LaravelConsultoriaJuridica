@@ -151,5 +151,4 @@ Route::group(['middleware' => ['auth', 'auth.unique.user', 'check.permissions'],
     Route::resource('gabinet', 'SearchInPlaces\SearchInGabinetController');
     Route::resource('arquivado', 'SearchInPlaces\ArquivadoController');
     Route::resource('secretaria', 'SearchInPlaces\SecretariaController');
-
 });

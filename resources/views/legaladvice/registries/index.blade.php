@@ -16,7 +16,7 @@
             @lang('legaladvice.registries.title')  
             
             @if((isset($outCg)))
-                Fora da CG
+                Fora da CJ
             @endif
 
             @if((isset($gabinet)))
@@ -95,7 +95,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                    <a href="{{ route('legaladvice.registries.create') }}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> @lang('global.app_create')</a>
+                    <a href="{{ route('legaladvice.registries.create') }}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> @lang('global.app_create') </a>
                 </div>
                 <div class="col-md-6">
                     <div class="float-sm-right">
@@ -124,12 +124,7 @@
             <table class="table  table-hover table-bordered sortable">
                 <thead class=" ">
                     <tr>
-                        <th class="text-center">
-                            <div class="checkbox icheck-primary">
-                                {{ Form::checkbox('', false, false, ['id' => 'select-all']) }}
-                                {{ Form::label('select-all', '&nbsp;') }}
-                            </div>
-                        </th>
+                        <th class="text-center"> </th>
                         <th>@lang('legaladvice.registries.fields.protocol')</th>
                         <th>Prioridade</th>
                         <th>@lang('legaladvice.registries.fields.interested')</th>
@@ -144,15 +139,12 @@
                 <tbody style=" ">
                     @foreach ($items as $item)
                         <tr data-entry-id="{{ $item->id }}" class="protocol">
-                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }} text-center">
-                                <div class="checkbox icheck-primary">
-                                    {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }} 
-                                    {{ Form::label('selectId'.$item->id, '&nbsp;') }}
-                                </div>
+                            <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">
+                                @if(($item->urgent)) <i class="fas fa-exclamation-triangle" style="color: red;"></i> @endif
                             </td>
 
                             <td value="{{ $item->protocol }}" class=" align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">
-                                <a  href="#"> @if(($item->urgent)) <i class="fas fa-exclamation-triangle" style="color: red;"></i> @endif  {{ $item->protocol }} </a>
+                                <a  href="#"> {{ $item->protocol }} </a>
                             </td>
 
                             <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}">

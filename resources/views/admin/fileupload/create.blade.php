@@ -26,9 +26,9 @@
                     $('.progress-bar').css('width', '100%');
                     $('#message').html('<div class="alert alert-success alert-dismissible">'+data.success+'</div>');
                 }
-                $('#modalBox').delay( 800 ).hide( 'slow', function(){
-                    $('#modalBox').modal('hide');
-                } );
+                // $('#modalBox').delay( 800 ).hide( 'slow', function(){
+                //     $('#modalBox').modal('hide');
+                // } );
             }
         });
 
@@ -39,6 +39,7 @@
 </script>
 @stop
 
+
 @section('content')
     {!! Form::open(['id' => 'uploadFileAjax', 'method' => 'POST', 'route' => $store, 'enctype' => 'multipart/form-data']) !!}
         {!! Form::hidden('route_id', $id) !!}
@@ -46,12 +47,17 @@
         {!! Form::text('title', old('title'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
         <br />
         <!-- Até o momento não há necessidade de barra de progresso 16/10/20 -->
-        <!-- <div class="progress">
+        <!-- 
+        <div class="progress">
             <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
-        </div> -->
+        </div> 
+        -->
         {!! Form::label('fileUpload', __('global.app_file_select'), ['class' => 'btn btn-warning btn-sm mt-2']) !!}
         {!! Form::file('fileUpload', ['style' => 'display: none']) !!}
         <span id='file-name'></span>
         {!! Form::submit(__('global.app_create'), ['class' => 'btn btn-primary btn-sm float-right mt-2']) !!}
+        <button style="float:right; margin-right:18px; margin-top: 8px;" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+            Fechar
+        </button>
     {!! Form::close() !!}
 @stop
