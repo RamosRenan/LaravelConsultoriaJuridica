@@ -56,9 +56,9 @@
 
             var route = '{{ route('legaladvice.registries.mass_destroy') }}';
 
-            $(document).ready(function() {
-                $('#example').DataTable();
-            } );
+            // $(document).ready(function() {
+            //     $('#example').DataTable();
+            // } );
         </script>
 
         <!--

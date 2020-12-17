@@ -27,12 +27,15 @@
             <div class="row">
                 <div class="col-md-3 form-group">
                     {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}<small> &nbsp; Dica: Crtl + Space. </small>
-                    {{ Form::text('protocol', old('protocol'), ['class' => 'form-control eprotocolkeypress', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '', 'required' => '', 'id'=>'eprotocolkeypress', 'data-toggle'=>'popover', 'data-trigger'=>'focus', 'title'=>'eProtocolo existente !', 'data-content'=>'Este protocolo já existe em nossa base de dados. Comece novamente !']) }}
-                    @if($errors->has('protocol'))
-                        <div class="form-group has-error">
-                            <span class="help-block">{{ $errors->first('protocol') }}</span>
-                        </div>
-                    @endif
+                    <div class="input-group mb-3">
+                        {{ Form::text('protocol', old('protocol'), ['class' => 'form-control eprotocolkeypress', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '', 'required' => '', 'id'=>'eprotocolkeypress', 'data-trigger'=>'focus']) }}
+                        <button class="addon2" type="button" id="addon2"> Procure </button>
+                        @if($errors->has('protocol'))
+                            <div class="form-group has-error">
+                                <span class="help-block">{{ $errors->first('protocol') }}</span>
+                            </div>
+                        @endif
+                    </div>
                 </div>
                 <div class="col-md-2 form-group">
                     {{ Form::label('document_type', __('legaladvice.registries.fields.document_type').'*', ['class' => 'control-label']) }}
@@ -182,7 +185,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#eprotocolkeypress").keypress(function(e){
+            $(".addon2").click(function(){
                 // Get CSRF token
 	            const token = '{{ csrf_token() }}';
 
@@ -210,15 +213,17 @@
                     contentType: "application/json",
                     dataType: "json",
                     data: {
-                        'protocol': this.value,
+                        'protocol': $(".eprotocolkeypress").val(),
                     },
                     success: function(data)
                     {
                         if(data.resp > 0){
+                            alert("Protocolo existe !");
                             $('[data-toggle="popover"]').popover('enable')
                             $('[data-toggle="popover"]').popover('show');
                             console.log(data.resp);
                         }else{
+                            alert("Protocolo ñ existe !");
                             $('[data-toggle="popover"]').popover('disable');
                             $('[data-toggle="popover"]').popover('hide');
                             console.log(data.resp);
@@ -226,7 +231,7 @@
                     },
                     error: function(data)
                     {
-                        
+                        alert("error >>>");
                     }
                 });
                 //end ajax()
