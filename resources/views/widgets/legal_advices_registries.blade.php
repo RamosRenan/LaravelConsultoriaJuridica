@@ -1,3 +1,10 @@
+<!-- 
+   - Não é possível divisão por zero
+   - se for zero aponto total para 1
+ -->
+@if($total <= 0)
+    {{$total = 1}}
+@endif
 <div class="row">
     <div class="col-md-4">
         <div class="info-box bg-green">
@@ -6,7 +13,8 @@
                 <span class="info-box-text">@lang('legaladvice.title.uptodate')</span>
                 <span class="info-box-number"><h1><a href="{{ route('legaladvice.registries.index') }}?see=uptodate" class="text-white">{{ count($items->uptodate) }}</a></h1></span>
                 <div class="progress">
-                    <div class="progress-bar" style="width: {{ 100 * count($items->uptodate) / $total }}%"></div>
+                    
+                        <div class="progress-bar" style="width: {{ 100 * count($items->uptodate) / $total }}%"></div>
                 </div>
                 <span class="progress-description">
                     {{ number_format (100 * count($items->uptodate) / $total, 2) }}% @lang('legaladvice.title.of_all')
