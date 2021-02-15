@@ -19,6 +19,7 @@
 
         loadCalls();
 
+        /* /view/admin/fileupload */ 
         $('#modalBox').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
             var modal = $(this)
@@ -40,7 +41,7 @@
     <div class="modal fade" id="modalBox" role="dialog">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-body" id="modalBoxContent">daFSDGVDBEFB EBRTGBTRH THB</div>
+                <div class="modal-body" id="modalBoxContent"> </div>
             </div>
         </div>
     </div>
@@ -55,7 +56,7 @@
                 <div class="col-md-12 form-group">
                     <div class="checkbox icheck-danger d-inline float-left">
                         {{ Form::checkbox('urgent', true, old('urgent'), ['id' => 'urgent']) }}
-                        {{ Form::label('urgent', 'URGENTE') }}
+                        {{ Form::label('urgent', 'URGENTE') }} 
                     </div>
                 </div>
             </div>
@@ -124,32 +125,39 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     {{ Form::label('date_in', __('legaladvice.registries.fields.date_in').'*', ['class' => 'control-label']) }}
                     {{ Form::text('date_in', old('date_in'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('date_in'))
                         <span class="text-danger">{{ $errors->first('date_in') }}</span>
                     @endif
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     {{ Form::label('deadline', __('legaladvice.registries.fields.deadline').'*', ['class' => 'control-label']) }}
                     {{ Form::text('deadline', old('deadline'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('deadline'))
                         <span class="text-danger">{{ $errors->first('deadline') }}</span>
                     @endif
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     {{ Form::label('date_out', __('legaladvice.registries.fields.date_out'), ['class' => 'control-label']) }}
                     {{ Form::text('date_out', old('date_out'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
                     @if($errors->has('date_out'))
                         <span class="text-danger">{{ $errors->first('date_out') }}</span>
                     @endif
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     {{ Form::label('date_return', __('legaladvice.registries.fields.date_return'), ['class' => 'control-label']) }}
                     {{ Form::text('date_return', old('date_return'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
                     @if($errors->has('date_return'))
                         <span class="text-danger">{{ $errors->first('date_return') }}</span>
+                    @endif
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ Form::label('email', 'email', ['class' => 'control-label']) }} 
+                    {{ Form::text('email', old('email'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
+                    @if($errors->has('email'))
+                        <span class="text-danger">{{ $errors->first('email') }}</span>
                     @endif
                 </div>
             </div>
@@ -169,7 +177,8 @@
                 <div class="col-md-12 form-group">
                     {{ Form::label('source_file', __('legaladvice.registries.fields.files'). '  ', ['class' => 'control-label']) }}
                     <!-- button aciona modal -->
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') treste</button>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create')</button>
+                    <!-- Aqui mostra tabela de arquivos cadastros -->
                     <div id="filesBox"></div> 
                 </div>
             </div>
@@ -177,11 +186,12 @@
 
             <div class="row">
                 <div class="col-md-12 form-group">
-                    {{ Form::label('procedures', __('legaladvice.registries.fields.procedures'), ['class' => 'control-label']) }}
+                    {{ Form::label('procedures', __('legaladvice.registries.fields.procedures'), ['class' => 'control-label']) }} 
                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.procedures.create') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') </button>
                     <div id="proceduresBox"></div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-12 form-group">
                     <span> <strong> Anotações. </strong> Total.: {{count($note_registry)}} </span>

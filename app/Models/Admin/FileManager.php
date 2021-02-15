@@ -7,7 +7,7 @@ use Validator;
 
 class FileManager extends Model
 {
-    protected $fillable = ['route', 'title', 'route_id', 'owner', 'filename', 'originalfilename', 'mime', 'extension', 'size', 'hash'];
+    protected $fillable = ['route', 'title', 'route_id', 'owner', 'filename', 'originalfilename', 'mime', 'extension', 'size', 'hash', 'redator'];
 
     public static function getFiles($id = null, $route = null) {
         $action = app('request')->route()->getAction();
@@ -102,7 +102,8 @@ class FileManager extends Model
                 'mime' => $file->getClientMimeType(),
                 'extension' => $file->guessClientExtension(),
                 'size' => $size,
-                'hash' => $hash,
+                'hash' => $hash, 
+                'redator' => $request->input('redator'),
             ]));
 
             $output = array(

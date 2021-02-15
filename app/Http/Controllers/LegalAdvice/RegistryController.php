@@ -297,6 +297,7 @@ class RegistryController extends Controller {
     public function show($id) {
 
         $nobreadcrumbs = true;
+
         $item = Registry::findOrFail($id);
 
         $notes = DB::select(DB::raw("select * from notes where registries_id = $id"));
@@ -306,6 +307,7 @@ class RegistryController extends Controller {
         // return $file_managers;
 
         $item->date_in = date("d/m/Y", strtotime($item->date_in));
+
         $item->deadline = date("d/m/Y", strtotime($item->deadline));
 
         $doctypes = Doctype::orderBy('name')->get()->pluck('name', 'id');

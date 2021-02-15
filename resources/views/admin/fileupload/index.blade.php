@@ -41,11 +41,12 @@
 <table class="table table-head-fixed table-hover">
     <thead>
         <tr>
-            <th>@lang('global.app_file_title')</th>
-            <th>@lang('global.app_file_type')</th>
-            <th>@lang('global.app_file_size')</th>
-            <th>@lang('global.app_file_date')</th>
-            <th>@lang('global.app_file_owner')</th>
+            <th>@lang('global.app_file_title')  </th>
+            <th>@lang('global.app_file_type')   </th>
+            <th>@lang('global.app_file_size')   </th>
+            <th>@lang('global.app_file_date')   </th>
+            <th>@lang('global.app_file_owner')  </th>
+            <th>Redator                         </th>
             <th>&nbsp;</th>
         </tr>
     </thead>
@@ -57,6 +58,13 @@
             <td class="align-middle">{{ $item->size }}</td>
             <td class="align-middle">{{ $item->date }}</td>
             <td class="align-middle">{{ $item->ownername }}</td>
+            <td class="align-middle">
+                @if(isset($item->redator))
+                    {{ $item->redator }}
+                    @else
+                        <span>--</span>
+                @endif
+            </td>
             <td class="align-middle text-right">
                 {{ Form::open([
                     'id' => 'formDelete'.$item->id,

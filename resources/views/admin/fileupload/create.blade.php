@@ -41,11 +41,11 @@
 
 
 @section('content')
+{{$store}}
     {!! Form::open(['id' => 'uploadFileAjax', 'method' => 'POST', 'route' => $store, 'enctype' => 'multipart/form-data']) !!}
         {!! Form::hidden('route_id', $id) !!}
         {!! Form::label('title', __('global.app_file_title').'*', ['class' => 'control-label']) !!}
         {!! Form::text('title', old('title'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
-        <br />
         <!-- Até o momento não há necessidade de barra de progresso 16/10/20 -->
         <!-- 
         <div class="progress">
@@ -54,6 +54,10 @@
         -->
         {!! Form::label('fileUpload', __('global.app_file_select'), ['class' => 'btn btn-warning btn-sm mt-2']) !!}
         {!! Form::file('fileUpload', ['style' => 'display: none']) !!}
+        <br />
+        {!! Form::label('redator', 'Redator', ['class' => 'control-label']) !!}
+        {!! Form::text('redator', ' ', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+        <br />
         <span id='file-name'></span>
         {!! Form::submit(__('global.app_create'), ['class' => 'btn btn-primary btn-sm float-right mt-2']) !!}
         <button style="float:right; margin-right:18px; margin-top: 8px;" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">

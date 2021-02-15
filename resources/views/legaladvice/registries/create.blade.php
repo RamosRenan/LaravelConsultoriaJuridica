@@ -104,7 +104,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     {{ Form::label('date_in', __('legaladvice.registries.fields.date_in').'*', ['class' => 'control-label']) }}
                     {{ Form::text('date_in', old('date_in'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('date_in'))
@@ -113,7 +113,7 @@
                         </div>
                     @endif
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     {{ Form::label('deadline', __('legaladvice.registries.fields.deadline').'*', ['class' => 'control-label']) }}
                     {{ Form::text('deadline', old('deadline'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('deadline'))
@@ -122,7 +122,7 @@
                         </div>
                     @endif
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     {{ Form::label('date_out', __('legaladvice.registries.fields.date_out'), ['class' => 'control-label']) }}
                     {{ Form::text('date_out', old('date_out'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
                     @if($errors->has('date_out'))
@@ -131,7 +131,7 @@
                         </div>
                     @endif
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     {{ Form::label('date_return', __('legaladvice.registries.fields.date_return'), ['class' => 'control-label']) }}
                     {{ Form::text('date_return', old('date_return'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
                     @if($errors->has('date_return'))
@@ -139,6 +139,11 @@
                             <span class="help-block">{{ $errors->first('date_return') }}</span>
                         </div>
                     @endif
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label> e-mail </label>
+                    {{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
                 </div>
             </div>
             <div class="row">
@@ -157,15 +162,6 @@
                 <div class="col-md-6 form-group">
                     <label> Redator &nbsp; <small> campo ainda não implementado * </small> </label>
                     {{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('subject'))
-                        <div class="form-group has-error">
-                            <span class="help-block">{{ $errors->first('subject') }}</span>
-                        </div>
-                    @endif
-                </div>
-                <div class="col-md-6 form-group">
-                    <label> e-mail &nbsp; <small> campo ainda não implementado * </small> </label>
-                    {{ Form::text('Redator', '', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('subject'))
                         <div class="form-group has-error">
                             <span class="help-block">{{ $errors->first('subject') }}</span>
