@@ -19,7 +19,12 @@
                 if(data.errors) {
                     $('.progress-bar').text('0%');
                     $('.progress-bar').css('width', '0%');
-                    $('#message').html('<div class="alert alert-error alert-dismissible">'+data.errors+'</div>');
+                    // console.log(data.errors.valueOf().lenght);
+                    // if(data.hasTitle > 0){
+                        $('#message').html('<div class="alert alert-error alert-dismissible">'+'Título já existe !' || data.errors +'</div>');
+                    // }else{
+                        // $('#message').html('<div class="alert alert-error alert-dismissible">'+data.errors+'</div>');
+                    // }
                 }
                 if(data.success) {
                     $('.progress-bar').text('@lang('global.app_file_upload_success')');
@@ -41,7 +46,6 @@
 
 
 @section('content')
-{{$store}}
     {!! Form::open(['id' => 'uploadFileAjax', 'method' => 'POST', 'route' => $store, 'enctype' => 'multipart/form-data']) !!}
         {!! Form::hidden('route_id', $id) !!}
         {!! Form::label('title', __('global.app_file_title').'*', ['class' => 'control-label']) !!}

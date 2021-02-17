@@ -51,7 +51,12 @@ class FileManager extends Model
 
     public static function uploadFile($request, $route = null) {
         $myId = \Auth::user()->id;
+
         $action = app('request')->route()->getAction();
+
+        $hasTitle = self::where('title', $request->input('title'))->get();
+
+        // return response('Informe title: '.$hasTitle, 200)->header('Content-type', 'text/plain');
 
         $route = ($route == null) ? str_replace($action['namespace'].'\\', '', $action['controller']) : $route;
         $route = strstr($route, '@', true);
@@ -66,8 +71,8 @@ class FileManager extends Model
 
         $error = Validator::make($request->all(), $rules);
 
-        if($error->fails()) {
-            return response()->json(['errors' => $error->errors()->all()]);
+        if($error->fails() || (count($hasTitle)>0)) {
+            return response()->json(['errors' => $error->errors()->all(), 'hasTitle'=>count($hasTitle)]);
         }
 
         $file = $request->file('fileUpload');
