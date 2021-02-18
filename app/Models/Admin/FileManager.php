@@ -34,15 +34,18 @@ class FileManager extends Model
 
         }
 
-        $files = $files->each(function($item) {
-            $size = $item->size / 1024;
-
-            if ($size < 1024) {
+        $files = $files->each(function($item){
+            $size = $item->size;
+            if ($size < (1024 * 1024)){
+                $size = $size / 1024;
                 $measure = "KB";
-            } else {
+            }elseif($size < (1024 * 1024 * 1024)){
+                $size = $size / (1024 * 1024);
                 $measure = "MB";
+            }else{
+                $size = $size / (1024 * 1024 * 1024);
+                $measure = "GB";
             }
-
             $item->size = number_format($size, 2, ',', '.') .' '. $measure;
         });
 
@@ -61,8 +64,8 @@ class FileManager extends Model
         $route = ($route == null) ? str_replace($action['namespace'].'\\', '', $action['controller']) : $route;
         $route = strstr($route, '@', true);
 
-        $maxSize = (str_replace('M', '', ini_get('upload_max_filesize')));
-        $uploadMaxSize = $maxSize * 1024;
+        // $maxSize = (str_replace('M', '', ini_get('upload_max_filesize')));
+        // $uploadMaxSize = $maxSize * 1024;
 
         $rules = array(
             'title' => 'required',

@@ -55,7 +55,7 @@
         <tr data-entry-id="{{ $item->id }}">
             <td class="align-middle">{{ $item->title }}</td>
             <td class="align-middle">{{ $item->extension }}</td>
-            <td class="align-middle">{{ $item->size }} </td>
+            <td class="align-middle">{{ $item->size }}</td>
             <td class="align-middle">{{ $item->date }}</td>
             <td class="align-middle">{{ $item->ownername }}</td>
             <td class="align-middle">
