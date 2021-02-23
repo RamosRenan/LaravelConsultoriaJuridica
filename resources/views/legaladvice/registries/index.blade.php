@@ -2,14 +2,15 @@
 
     @section('content_header')
         <link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
-
         <script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+        <script type="text/javascript" src="node_modules/jquery/dist/jquery.js" charset="utf-8"></script>
+        <script type="text/javascript" src="dist/jquery.inputmask.js" charset="utf-8"></script>
+
+
+
 
         <h1 style="color: #339af0;">
             <i class="fa fa-list"></i> 
@@ -56,32 +57,39 @@
 
             var route = '{{ route('legaladvice.registries.mass_destroy') }}';
 
-            // $(document).ready(function() {
-            //     $('#example').DataTable();
-            // } );
-        </script>
-
-        <!--
-            * script responsável por detectar cursor do mouse 
-            * quando deslizar sobre as barras dos protocolos. 
-        -->
-        <script>
-
-            function note(e){
-                var elementClick = e.offsetParent.parentElement.parentElement.nextElementSibling.ch;
-
-                if(elementClick == ""){
-                    e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: contents";
-                    e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "false";
-                }else{
-                    e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: none";
-                    e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "";
-                }
-                // console.log(e.offsetParent.parentElement.parentElement.nextElementSibling);
-                // console.log(e.offsetParent.parentElement.parentElement.nextElementSibling.ch);
-            }  
             
+            $(document).ready(function() {
+                const subChar = '_';
+                var paragraph = $("#search").val();
+                $('#search').on('focus click', function() {
+                    $(this)[0].setSelectionRange(0, 0);
+                    $("#search").keydown(function(e) {
+                        // let firstFound = paragraph.indexOf(subChar);
+                        // let cut = paragraph.substr(firstFound);
+                        // $('#search').val(paragraph.substr(firstFound));
+
+                        // let cutRight = $("#search").val();
+                        // let wasCutR = cutRight.substr(firstFound);
+                        // let resp = $("#search").val(wasCutR);
+                        // let cutLeft = $("#search").val().substring(0, firstFound + 1);
+                        // var newString = $("#search").val(cutLeft + cutRight);
+
+                        $("#search").inputmask({
+                            mask: '99.999.999-9',
+                            placeholder: '__.___.___-_',
+                            showMaskOnHover: false,
+                            showMaskOnFocus: false,
+                        });
+
+                        console.log("\n Valor final: "+paragraph.substr(1));
+                    });
+
+                    
+                });
+            });
         </script>
+
+         
     @stop
 
     <style> 
@@ -102,7 +110,7 @@
                         {{ Form::open(['method' => 'GET', 'route' => ['legaladvice.registries.index']]) }}
                         @csrf
                         <div class="input-group input-group-sm">
-                            {{ Form::text('search', $search, ['class' => 'form-control', 'placeholder' => __('global.app_search')]) }}
+                            {{ Form::text('search', '__.___.___-_', array('class'=>'form-control', 'id'=>'search')) }}                             
                             <span class="input-group-append">
                                 {{ Form::button('<i class="fa fa-search"></i>', ['type' => 'submit', 'class' => 'btn btn-info btn-flat']) }}
                             </span>
