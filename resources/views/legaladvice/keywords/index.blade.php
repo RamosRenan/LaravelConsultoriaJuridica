@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content_header')
-    <h1><i class="fa fa-exclamation"></i> @lang('legaladvice.priorities.title')</h1>
+    <h1> Defina palavras chaves</h1>
 @stop
 
 @section('js') 
@@ -51,18 +51,11 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                    <a href="{{ route('legaladvice.priorities.create') }}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> @lang('global.app_create')</a>
+                    <a href="{{ route('legaladvice.keywords.create') }}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Inserir </a>
                 </div>
                 <div class="col-md-6">
                     <div class="float-sm-right">
-                        {{ Form::open(['method' => 'GET', 'route' => ['legaladvice.priorities.index']]) }}
-                        <div class="input-group input-group-sm">
-                            {{ Form::text('search', $search, ['class' => 'form-control', 'placeholder' => __('global.app_search')]) }}
-                            <span class="input-group-append">
-                                {{ Form::button('<i class="fa fa-search"></i>', ['type' => 'submit', 'class' => 'btn btn-info btn-flat']) }}
-                            </span>
-                        </div>
-                        {{ Form::close() }}
+                         
                     </div>
                 </div>
             </div>
@@ -84,27 +77,27 @@
                 </thead>
                 <tbody>
                 @foreach ($items as $item)
-                <tr id="{{ $item->id }}" data-entry-id="{{ $item->id }}" class="item-order">
-                    <td class="align-middle text-center">
-                        <div class="checkbox icheck-primary">
-                            {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }}
-                            {{ Form::label('selectId'.$item->id, '&nbsp;') }}
-                        </div>
-                    </td>
-                    <td class="align-middle">{{ $item->name }}</td>
-                    <td class="align-middle text-right">
-                        {{ Form::open(array(
-                            'id' => 'deleteItem'.$item->id,
-                            'method' => 'DELETE',
-                            'route' => ['legaladvice.priorities.destroy', $item->id])) }}
-                        {{ Form::close() }}
-                        <a href="#" class="btn btn-sm btn-secondary order-handle"><i class="fa fa-arrows-alt"></i></a>
-                        <div class="btn-group">
-                            <a href="{{ route('legaladvice.priorities.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
-                            {{ Form::button('<i class="fa fa-trash"></i> ' . __('global.app_delete'), ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
-                        </div>
-                    </td>
-                </tr>
+                    <tr id="{{ $item->id }}" data-entry-id="{{ $item->id }}" class="item-order">
+                        <td class="align-middle text-center">
+                            <div class="checkbox icheck-primary">
+                                {{ Form::checkbox('ids[]', $item->id, false, ['id' => 'selectId'.$item->id]) }}
+                                {{ Form::label('selectId'.$item->id, '&nbsp;') }}
+                            </div>
+                        </td>
+                        <td class="align-middle">{{ $item->name }}</td>
+                        <td class="align-middle text-right">
+                            {{ Form::open(array(
+                                'id' => 'deleteItem'.$item->id,
+                                'method' => 'DELETE',
+                                'route' => ['legaladvice.priorities.destroy', $item->id])) }}
+                            {{ Form::close() }}
+                            <a href="#" class="btn btn-sm btn-secondary order-handle"><i class="fa fa-arrows-alt"></i></a>
+                            <div class="btn-group">
+                                <a href="{{ route('legaladvice.priorities.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
+                                {{ Form::button('<i class="fa fa-trash"></i> ' . __('global.app_delete'), ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
+                            </div>
+                        </td>
+                    </tr>
                 @endforeach
                 </tbody>
             </table>
@@ -123,7 +116,7 @@
                 </div>
                 <div class="col-md-9">
                     <div class="float-right">
-                    {{ $items->links() }}
+                     
                     </div>
                 </div>
             </div>

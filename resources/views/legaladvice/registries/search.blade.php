@@ -19,7 +19,7 @@
          <div id="collapseOne" @if (count($items) > 0) class="panel-collapse collapse in" @endif >
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-3 form-group"> 
                         {{ Form::label('protocol', __('legaladvice.registries.fields.protocol'), ['class' => 'control-label']) }}
                         {{ Form::text('protocol', old('protocol'), ['class' => 'form-control', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '']) }}
                     </div>

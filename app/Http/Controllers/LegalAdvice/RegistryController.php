@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Validate\pregmatch;
 use App\Http\Controllers\Validate\boolean;
 use Illuminate\Support\Facades\Validator;
+use App\Models\LegalAdvice\Key_words;
+
+
+
 
 class RegistryController extends Controller {
     public function __construct() {
@@ -218,10 +222,10 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $doctypes = Doctype::orderBy('order')->get()->pluck('name', 'id');
-        $statuses = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
-        $priorities = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
-        $places = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $doctypes       = Doctype::orderBy('order')->get()->pluck('name', 'id');
+        $statuses       = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $priorities     = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $places         = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
 
         return view('legaladvice.registries.create', compact('doctypes', 'statuses', 'priorities', 'places'));
     }

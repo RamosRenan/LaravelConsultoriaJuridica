@@ -64,24 +64,12 @@
                 $('#search').on('focus click', function() {
                     $(this)[0].setSelectionRange(0, 0);
                     $("#search").keydown(function(e) {
-                        // let firstFound = paragraph.indexOf(subChar);
-                        // let cut = paragraph.substr(firstFound);
-                        // $('#search').val(paragraph.substr(firstFound));
-
-                        // let cutRight = $("#search").val();
-                        // let wasCutR = cutRight.substr(firstFound);
-                        // let resp = $("#search").val(wasCutR);
-                        // let cutLeft = $("#search").val().substring(0, firstFound + 1);
-                        // var newString = $("#search").val(cutLeft + cutRight);
-
                         $("#search").inputmask({
                             mask: '99.999.999-9',
                             placeholder: '__.___.___-_',
                             showMaskOnHover: false,
                             showMaskOnFocus: false,
                         });
-
-                        console.log("\n Valor final: "+paragraph.substr(1));
                     });
 
                     
