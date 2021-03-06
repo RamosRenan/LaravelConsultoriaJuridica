@@ -19,7 +19,7 @@ $(document).ready(function() {
                 form.append('<input name="_token" type="text" value="' + token + '">');
                 $.each( $("input[name='ids[]']:checked"), function() {
                     form.append('<input name="ids[]" type="text" value="'+$(this).val()+'">');
-                } );
+                });
                 $('body').append(form);
                 form.submit();
             }

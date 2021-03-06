@@ -102,6 +102,12 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 form-group">
+                        {{ Form::label('key_words', 'Palavra chave', ['class' => 'control-label']) }}<br />
+                        {{ Form::select('key_words[]', $Key_words, old('key_words[]'), ['style' => 'width: 100%', 'class' => 'form-control select2', 'multiple' => '']) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
                         {{ Form::label('subject', __('legaladvice.registries.fields.subject'), ['class' => 'control-label']) }}
                         {{ Form::text('subject', old('subject'), ['class' => 'form-control', 'placeholder' => '']) }}
                     </div>
@@ -127,7 +133,6 @@
                         <th>@lang('legaladvice.registries.fields.date_in')</th>
                         <th>@lang('legaladvice.registries.fields.deadline')</th>
                         <th><i class="fa fa-file"></i></th>
-                        <th><i class="fa fa-share"></i></th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -140,7 +145,6 @@
                     <td class="align-middle">{{ $item->date_in }}</td>
                     <td class="align-middle">{{ $item->deadline }}</td>
                     <td class="align-middle">{{ $item->files }}</td>
-                    <td class="align-middle">{{ $item->procedures }}</td>
                     <td class="align-middle text-right">
                         <div class="btn-group">
                             <a href="{{ route('legaladvice.registries.show',[$item->id]) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> @lang('global.app_show')</a>
@@ -152,15 +156,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="float-right">
-                    {{ $items->appends($form)->links() }}
-                    </div>
-                </div>
-            </div>
-        </div>
+         
     </div>
     @endif
 {{ Form::close() }}

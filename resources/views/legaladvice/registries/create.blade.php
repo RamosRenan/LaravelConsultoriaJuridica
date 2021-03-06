@@ -143,15 +143,13 @@
                         </div>
                     @endif
                 </div>
-
                 <div class="col-md-4 form-group">
                     <label> e-mail </label>
                     {{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
                 </div>
-
                 <div class="col-md-12 form-group">
-                    {{ Form::label('priority', __('legaladvice.registries.fields.priority'), ['class' => 'control-label']) }}<br />
-                    {{ Form::select('priority[]', $priorities, old('priority'), ['style' => 'width: 100%', 'class' => 'form-control select2', 'multiple' => '']) }}
+                    {{ Form::label('key_words', 'Palavra chave', ['class' => 'control-label']) }}<br />
+                    {{ Form::select('key_words[]', $Key_words, old('key_words[]'), ['style' => 'width: 100%', 'class' => 'form-control select2', 'multiple' => '']) }}
                 </div>
             </div>
             <div class="row">
@@ -164,19 +162,6 @@
                         </div>
                     @endif
                 </div>
-            </div>
-            <div class="row">
-                <!--
-                <div class="col-md-6 form-group">
-                    <label> Redator &nbsp; <small> campo ainda não implementado * </small> </label>
-                    {{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('subject'))
-                        <div class="form-group has-error">
-                            <span class="help-block">{{ $errors->first('subject') }}</span>
-                        </div>
-                    @endif
-                </div>
-                -->
             </div>
         </div>
         <div class="card-footer text-right">
@@ -197,21 +182,6 @@
             $(".addon2").click(function(){
                 // Get CSRF token
 	            const token = '{{ csrf_token() }}';
-
-                // #method 1
-                // jQuery.get("/legaladvice/registries_verify_eProtocol", `protocol=${this.value}`, function(data){
-                //     console.log(data);
-                // } );
- 
-                // #method 2
-                // $("#rolup").load("/legaladvice/registries_verify_eProtocol", `protocol=${this.value}`);
-
-                // Set CSRF in header
-                // $.ajaxSetup({
-                //     headers: {
-                //         'X-CSRF-TOKEN': token
-                //     }
-                // });
 
                 jQuery.ajax({
                     // beforeSend: function( xhr ) {

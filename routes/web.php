@@ -97,6 +97,7 @@ Route::group(['middleware' => ['auth', 'auth.unique.user', 'check.permissions'],
     Route::get('doctypes_order', ['uses' => 'LegalAdvice\DocumentsController@order', 'as' => 'doctypes.order']);
     
     Route::resource('keywords', 'LegalAdvice\keyWordsController');
+    Route::get('keywordDestroy', 'LegalAdvice\keyWordsController@destroy')->name('unitDestroy');
 
     Route::resource('priorities', 'LegalAdvice\PrioritiesController');
     Route::post('priorities_mass_destroy', ['uses' => 'LegalAdvice\PrioritiesController@massDestroy', 'as' => 'priorities.mass_destroy']);

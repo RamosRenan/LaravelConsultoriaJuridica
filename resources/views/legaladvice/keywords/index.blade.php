@@ -42,11 +42,24 @@
         }
     }).disableSelection();
 
-    var route = '{{ route('legaladvice.priorities.mass_destroy') }}';
 </script>
 @stop
+ 
+
+
 
 @section('content')
+    @if(session('status') && session('status') == 200)
+        <div class="alert alert-success" role="alert">
+            Excluído com sucesso !
+        </div>         
+        @else
+            @if(session('status') instanceof Exception)
+                <div class="alert alert-danger" role="alert">
+                    Não foi possível excluir: {{ session('status') }}
+                </div> 
+            @endif
+    @endif
     <div class="card card-default">
         <div class="card-header">
             <div class="row">
@@ -93,8 +106,11 @@
                             {{ Form::close() }}
                             <a href="#" class="btn btn-sm btn-secondary order-handle"><i class="fa fa-arrows-alt"></i></a>
                             <div class="btn-group">
-                                <a href="{{ route('legaladvice.priorities.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
-                                {{ Form::button('<i class="fa fa-trash"></i> ' . __('global.app_delete'), ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
+                                <a href="{{ route('legaladvice.keywords.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
+                                <button type="button" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i> &nbsp; 
+                                    <a href="{{route('legaladvice.unitDestroy',['id'=>$item->id] )}}" style="color:white"> @lang('global.app_delete')</a>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -111,7 +127,7 @@
             <div class="row">
                 <div class="col-md-3">
                     @if (count($items) > 0)
-                        <button class="btn btn-danger massDelete"><i class="fa fa-trash"></i> @lang('global.app_delete_selected')</button>
+                        <button class="btn btn-danger massDelete"><i class="fa fa-trash"></i> @lang('global.app_delete_selected') </button>
                     @endif
                 </div>
                 <div class="col-md-9">
