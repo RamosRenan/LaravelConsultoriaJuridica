@@ -17,8 +17,6 @@ use App\Http\Controllers\Validate\pregmatch;
 use App\Http\Controllers\Validate\boolean;
 use Illuminate\Support\Facades\Validator;
 use App\Models\LegalAdvice\Key_words;
-use Illuminate\Support\Arr;
-use App\Models\LegalAdvice\protocol_kw;
 
 
 
@@ -206,22 +204,24 @@ class RegistryController extends Controller {
                 $item->deadline = date("d/m/Y", strtotime($item->deadline));
                 $item->files = isset($this->files[$item->id]) ? $this->files[$item->id] : 0;
             });
-        }elseif($request['key_words'] != null) {
 
-                $items = DB::table('protocol_kw')
-                ->whereIn('id_keyword', $this->request['key_words'])
-                ->join('registries', 'registries.id', '=', 'protocol_kw.id_protocolo')
-                ->get();
+        } elseif($request['key_words'] != null) {
 
-                $items->each( function($item) {
-                    $item->date_in = date("d/m/Y", strtotime($item->date_in));
-                    $item->deadline = date("d/m/Y", strtotime($item->deadline));
-                    $item->files = isset($this->files[$item->id]) ? $this->files[$item->id] : 0;
-                });
-                
-                $items = $items->unique('protocol');
-        }else{
-            $items = [];
+            $items = DB::table('protocol_kw')
+            ->whereIn('id_keyword', $this->request['key_words'])
+            ->join('registries', 'registries.id', '=', 'protocol_kw.id_protocolo')
+            ->get();
+
+            $items->each( function($item) {
+                $item->date_in = date("d/m/Y", strtotime($item->date_in));
+                $item->deadline = date("d/m/Y", strtotime($item->deadline));
+                $item->files = isset($this->files[$item->id]) ? $this->files[$item->id] : 0;
+            });
+            
+            $items = $items->unique('protocol');
+        
+        }else {
+                $items = [];
         }
 
         $doctypes = Doctype::orderBy('order')->get()->pluck('name', 'id');
@@ -242,8 +242,8 @@ class RegistryController extends Controller {
         $doctypes       = Doctype::orderBy('order')->get()->pluck('name', 'id');
         $statuses       = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $priorities     = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $places         = Place::orderBy('order', 'asc')->get()->pluck('name', 'id'); 
         $Key_words      = DB::table('key_words')->select('*')->get()->pluck('name', 'id');
-         $places        = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
 
         return view('legaladvice.registries.create', compact('doctypes', 'statuses', 'priorities', 'places', 'Key_words'));
     }
@@ -254,8 +254,6 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $id = null) {
-        // return $request;
-
         $existeProtocolo = Registry::where('protocol', 'like', $request->protocol.'%')->count();
 
         if($existeProtocolo>0)
@@ -290,7 +288,7 @@ class RegistryController extends Controller {
         $date_out = $request->date_out ? $this->dateBR($request->date_out) : '';
         $date_return = $request->date_return ? $this->dateBR($request->date_return) : '';
 
-        $form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return', 'key_words');
+        $form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return');
         $form += [ 
                 'date_in' => $date_in,
                 'deadline' => $deadline,
@@ -298,16 +296,7 @@ class RegistryController extends Controller {
                 'date_return' => $date_return,
         ];
 
-        $kw_arr = (array)$request->input('key_words');
-        
         $id = Registry::create($form);
-        
-        for ($i=0; $i < count($kw_arr); $i++) { 
-            # code...
-            protocol_kw::create([
-                'id_protocolo' => $id->id, 'id_keyword' => $kw_arr[$i],
-            ]);
-        }
 
         return redirect()->route('legaladvice.registries.edit', $id->id)->with('success', __('global.app_msg_store_success'));
     }
