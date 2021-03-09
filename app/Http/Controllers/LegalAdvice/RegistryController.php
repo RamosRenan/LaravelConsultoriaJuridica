@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\LegalAdvice;
 
 use App\Models\LegalAdvice\Doctype;
+use App\Models\LegalAdvice\protocol_kw;
 use App\Models\LegalAdvice\Procedure;
 use App\Models\LegalAdvice\Status;
 use App\Models\LegalAdvice\Priority;
@@ -22,9 +23,13 @@ use App\Models\LegalAdvice\Key_words;
 
 
 class RegistryController extends Controller {
+    
     public function __construct() {
         $this->middleware('check.permissions');
     }
+
+
+
 
     /**
      * Display a listing of Procedures.
@@ -34,8 +39,6 @@ class RegistryController extends Controller {
     public function index(Request $request){
          
         $search = @$_GET['search'];
-
-        // return $search;
 
         $res = isset($_GET['see'], $_GET['priority']) ? 'true' || true : false; if($res) return  $this->findPriority($_GET['priority']);
         
@@ -159,9 +162,6 @@ class RegistryController extends Controller {
         group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agrupa r e n */
         po.document_type, po.document_number,  po.source, po.date, po.subject
         order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
-        // return $results; 
-
-        // return $items;
          
         return view('legaladvice.registries.index', compact('items', 'search'));
     }
@@ -288,7 +288,7 @@ class RegistryController extends Controller {
         $date_out = $request->date_out ? $this->dateBR($request->date_out) : '';
         $date_return = $request->date_return ? $this->dateBR($request->date_return) : '';
 
-        $form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return');
+        $form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return', 'key_words');
         $form += [ 
                 'date_in' => $date_in,
                 'deadline' => $deadline,
@@ -296,7 +296,17 @@ class RegistryController extends Controller {
                 'date_return' => $date_return,
         ];
 
+        $kw_arr = (array)$request->input('key_words');
+        
         $id = Registry::create($form);
+        
+        for ($i=0; $i < count($kw_arr); $i++) { 
+            # code...
+            protocol_kw::create([
+                'id_protocolo' => $id->id, 'id_keyword' => $kw_arr[$i],
+            ]);
+        }
+
 
         return redirect()->route('legaladvice.registries.edit', $id->id)->with('success', __('global.app_msg_store_success'));
     }

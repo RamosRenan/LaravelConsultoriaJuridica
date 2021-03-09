@@ -21,23 +21,24 @@
 
         /* /view/admin/fileupload */ 
         $('#modalBox').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var modal = $(this)
+            var button = $(event.relatedTarget);
+            var modal = $(this);
 
-            $('#modalBoxContent').load(button.data('url'), function(){
-                $('#myModal').modal({ show:true });
-            });
+            $('#modalBoxContent').load(button.data('url'));
         });
 
         $('#modalBox').on('hide.bs.modal', function (event) {
             loadCalls();
-        });       
+        }); 
+        
     });
  
+
 </script>
 @stop
 
 @section('content')
+
     <div class="modal fade" id="modalBox" role="dialog">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -175,9 +176,9 @@
             <!-- Insere um novo documento -->
             <div class="row">
                 <div class="col-md-12 form-group">
-                    {{ Form::label('source_file', __('legaladvice.registries.fields.files'). '  ', ['class' => 'control-label']) }}
+                    <b> Arquivos relacionados </b> &nbsp;
                     <!-- button aciona modal -->
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create')</button>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"> Novo arquivo </button>
                     <!-- Aqui mostra tabela de arquivos cadastros -->
                     <div id="filesBox"></div> 
                 </div>
@@ -187,7 +188,7 @@
             <div class="row">
                 <div class="col-md-12 form-group">
                     {{ Form::label('procedures', __('legaladvice.registries.fields.procedures'), ['class' => 'control-label']) }} 
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.procedures.create') }}?id={{ $id }}"><i class="fa fa-plus"></i> @lang('global.app_create') </button>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.procedures.create') }}?id={{ $id }}"> Nova tramitação </button>
                     <div id="proceduresBox"></div>
                 </div>
             </div>

@@ -19,13 +19,12 @@
                 if(data.errors) {
                     $('.progress-bar').text('0%');
                     $('.progress-bar').css('width', '0%');
-                    // console.log(data.errors.valueOf().lenght);
-                    // if(data.hasTitle > 0){
-                        $('#message').html('<div class="alert alert-error alert-dismissible">'+'Título já existe !' || data.errors +'</div>');
-                    // }else{
-                        // $('#message').html('<div class="alert alert-error alert-dismissible">'+data.errors+'</div>');
-                    // }
-                }
+                        document.getElementById('uploadFileAjax').reset();
+                        $('#message').html('<div class="alert alert-error alert-dismissible">'+'Dados não enviado. Título já existente  !!!' || data.errors +'</div>');
+                        document.getElementById('file-name').textContent = '';
+                        document.getElementById('chargedFile').innerHTML = "";
+
+                    }
                 if(data.success) {
                     $('.progress-bar').text('@lang('global.app_file_upload_success')');
                     $('.progress-bar').css('width', '100%');
@@ -38,8 +37,13 @@
         });
 
         document.getElementById('fileUpload').addEventListener('change', function(){
-            document.getElementById('file-name').textContent = this.value;
+            let file_name = document.getElementById('file-name');
+            file_name.textContent = this.value;
+            file_name.style.fontSize = "x-large" ;
+            file_name.style.color = "green" ;
+            document.getElementById('chargedFile').innerHTML = " DOCUMENTO CARREGADO COM SUCESSO  <i class='fas fa-check'></i>";
         });
+
     });
 </script>
 @stop
@@ -49,13 +53,7 @@
     {!! Form::open(['id' => 'uploadFileAjax', 'method' => 'POST', 'route' => $store, 'enctype' => 'multipart/form-data']) !!}
         {!! Form::hidden('route_id', $id) !!}
         {!! Form::label('title', __('global.app_file_title').'*', ['class' => 'control-label']) !!}
-        {!! Form::text('title', old('title'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
-        <!-- Até o momento não há necessidade de barra de progresso 16/10/20 -->
-        <!-- 
-        <div class="progress">
-            <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
-        </div> 
-        -->
+        {!! Form::text('title', old('title'), ['class' => 'form-control', 'placeholder' => '', 'required' => '', 'title'=>'nao esqueca']) !!}
         {!! Form::label('fileUpload', __('global.app_file_select'), ['class' => 'btn btn-warning btn-sm mt-2']) !!}
         {!! Form::file('fileUpload', ['style' => 'display: none']) !!}
         <br />
@@ -63,7 +61,9 @@
         {!! Form::text('redator', ' ', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
         <br />
         <span id='file-name'></span>
-        {!! Form::submit(__('global.app_create'), ['class' => 'btn btn-primary btn-sm float-right mt-2']) !!}
+        &nbsp;
+        <span id="chargedFile" STYLE="color:green;"></span>
+        {!! Form::submit('Enviar dados', ['class' => 'btn btn-primary btn-sm float-right mt-2']) !!}
         <button style="float:right; margin-right:18px; margin-top: 8px;" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
             Fechar
         </button>

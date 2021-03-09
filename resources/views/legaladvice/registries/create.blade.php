@@ -29,7 +29,7 @@
             </div>
             <div class="row">
                 <div class="col-md-3 form-group">
-                    {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}<small> &nbsp; Dica: Crtl + Space. </small>
+                    {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}<small> &nbsp; </small>
                     <div class="input-group mb-3">
                         {{ Form::text('protocol', old('protocol'), ['class' => 'form-control eprotocolkeypress', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '', 'required' => '', 'id'=>'eprotocolkeypress', 'data-trigger'=>'focus']) }}
                         <button class="addon2" type="button" id="addon2"> Procure </button>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="col-md-2 form-group">
-                    {{ Form::label('document_type', __('legaladvice.registries.fields.document_type').'*', ['class' => 'control-label']) }}
+                    {{ Form::label('document_type', 'Documento *', ['class' => 'control-label']) }}
                     {{ Form::select('document_type', $doctypes, old('document_type'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('document_type'))
                         <div class="form-group has-error">
@@ -50,7 +50,7 @@
                     @endif
                 </div>
                 <div class="col-md-2 form-group">
-                    {{ Form::label('document_number', __('legaladvice.registries.fields.document_number').'*', ['class' => 'control-label']) }}
+                    {{ Form::label('document_number', 'Nº do documento*', ['class' => 'control-label']) }}
                     {{ Form::text('document_number', old('document_number'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('document_number'))
                         <div class="form-group has-error">
@@ -70,7 +70,7 @@
             </div>
             <div class="row">
                 <div class="col-md-2 form-group">
-                    {{ Form::label('status', __('legaladvice.registries.fields.status'), ['class' => 'control-label']) }}
+                    {{ Form::label('status', 'Solução', ['class' => 'control-label']) }}
                     {{ Form::select('status', $statuses, old('status'), ['class' => 'form-control', 'placeholder' => '']) }}
                     @if($errors->has('status'))
                         <div class="form-group has-error">
@@ -79,7 +79,7 @@
                     @endif
                 </div>
                 <div class="col-md-3 form-group">
-                    {{ Form::label('priority', __('legaladvice.registries.fields.priority').'*', ['class' => 'control-label']) }}
+                    {{ Form::label('priority', 'Natureza *', ['class' => 'control-label']) }}
                     {{ Form::select('priority', $priorities, old('priority'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
                     @if($errors->has('priority'))
                         <div class="form-group has-error">
@@ -144,8 +144,8 @@
                     @endif
                 </div>
                 <div class="col-md-4 form-group">
-                    <label> e-mail </label>
-                    {{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                    <label> E-mail </label>
+                    {{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => '']) }}
                 </div>
                 <div class="col-md-12 form-group">
                     {{ Form::label('key_words', 'Palavra chave', ['class' => 'control-label']) }}<br />

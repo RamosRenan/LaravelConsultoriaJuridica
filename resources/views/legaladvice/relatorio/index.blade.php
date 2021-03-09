@@ -24,10 +24,11 @@
 
         <div class="card-body" style="background: white;" >
     
-            <h4 style="font-family: Arial, Helvetica, sans-serif;"><u> Relatório </u></h4>
 
             <div class="container" style="">
                 <div class="row">
+                    <h5 style="font-family: Arial, Helvetica, sans-serif; margin-left: 15px;"><u> Relatório </u></h5>
+
                     <!-- qtd por ano -->
                     <div class="col-12" style="margin: auto;">
                         <div class="p-3 border bg-light">
