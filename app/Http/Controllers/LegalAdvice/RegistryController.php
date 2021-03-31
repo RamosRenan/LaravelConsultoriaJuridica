@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\LegalAdvice;
 
 use App\Models\LegalAdvice\Doctype;
-use App\Models\LegalAdvice\protocol_kw;
+use App\Models\LegalAdvice\Protocolo_kw;
 use App\Models\LegalAdvice\Procedure;
 use App\Models\LegalAdvice\Status;
 use App\Models\LegalAdvice\Priority;
@@ -207,9 +207,9 @@ class RegistryController extends Controller {
 
         } elseif($request['key_words'] != null) {
 
-            $items = DB::table('protocol_kw')
+            $items = DB::table('protocolo_kw')
             ->whereIn('id_keyword', $this->request['key_words'])
-            ->join('registries', 'registries.id', '=', 'protocol_kw.id_protocolo')
+            ->join('registries', 'registries.id', '=', 'protocolo_kw.id_protocolo')
             ->get();
 
             $items->each( function($item) {
@@ -302,7 +302,7 @@ class RegistryController extends Controller {
         
         for ($i=0; $i < count($kw_arr); $i++) { 
             # code...
-            protocol_kw::create([
+            Protocolo_kw::create([
                 'id_protocolo' => $id->id, 'id_keyword' => $kw_arr[$i],
             ]);
         }

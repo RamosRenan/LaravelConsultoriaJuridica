@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 
 
 
-class protocol_kw extends Model
+class Protocolo_kw extends Model
 {
     // filds
 
-    protected $table = 'protocol_kw';
+    protected $table = 'protocolo_kw';
 
     protected $fillable = ['id', 'id_protocolo', 'id_keyword', 'created_at', 'updated_at'];
 

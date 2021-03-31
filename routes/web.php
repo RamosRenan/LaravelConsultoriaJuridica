@@ -97,6 +97,7 @@ Route::group(['middleware' => ['auth', 'auth.unique.user', 'check.permissions'],
     Route::get('doctypes_order', ['uses' => 'LegalAdvice\DocumentsController@order', 'as' => 'doctypes.order']);
     
     Route::resource('relatorio', 'LegalAdvice\RelatorioProtocoloCadastradoController');
+    Route::post('relatorioSearch', 'LegalAdvice\RelatorioProtocoloCadastradoController@show')->name('relatorioSearch');
 
     Route::resource('keywords', 'LegalAdvice\keyWordsController');
     Route::get('keywordDestroy', 'LegalAdvice\keyWordsController@destroy')->name('unitDestroy');
