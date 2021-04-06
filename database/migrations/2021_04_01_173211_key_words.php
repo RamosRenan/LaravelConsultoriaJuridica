@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ProtocolKw extends Migration
+class KeyWords extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class ProtocolKw extends Migration
      */
     public function up()
     {
-        // create
-        Schema::create('protocolo_kw', function(Blueprint $table){
+        //tuples
+        Schema::connection('legaladvice')->create('key_words', function (Blueprint $table){
             $table->bigIncrements('id');
-            $table->integer('id_protocolo');
-            $table->integer('id_keyword');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -29,7 +28,7 @@ class ProtocolKw extends Migration
      */
     public function down()
     {
-        // drop if exist table
-        Schema::dropIfExists('protocolo_kw');
+        //code ...
+        Schema::dropIfExists('key_words');
     }
 }

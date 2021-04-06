@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 
 
-class Protocolo_kw extends Model
+class Protocol_kw extends Model
 {
     // filds
 

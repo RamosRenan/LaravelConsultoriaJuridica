@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Dispatcher $events)
     {
-         $events->listen(BuildingMenu::class, function (BuildingMenu $event) {
+        $events->listen(BuildingMenu::class, function (BuildingMenu $event) {
             $lista = [];
 
             $isSuperAdmin = Gate::allows('@@ superadmin @@');

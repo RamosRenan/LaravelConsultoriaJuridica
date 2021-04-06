@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\LegalAdvice;
 
 use App\Models\LegalAdvice\Doctype;
-use App\Models\LegalAdvice\Protocolo_kw;
+use App\Models\LegalAdvice\Protocol_kw;
 use App\Models\LegalAdvice\Procedure;
 use App\Models\LegalAdvice\Status;
 use App\Models\LegalAdvice\Priority;
@@ -114,7 +114,6 @@ class RegistryController extends Controller {
                         n.registries_id, n.created_at, n.contain, n.inserted_by, n.date_in,                     /* select tuplas  notes */
                         pi.name, pi.order, pi.id as priority_id,                                                /* select tuplas priorities */
                         po.registry_id, po.document_type, po.document_number, po.source, po.date, po.subject,   /* select tuplas procedures */
-
                         count(po.files) as qtd_procedures_files,             /* conta qtd de files   */
                         count(fm) as qtd_file_managers                      /* conta qtd de files   */
                         FROM registries r                                   /* da tabela registries */
@@ -122,9 +121,7 @@ class RegistryController extends Controller {
                         left join procedures po on po.registry_id=r.id      /* junta com procedures */
                         left join file_managers fm on r.id=fm.route_id      /* junta com file_managers */
                         left outer join notes n on n.registries_id=r.id     /* junta com notes, busca fora relação */
-
                         where r.protocol like '$search%' or r.interested like '%$search%' /* busca personalizada */
-
                         group by r.protocol, n.registries_id, r.id, n.created_at, n.contain, n.inserted_by, n.date_in, pi.name, pi.order, priority_id, po.registry_id, /* agrupa r e n */
                         po.document_type, po.document_number,  po.source, po.date, po.subject
                         order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
@@ -205,6 +202,7 @@ class RegistryController extends Controller {
                 $item->files = isset($this->files[$item->id]) ? $this->files[$item->id] : 0;
             });
 
+
         } elseif($request['key_words'] != null) {
 
             $items = DB::table('protocolo_kw')
@@ -221,7 +219,7 @@ class RegistryController extends Controller {
             $items = $items->unique('protocol');
         
         }else {
-                $items = [];
+            $items = false;
         }
 
         $doctypes = Doctype::orderBy('order')->get()->pluck('name', 'id');
@@ -302,7 +300,7 @@ class RegistryController extends Controller {
         
         for ($i=0; $i < count($kw_arr); $i++) { 
             # code...
-            Protocolo_kw::create([
+            Protocol_kw::create([
                 'id_protocolo' => $id->id, 'id_keyword' => $kw_arr[$i],
             ]);
         }

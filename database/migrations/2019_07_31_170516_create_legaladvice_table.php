@@ -169,6 +169,7 @@ class CreateLegaladviceTable extends Migration
             $table->foreign('document_type')->references('id')->on('doctypes')->onDelete('cascade');
             $table->string('document_number');
             $table->string('source');
+            $table->string('email');
             $table->integer('status')->unsigned()->nullable();
             $table->foreign('status')->references('id')->on('doctypes')->onDelete('cascade');
             $table->integer('priority')->unsigned();

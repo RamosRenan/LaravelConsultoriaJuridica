@@ -37,6 +37,9 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
+
+
+
     /**
      * Create a new controller instance.
      *
@@ -47,11 +50,17 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
     
+
+
+
     public function username()
     {
         return "username";
     }
     
+
+
+
     protected function validateLogin(Request $request)
     {
         $this->validate($request, [
@@ -59,6 +68,9 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
     }
+
+
+
 
     protected function attemptLogin(Request $request)
     {
@@ -73,54 +85,63 @@ class LoginController extends Controller
         // [#14](https://github.com/jotaelesalinas/laravel-simple-ldap-auth/issues/14):
         // Adldap::auth()->bind($userdn, $password);
 
-        if(Adldap::auth()->attempt($userdn, $password, $bindAsUser = true)) {
-            // the user exists in the LDAP server, with the provided password
-
-            $user = User::where($this->username(), $username)->first();
-            if (!$user) {
-                // the user doesn't exist in the local database, so we have to create one
-
-                $user = new User();
-                $user->username = $username;
-                $user->password = '';
-
-                // you can skip this if there are no extra attributes to read from the LDAP server
-                // or you can move it below this if(!$user) block if you want to keep the user always
-                // in sync with the LDAP server 
-                $sync_attrs = $this->retrieveSyncAttributes($username);
-                foreach ($sync_attrs as $field => $value) {
-                    $user->$field = $value !== null ? $value : '';
+        try {
+            //code...
+            // Para ambiente intranet
+            if(Adldap::auth()->attempt($userdn, $password, $bindAsUser = true)) {
+                // the user exists in the LDAP server, with the provided password
+    
+                $user = User::where($this->username(), $username)->first();
+                if (!$user) {
+                    // the user doesn't exist in the local database, so we have to create one
+    
+                    $user = new User();
+                    $user->username = $username;
+                    $user->password = '';
+    
+                    // you can skip this if there are no extra attributes to read from the LDAP server
+                    // or you can move it below this if(!$user) block if you want to keep the user always
+                    // in sync with the LDAP server 
+                    $sync_attrs = $this->retrieveSyncAttributes($username);
+                    foreach ($sync_attrs as $field => $value) {
+                        $user->$field = $value !== null ? $value : '';
+                    }
                 }
-            }
-
-            $users = User::all();
-
-            if (! Gate::allows('@@ superadmin @@') && $users->count() < 1 ) {
-                app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-                Permission::create(['name' => '@@ superadmin @@']);
-
-                $roleSuperAdmin = Role::create(['name' => '@@ superadmin @@']);
-                $roleSuperAdmin->givePermissionTo('@@ superadmin @@');
     
-                $user->assignRole('@@ superadmin @@');
-
-                Permission::create(['name' => '@@ admin @@']);
+                $users = User::all();
     
-                $roleAdmin = Role::create(['name' => '@@ admin @@']);
-                $roleAdmin->givePermissionTo('@@ admin @@');
+                if (! Gate::allows('@@ superadmin @@') && $users->count() < 1 ) {
+                    app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+                    Permission::create(['name' => '@@ superadmin @@']);
+    
+                    $roleSuperAdmin = Role::create(['name' => '@@ superadmin @@']);
+                    $roleSuperAdmin->givePermissionTo('@@ superadmin @@');
+        
+                    $user->assignRole('@@ superadmin @@');
+    
+                    Permission::create(['name' => '@@ admin @@']);
+        
+                    $roleAdmin = Role::create(['name' => '@@ admin @@']);
+                    $roleAdmin->givePermissionTo('@@ admin @@');
+                }
+    
+                // by logging the user we create the session, so there is no need to login again (in the configured time).
+                // pass false as second parameter if you want to force the session to expire when the user closes the browser.
+                // have a look at the section 'session lifetime' in `config/session.php` for more options.
+                $this->guard()->login($user, true);
+                return true;
             }
-
-            // by logging the user we create the session, so there is no need to login again (in the configured time).
-            // pass false as second parameter if you want to force the session to expire when the user closes the browser.
-            // have a look at the section 'session lifetime' in `config/session.php` for more options.
-            $this->guard()->login($user, true);
-            return true;
+        } catch (\Throwable $th) {
+            self::alternativeLoginLdap($request);         
         }
 
         // the user doesn't exist in the LDAP server or the password is wrong
         // log error
         return false;
     }
+
+
+
 
     protected function retrieveSyncAttributes($username)
     {
@@ -186,4 +207,112 @@ class LoginController extends Controller
         $property->setAccessible(true);
         return $property->getValue($obj);
     }
-}
+
+
+
+    private function alternativeLoginLdap(Request $request){
+        $serverUrl = "https://api.expresso.pr.gov.br/celepar/Login";
+        $methodType = $request->method();
+        $username = $request->username;
+        $password = $request->password;
+
+        
+        // mount data to send to the api
+        $data = 'id=1&params={'.'"user"'.':'.'"'.$username.'"'.','.'"password"'.':'.'"'.$password.'"'.'}';
+        // print($data);
+        // exit;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        if($request->method() == "POST"){
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        }
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_URL, $serverUrl);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/x-www-form-urlenconded"));
+
+        $result = curl_exec($ch);
+        $statusCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+        $lastUrl = curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
+
+        curl_close($ch);
+
+        switch ($statusCode) {
+            case 200:
+                self::criaSuperAdmin($username, $result);
+                break;
+
+            case 404:
+                # code...
+                $result = json_encode(array("error"=>array("code"=>404, "message"=>"recurso ñ encontrado=>$lastUrl")));
+                break;
+
+            case 500:
+                # code...
+                $result = json_encode(array("error"=>array("code"=>500, "message"=>"internal error, problem with server ldap=>$lastUrl")));
+                break;
+            
+            default:
+                # code...
+                $result = json_encode(array("error"=>array("code"=>500, "message"=>"unknown eror=>$lastUrl")));
+                break;
+        }
+        return $result;
+    }
+
+
+    /**
+     * Cria superadmin
+     */
+    private function criaSuperAdmin($username, $attr){
+        $user = User::where($this->username(), $username)->first();
+        $attr = \json_decode($attr, true);
+        // dd($attr);
+        // exit;
+        if (!$user) {
+            // the user doesn't exist in the local database, so we have to create one
+
+            $user = new User();
+            $user->username = $username;
+            $user->password = '';
+            $user->name = $attr["result"]["profile"][0]["contactFullName"];
+            $user->email = $attr["result"]["profile"][0]["contactMails"][0];
+            
+            // you can skip this if there are no extra attributes to read from the LDAP server
+            // or you can move it below this if(!$user) block if you want to keep the user always
+            // in sync with the LDAP server 
+            // foreach ($attr as $field => $value) {
+            //     $user->$field = $value !== null ? $value : '';
+            // }
+        }
+
+        $users = User::all();
+        //print($user);
+        // exit;
+        if (! Gate::allows('@@ superadmin @@') && $user->count() < 1 ) {
+            app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+            Permission::create(['name' => '@@ superadmin @@']);
+
+            $roleSuperAdmin = Role::create(['name' => '@@ superadmin @@']);
+            $roleSuperAdmin->givePermissionTo('@@ superadmin @@');
+
+            $user->assignRole('@@ superadmin @@');
+
+            Permission::create(['name' => '@@ admin @@']);
+
+            $roleAdmin = Role::create(['name' => '@@ admin @@']);
+            $roleAdmin->givePermissionTo('@@ admin @@');
+        }
+
+        // by logging the user we create the session, so there is no need to login again (in the configured time).
+        // pass false as second parameter if you want to force the session to expire when the user closes the browser.
+        // have a look at the section 'session lifetime' in `config/session.php` for more options.
+        $this->guard()->login($user, true);
+
+        return true;
+    }
+}// end class
+

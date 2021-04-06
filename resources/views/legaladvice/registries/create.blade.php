@@ -202,7 +202,7 @@
                             $('[data-toggle="popover"]').popover('show');
                             console.log(data.resp);
                         }else{
-                            alert("Protocolo ñ existe !");
+                            alert("Protocolo não encontrado !");
                             $('[data-toggle="popover"]').popover('disable');
                             $('[data-toggle="popover"]').popover('hide');
                             console.log(data.resp);

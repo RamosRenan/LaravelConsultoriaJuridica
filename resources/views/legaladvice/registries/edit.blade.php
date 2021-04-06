@@ -38,7 +38,6 @@
 @stop
 
 @section('content')
-
     <div class="modal fade" id="modalBox" role="dialog">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -53,172 +52,193 @@
         </div>
         <div class="card-body">
             {{ Form::model($registry, ['id' => 'editForm', 'method' => 'PUT', 'route' => ['legaladvice.registries.update', $id]]) }}
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    <div class="checkbox icheck-danger d-inline float-left">
-                        {{ Form::checkbox('urgent', true, old('urgent'), ['id' => 'urgent']) }}
-                        {{ Form::label('urgent', 'URGENTE') }} 
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <div class="checkbox icheck-danger d-inline float-left">
+                            {{ Form::checkbox('urgent', true, old('urgent'), ['id' => 'urgent']) }}
+                            {{ Form::label('urgent', 'URGENTE') }} 
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="container shadow p-3 mb-5 bg-body rounded">
+                    <div class="row">
+                        <div class="col-md-3 form-group">
+                            {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}
+                            {{ Form::text('protocol', old('protocol'), ['class' => 'form-control', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '', 'required' => '']) }}
+                            @if($errors->has('protocol'))
+                                <span class="text-danger">{{ $errors->first('protocol') }}</span>
+                            @endif
+                        </div>
+                        <div class="col-md-2 form-group">
+                            {{ Form::label('document_type', __('legaladvice.registries.fields.document_type').'*', ['class' => 'control-label']) }}
+                            {{ Form::select('document_type', $doctypes, old('document_type'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                            @if($errors->has('document_type'))
+                                <span class="text-danger">{{ $errors->first('document_type') }}</span>
+                            @endif
+                        </div>
+                        <div class="col-md-2 form-group">
+                            {{ Form::label('document_number', __('legaladvice.registries.fields.document_number').'*', ['class' => 'control-label']) }}
+                            {{ Form::text('document_number', old('document_number'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                            @if($errors->has('document_number'))
+                                <span class="text-danger">{{ $errors->first('document_number') }}</span>
+                            @endif
+                        </div>
+                        <div class="col-md-5 form-group">
+                            {{ Form::label('source', __('legaladvice.registries.fields.source').'*', ['class' => 'control-label']) }}
+                            {{ Form::text('source', old('source'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                            @if($errors->has('source'))
+                                <span class="text-danger">{{ $errors->first('source') }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <!-- row -->
+
+                    <div class="row">
+                        <div class="col-md-2 form-group">
+                            {{ Form::label('status', __('legaladvice.registries.fields.status'), ['class' => 'control-label']) }}
+                            {{ Form::select('status', $statuses, old('status'), ['class' => 'form-control', 'placeholder' => '']) }}
+                            @if($errors->has('status'))
+                                <span class="text-danger">{{ $errors->first('status') }}</span>
+                            @endif
+                        </div>
+                        <div class="col-md-3 form-group">
+                            {{ Form::label('priority', __('legaladvice.registries.fields.priority').'*', ['class' => 'control-label']) }}
+                            {{ Form::select('priority', $priorities, old('priority'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                            @if($errors->has('priority'))
+                                <div class="form-group has-error">
+                                    <span class="help-block">{{ $errors->first('priority') }}</span>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-2 form-group">
+                            {{ Form::label('place', __('legaladvice.registries.fields.place'), ['class' => 'control-label']) }}
+                            {{ Form::select('place', $places, old('place'), ['class' => 'form-control', 'placeholder' => '']) }}
+                            @if($errors->has('place'))
+                                <div class="form-group has-error">
+                                    <span class="help-block">{{ $errors->first('place') }}</span>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-5 form-group">
+                            {{ Form::label('interested', __('legaladvice.registries.fields.interested').'*', ['class' => 'control-label']) }}
+                            {{ Form::text('interested', old('interested'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
+                            @if($errors->has('interested'))
+                                <span class="text-danger">{{ $errors->first('interested') }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <!-- row -->
+
+                    <div class="row">
+                        <div class="col-md-2 form-group">
+                            {{ Form::label('date_in', __('legaladvice.registries.fields.date_in').'*', ['class' => 'control-label']) }}
+                            {{ Form::text('date_in', old('date_in'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
+                            @if($errors->has('date_in'))
+                                <span class="text-danger">{{ $errors->first('date_in') }}</span>
+                            @endif
+                        </div>
+                        <div class="col-md-2 form-group">
+                            {{ Form::label('deadline', __('legaladvice.registries.fields.deadline').'*', ['class' => 'control-label']) }}
+                            {{ Form::text('deadline', old('deadline'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
+                            @if($errors->has('deadline'))
+                                <span class="text-danger">{{ $errors->first('deadline') }}</span>
+                            @endif
+                        </div>
+                        <div class="col-md-2 form-group">
+                            {{ Form::label('date_out', __('legaladvice.registries.fields.date_out'), ['class' => 'control-label']) }}
+                            {{ Form::text('date_out', old('date_out'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
+                            @if($errors->has('date_out'))
+                                <span class="text-danger">{{ $errors->first('date_out') }}</span>
+                            @endif
+                        </div>
+                        <div class="col-md-2 form-group">
+                            {{ Form::label('date_return', __('legaladvice.registries.fields.date_return'), ['class' => 'control-label']) }}
+                            {{ Form::text('date_return', old('date_return'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
+                            @if($errors->has('date_return'))
+                                <span class="text-danger">{{ $errors->first('date_return') }}</span>
+                            @endif
+                        </div>
+                        <div class="col-md-4 form-group">
+                            {{ Form::label('email', 'email', ['class' => 'control-label']) }} 
+                            {{ Form::text('email', old('email'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
+                            @if($errors->has('email'))
+                                <span class="text-danger">{{ $errors->first('email') }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <!-- row -->
+
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            {{ Form::label('subject', __('legaladvice.registries.fields.subject'), ['class' => 'control-label']) }}
+                            {{ Form::textarea('subject', old('subject'), ['class' => 'form-control', 'rows' => 4, 'placeholder' => '']) }}
+                            @if($errors->has('subject'))
+                                <span class="text-danger">{{ $errors->first('subject') }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <!-- row -->
+                </div>
+                <!-- container -->
+            {{ Form::close() }}
+
+            <div class="container shadow p-3 mb-5 bg-body rounded">
+                <!-- Insere um novo documento -->
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <b> Arquivos relacionados </b> &nbsp;
+                        <!-- button aciona modal -->
+                        <!-- Aqui mostra tabela de arquivos cadastros -->
+                        <div id="filesBox"></div> 
+                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"> Novo arquivo </button>
                     </div>
                 </div>
             </div>
-            <div class="row">
-		<div class="col-md-3 form-group">
-                    {{ Form::label('protocol', __('legaladvice.registries.fields.protocol').'*', ['class' => 'control-label']) }}
-                    {{ Form::text('protocol', old('protocol'), ['class' => 'form-control', 'data-inputmask' => '"mask": "99.999.999-9"', 'data-mask' => '', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('protocol'))
-                        <span class="text-danger">{{ $errors->first('protocol') }}</span>
-                    @endif
-                </div>
-                <div class="col-md-2 form-group">
-                    {{ Form::label('document_type', __('legaladvice.registries.fields.document_type').'*', ['class' => 'control-label']) }}
-                    {{ Form::select('document_type', $doctypes, old('document_type'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('document_type'))
-                        <span class="text-danger">{{ $errors->first('document_type') }}</span>
-                    @endif
-                </div>
-                <div class="col-md-2 form-group">
-                    {{ Form::label('document_number', __('legaladvice.registries.fields.document_number').'*', ['class' => 'control-label']) }}
-                    {{ Form::text('document_number', old('document_number'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('document_number'))
-                        <span class="text-danger">{{ $errors->first('document_number') }}</span>
-                    @endif
-                </div>
-                <div class="col-md-5 form-group">
-                    {{ Form::label('source', __('legaladvice.registries.fields.source').'*', ['class' => 'control-label']) }}
-                    {{ Form::text('source', old('source'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('source'))
-                        <span class="text-danger">{{ $errors->first('source') }}</span>
-                    @endif
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 form-group">
-                    {{ Form::label('status', __('legaladvice.registries.fields.status'), ['class' => 'control-label']) }}
-                    {{ Form::select('status', $statuses, old('status'), ['class' => 'form-control', 'placeholder' => '']) }}
-                    @if($errors->has('status'))
-                        <span class="text-danger">{{ $errors->first('status') }}</span>
-                    @endif
-                </div>
-                <div class="col-md-3 form-group">
-                    {{ Form::label('priority', __('legaladvice.registries.fields.priority').'*', ['class' => 'control-label']) }}
-                    {{ Form::select('priority', $priorities, old('priority'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('priority'))
-                        <div class="form-group has-error">
-                            <span class="help-block">{{ $errors->first('priority') }}</span>
-                        </div>
-                    @endif
-                </div>
-                <div class="col-md-2 form-group">
-                    {{ Form::label('place', __('legaladvice.registries.fields.place'), ['class' => 'control-label']) }}
-                    {{ Form::select('place', $places, old('place'), ['class' => 'form-control', 'placeholder' => '']) }}
-                    @if($errors->has('place'))
-                        <div class="form-group has-error">
-                            <span class="help-block">{{ $errors->first('place') }}</span>
-                        </div>
-                    @endif
-                </div>
-                <div class="col-md-5 form-group">
-                    {{ Form::label('interested', __('legaladvice.registries.fields.interested').'*', ['class' => 'control-label']) }}
-                    {{ Form::text('interested', old('interested'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('interested'))
-                        <span class="text-danger">{{ $errors->first('interested') }}</span>
-                    @endif
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 form-group">
-                    {{ Form::label('date_in', __('legaladvice.registries.fields.date_in').'*', ['class' => 'control-label']) }}
-                    {{ Form::text('date_in', old('date_in'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('date_in'))
-                        <span class="text-danger">{{ $errors->first('date_in') }}</span>
-                    @endif
-                </div>
-                <div class="col-md-2 form-group">
-                    {{ Form::label('deadline', __('legaladvice.registries.fields.deadline').'*', ['class' => 'control-label']) }}
-                    {{ Form::text('deadline', old('deadline'), ['class' => 'form-control datepicker', 'placeholder' => '', 'required' => '']) }}
-                    @if($errors->has('deadline'))
-                        <span class="text-danger">{{ $errors->first('deadline') }}</span>
-                    @endif
-                </div>
-                <div class="col-md-2 form-group">
-                    {{ Form::label('date_out', __('legaladvice.registries.fields.date_out'), ['class' => 'control-label']) }}
-                    {{ Form::text('date_out', old('date_out'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
-                    @if($errors->has('date_out'))
-                        <span class="text-danger">{{ $errors->first('date_out') }}</span>
-                    @endif
-                </div>
-                <div class="col-md-2 form-group">
-                    {{ Form::label('date_return', __('legaladvice.registries.fields.date_return'), ['class' => 'control-label']) }}
-                    {{ Form::text('date_return', old('date_return'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
-                    @if($errors->has('date_return'))
-                        <span class="text-danger">{{ $errors->first('date_return') }}</span>
-                    @endif
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ Form::label('email', 'email', ['class' => 'control-label']) }} 
-                    {{ Form::text('email', old('email'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
-                    @if($errors->has('email'))
-                        <span class="text-danger">{{ $errors->first('email') }}</span>
-                    @endif
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    {{ Form::label('subject', __('legaladvice.registries.fields.subject'), ['class' => 'control-label']) }}
-                    {{ Form::textarea('subject', old('subject'), ['class' => 'form-control', 'rows' => 4, 'placeholder' => '']) }}
-                    @if($errors->has('subject'))
-                        <span class="text-danger">{{ $errors->first('subject') }}</span>
-                    @endif
-                </div>
-            </div>
-            {{ Form::close() }}
+            <!-- container -->
 
-            <!-- Insere um novo documento -->
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    <b> Arquivos relacionados </b> &nbsp;
-                    <!-- button aciona modal -->
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.registries.uploadcreate') }}?id={{ $id }}"> Novo arquivo </button>
-                    <!-- Aqui mostra tabela de arquivos cadastros -->
-                    <div id="filesBox"></div> 
+            <div class="container shadow p-3 mb-5 bg-body rounded">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        {{ Form::label('procedures', __('legaladvice.registries.fields.procedures'), ['class' => 'control-label']) }} 
+                        <div id="proceduresBox"></div>
+                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.procedures.create') }}?id={{ $id }}"> Nova tramitação </button>
+                    </div>
                 </div>
             </div>
-            <!--  -->
+            <!-- container -->
 
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    {{ Form::label('procedures', __('legaladvice.registries.fields.procedures'), ['class' => 'control-label']) }} 
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalBox" data-url="{{ route('legaladvice.procedures.create') }}?id={{ $id }}"> Nova tramitação </button>
-                    <div id="proceduresBox"></div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    <span> <strong> Anotações. </strong> Total.: {{count($note_registry)}} </span>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">Nota de.:</th>
-                            <th scope="col">Data     </th>
-                            <th scope="col">Conteúdo  </th>
-                            <th scope="col">         </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach($note_registry as $key => $value)
+            
+            <div class="container shadow p-3 mb-5 bg-body rounded">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <span> <strong> Anotações. </strong> </span>
+                        <p><samp><small>Total.: {{count($note_registry)}}</small></samp></p> 
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td> {{$value->inserted_by}} </td>
-                                    <td> {{$value->created_at}}              </td>
-                                    <td colspan="2">{{$value->contain}}      </td>
-                                    <td>                                     </td>
-                                </tr>  
-                            @endforeach                           
-                        </tbody>
-                    </table>
+                                <th scope="col">Nota de.:</th>
+                                <th scope="col">Data     </th>
+                                <th scope="col">Conteúdo  </th>
+                                <th scope="col">         </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach($note_registry as $key => $value)
+                                    <tr>
+                                        <td> {{$value->inserted_by}} </td>
+                                        <td> {{$value->created_at}}              </td>
+                                        <td colspan="2">{{$value->contain}}      </td>
+                                        <td>                                     </td>
+                                    </tr>  
+                                @endforeach                           
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+            <!-- container -->
         </div>
         <div class="card-footer text-right">
             {{ Form::button(__('global.app_edit'), ['onclick' => "event.preventDefault(); document.getElementById('editForm').submit();", 'class' => 'btn btn-primary']) }}

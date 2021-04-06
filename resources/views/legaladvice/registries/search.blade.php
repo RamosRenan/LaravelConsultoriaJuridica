@@ -16,7 +16,7 @@
 {{ Form::model($form, ['method' => 'GET', 'route' => ['legaladvice.registries.search']]) }}
     {{ Form::hidden('dosearch', true) }}
     <div class="card card-default">
-         <div id="collapseOne" @if (count($items) > 0) class="panel-collapse collapse in" @endif >
+         <div id="collapseOne"  @if($items) @if (count($items) > 0) class="panel-collapse collapse in" @endif  @endif >
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3 form-group"> 
@@ -118,46 +118,54 @@
             </div>
         </div>
     </div>
-    @if (count($items) > 0)
-    <div class="text-center">
-        <h5>@lang('global.app_search_results')</h5>
-    </div>
-    <div class="card card-default">
-        <div class="card-body table-responsive p-0">
-            <table class="table table-head-fixed table-hover">
-                <thead>
-                    <tr>
-                        <th>@lang('legaladvice.registries.fields.protocol')</th>
-                        <th>@lang('legaladvice.registries.fields.interested')</th>
-                        <th>@lang('legaladvice.registries.fields.subject')</th>
-                        <th>@lang('legaladvice.registries.fields.date_in')</th>
-                        <th>@lang('legaladvice.registries.fields.deadline')</th>
-                        <th><i class="fa fa-file"></i></th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach ($items as $item)
-                <tr data-entry-id="{{ $item->id }}">
-                    <td class="align-middle">{{ $item->protocol }}</td>
-                    <td class="align-middle">{{ $item->interested }}</td>
-                    <td class="align-middle">{{ $item->subject }}</td>
-                    <td class="align-middle">{{ $item->date_in }}</td>
-                    <td class="align-middle">{{ $item->deadline }}</td>
-                    <td class="align-middle">{{ $item->files }}</td>
-                    <td class="align-middle text-right">
-                        <div class="btn-group">
-                            <a href="{{ route('legaladvice.registries.show',[$item->id]) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> @lang('global.app_show')</a>
-                            <a href="{{ route('legaladvice.registries.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
-         
-    </div>
+    @if($items)
+        @if (count($items) > 0)
+            <div class="text-center">
+                <h5>@lang('global.app_search_results')</h5>
+            </div>
+            <div class="card card-default">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-head-fixed table-hover">
+                        <thead>
+                            <tr>
+                                <th>@lang('legaladvice.registries.fields.protocol')</th>
+                                <th>@lang('legaladvice.registries.fields.interested')</th>
+                                <th>@lang('legaladvice.registries.fields.subject')</th>
+                                <th>@lang('legaladvice.registries.fields.date_in')</th>
+                                <th>@lang('legaladvice.registries.fields.deadline')</th>
+                                <th><i class="fa fa-file"></i></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($items as $item)
+                        <tr data-entry-id="{{ $item->id }}">
+                            <td class="align-middle">{{ $item->protocol }}</td>
+                            <td class="align-middle">{{ $item->interested }}</td>
+                            <td class="align-middle">{{ $item->subject }}</td>
+                            <td class="align-middle">{{ $item->date_in }}</td>
+                            <td class="align-middle">{{ $item->deadline }}</td>
+                            <td class="align-middle">{{ $item->files }}</td>
+                            <td class="align-middle text-right">
+                                <div class="btn-group">
+                                    <a href="{{ route('legaladvice.registries.show',[$item->id]) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> @lang('global.app_show')</a>
+                                    <a href="{{ route('legaladvice.registries.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> @lang('global.app_edit')</a>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @else   
+                <div class="alert alert-warning" role="alert">
+                    Sem registros localizados. Refaça a busca.
+                </div>
+                <br>
+        @endif
     @endif
+
 {{ Form::close() }}
 @endsection

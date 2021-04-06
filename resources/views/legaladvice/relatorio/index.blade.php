@@ -88,7 +88,7 @@
                             </div>
 
                             <!-- row into -->
-                            <div class="row">
+                            <div class="row" >
                                 <div class="col">
                                     <form action="{{ route('legaladvice.relatorioSearch') }}" method="POST">
                                         @csrf
@@ -134,8 +134,8 @@
                                 <div class="card-header" style="background:  #aeb6bf ;"><span><i class="far fa-bell"></i> &nbsp;Prioridades</span></div>
                             </div>
 
-                            <div class="col">
-                                <div class="p-3 border bg-light" align="">
+                            <div class="col" align="center">
+                                <div class="p-3 border bg-light"  >
                                     @if(isset($priority) && count($priority) > 0)
                                         @foreach($priority as $prior)
                                         <h5> <small>{{$prior->name}}:</small> &nbsp; <span style="font-size:20px; color:black;">{{$prior->total}}</span></h5> 
@@ -165,8 +165,8 @@
                                 <div class="card-header" style="background:  #aeb6bf ;"><span><i class="fas fa-business-time"></i> &nbsp;  Situação </span></div>
                             </div>
 
-                            <div class="col">
-                                <div class="p-3 border bg-light" align="center">
+                            <div class="col" align="center">
+                                <div class="p-3 border bg-light" >
                                     @if(isset($status) && count($status) > 0)
                                         @foreach($status as $prior)
                                         <h5> <small>{{$prior->name}}:</small> &nbsp; <span style="font-size:20px; color:black;">{{$prior->total}}</span></h5> 
@@ -196,8 +196,8 @@
                                 <div class="card-header" style="background:  #aeb6bf ;"><span><i class="fas fa-map-marker-alt"></i> &nbsp; Locais </span></div>
                             </div>
 
-                            <div class="col">
-                                <div class="p-3 border bg-light" align="center">
+                            <div class="col" align="center">
+                                <div class="p-3 border bg-light"  >
                                     @if(isset($place) && count($place) > 0)
                                         @foreach($place as $prior)
                                         <h5> <small>{{$prior->name}}:</small> &nbsp; <span style="font-size:20px; color:black;">{{$prior->total}}</span></h5> 
@@ -227,8 +227,8 @@
                                 <div class="card-header" style="background:  #aeb6bf ;"><span><i class="far fa-file-alt"></i> &nbsp; Documentos </span></div>
                             </div>
 
-                            <div class="col">
-                                <div class="p-3 border bg-light" align="center">
+                            <div class="col" align="center">
+                                <div class="p-3 border bg-light"  >
                                     @if(isset($procedure) && count($procedure) > 0)
                                         @foreach($procedure as $prior)
                                         <h5> <small>{{$prior->name}}:</small> &nbsp; <span style="font-size:20px; color:black;">{{$prior->total}}</span></h5> 
