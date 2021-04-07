@@ -6,10 +6,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
         <script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
-        <script type="text/javascript" src="node_modules/jquery/dist/jquery.js" charset="utf-8"></script>
-        <script type="text/javascript" src="dist/jquery.inputmask.js" charset="utf-8"></script>
-
-
 
 
         <h1 style="color: #339af0;">
