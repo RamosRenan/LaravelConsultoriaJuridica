@@ -126,11 +126,12 @@ class RegistryController extends Controller {
                         po.document_type, po.document_number,  po.source, po.date, po.subject
                         order by r.protocol, n.registries_id, n.created_at desc") );    /* ordena e pega ultma atualizacao da tabela note */
                          
-        // return $items; 
+        // dd($items); 
 	    
         return view('legaladvice.registries.index', compact('items', 'search'));
 
-    }//index()
+    }
+    // index()
 
 
     public function findEprotocolEspecifc(){

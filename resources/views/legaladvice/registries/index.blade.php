@@ -71,9 +71,23 @@
                     
                 });
             });
-        </script>
 
-         
+            function note(e){
+                var elementClick = e.offsetParent.parentElement.parentElement.nextElementSibling.ch;
+
+                if(elementClick == ""){
+                    e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: contents";
+                    e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "false";
+                }else{
+                    e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: none";
+                    e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "";
+                }
+
+                console.log(e.offsetParent.parentElement.parentElement.nextElementSibling);
+                console.log(e.offsetParent.parentElement.parentElement.nextElementSibling.ch);
+            }
+
+        </script>         
     @stop
 
     <style> 
@@ -104,7 +118,7 @@
                 </div>
                 <i class="fas fa-circle" style="color:red;">   <span style="color:black"> <small>Perdeu o prazo</small> </span> </i> &nbsp; &nbsp;
                 <i class="fas fa-circle" style="color:orange;">   <span style="color:black"> <small>Vencendo</small> </span> </i> &nbsp; &nbsp;
-                <i class="fas fa-circle" style="color:lightgray;">   <span style="color:black"> <small>Dentro do prazo </small></span> </i> &nbsp; &nbsp;&nbsp;
+                <i class="fas fa-circle" style="color:whitesmoke;">   <span style="color:black"> <small>Dentro do prazo </small></span> </i> &nbsp; &nbsp;&nbsp;
                 <i class="fas fa-exclamation-triangle" style="color: red;"></i>   <span style="color:black"> <small> &nbsp; Urgente </small></span> </i> &nbsp; &nbsp;
                 &nbsp; &nbsp;  &nbsp; <span style="color:black"> <small> <b>(Base de cálculo 3 dias.)</b> </small></span> </i>  
             </div>
@@ -153,7 +167,6 @@
                             
                             <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> {{ $item->qtd_file_managers }} </td>
                             
-                            <!-- <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }}"> chave $item->procedures chave </td> -->
                             <td class="align-middle {{ (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 3) ? (((strtotime($item->deadline) - strtotime(date('Y-m-d')))/(60 * 60 * 24)) < 0) ? 'table-danger' : 'table-warning' : '' }} text-right">
                                 {{ Form::open(array(
                                     'id' => 'deleteItem'.$item->id,
@@ -163,13 +176,15 @@
                                 <div class="btn-group">
                                     <a href="{{ route('legaladvice.registries.show',[$item->id]) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i> </a>
                                     <a href="{{ route('legaladvice.registries.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>  </a>
-                                    {{ Form::button('<i class="fa fa-trash"></i> ', ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
-                                    <!-- open note() -->
+                                    
+                                    @can('isAdmin')
+                                        {{ Form::button('<i class="fa fa-trash"></i> ', ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
+                                    @endcan
                                     <a onclick="note(this)" class="btn btn-sm btn-light"> <i class="far fa-folder-open"></i>  </a>
                                 </div>
                             </td> 
 
-                            <tr style="display: none;" class="myo">
+                            <tr style="display: none;" id="openNote">
                                 <td colspan="9" class="{{ $item->protocol }}">
                                     <span>  <strong> Ultima atualização: </strong> &nbsp {{ $item->date_in }}     </span>  
                                     <br>     
@@ -201,18 +216,7 @@
         </div>
 
         <div class="card-footer">
-            <div class="row">
-                <div class="col-md-3">
-                    @if (count($items) > 0)
-                    <button class="btn btn-danger massDelete"><i class="fa fa-trash"></i> @lang('global.app_delete_selected')</button>
-                    @endif
-                </div>
-                <div class="col-md-9">
-                    <div class="float-right"> 
-                        <!-- chave $items->links() chave -->
-                    </div>
-                </div>
-            </div>
+            <div class="row"></div>
         </div>
     </div>
 @endsection
