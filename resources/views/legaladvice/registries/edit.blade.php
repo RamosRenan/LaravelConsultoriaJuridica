@@ -161,7 +161,7 @@
                         </div>
                         <div class="col-md-4 form-group">
                             {{ Form::label('email', 'email', ['class' => 'control-label']) }} 
-                            {{ Form::text('email', old('email'), ['class' => 'form-control datepicker', 'placeholder' => '']) }}
+                            {{ Form::text('email', old('email'), ['class' => 'form-control', 'placeholder' => '']) }}
                             @if($errors->has('email'))
                                 <span class="text-danger">{{ $errors->first('email') }}</span>
                             @endif
