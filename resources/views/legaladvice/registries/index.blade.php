@@ -199,10 +199,10 @@
                                     <hr>
                                     
                                     {{Form::open(['method'=>'POST', 'route'=>['legaladvice.registries.note']])}}
-                                            <input type="hidden" value="{{ $item->id }}" name="id_registries">
-                                            <input type="hidden"  value="{{ $item->protocol }}" name="eProtocolo">
-                                            <textarea style="display:inline-block;" type="text" name="contain" class="form-control" rows="2" required></textarea>
-                                            <button type="submit" style="display:inline-block; margin-left:0px; " class="btn btn-primary" > <i class="fa fa-plus"></i> </button>
+                                        <input type="hidden" value="{{ $item->id }}" name="id_registries">
+                                        <input type="hidden"  value="{{ $item->protocol }}" name="eProtocolo">
+                                        <input style="display:inline-block;" type="text" name="contain" class="form-control" rows="2" required> <br>
+                                        <button type="submit" style="display:inline-block; margin-left:0px; margin-top:5px;" class="btn btn-primary btn-sm" > Enviar </button>
                                     {{Form::close()}}
                                 </td >
                             </tr>                
