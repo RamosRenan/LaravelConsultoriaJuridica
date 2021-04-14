@@ -98,7 +98,7 @@
                                             </div>
 
                                             <div class="col-2">
-                                                <input type="time" name="time_i" class="form-control" placeholder="Data inicial" aria-label="Data inicial" required>
+                                                <input type="time" value="08:00" name="time_i" class="form-control" placeholder=" " aria-label="Data inicial" required>
                                             </div>
 
                                             <div class="col-4">
@@ -106,7 +106,7 @@
                                             </div>
 
                                             <div class="col-2">
-                                                <input type="time" name="time_f" class="form-control" placeholder="Data final" aria-label="Data final" required>
+                                                <input type="time" value="23:59" name="time_f" class="form-control" placeholder=" " aria-label="Data final" required>
                                             </div>
                                         </div>
                                         <br>
