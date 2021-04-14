@@ -82,9 +82,6 @@
                     e.offsetParent.parentElement.parentElement.nextElementSibling.style="display: none";
                     e.offsetParent.parentElement.parentElement.nextElementSibling.ch  = "";
                 }
-
-                console.log(e.offsetParent.parentElement.parentElement.nextElementSibling);
-                console.log(e.offsetParent.parentElement.parentElement.nextElementSibling.ch);
             }
 
         </script>         
@@ -187,14 +184,14 @@
                                     @endif
 
                                     @if(auth()->user()->can('legaladvice.registries.note') || auth()->user()->can('@@ superadmin @@') || auth()->user()->can('@@ admin @@')) 
-                                        <a onclick="note(this)" class="btn btn-sm btn-light"> <i class="far fa-folder-open"></i>  </a>
+                                        <a onclick="note(this)" class="btn btn-sm btn-light"> <i class="far fa-folder-open"></i> </a>
                                     @endif
                                 </div>
                             </td> 
 
                             <tr style="display: none;" id="openNote">
                                 <td colspan="9" class="{{ $item->protocol }}">
-                                    <span>  <strong> Ultima atualização: </strong> &nbsp {{ $item->date_in }}     </span>  
+                                    <span>  <strong> Última atualização: </strong> &nbsp {{ $item->date_in }}     </span>  
                                     <br>     
                                     <span>  <strong> Responsável:        </strong> &nbsp {{ $item->inserted_by }} </span> 
                                     <p>     <strong> Descrição:          </strong> <span style="width:auto; height:auto; background: #eceff4;"> &nbsp {{ $item->contain }} &nbsp &nbsp</span>     </p> 
@@ -204,10 +201,8 @@
                                     {{Form::open(['method'=>'POST', 'route'=>['legaladvice.registries.note']])}}
                                             <input type="hidden" value="{{ $item->id }}" name="id_registries">
                                             <input type="hidden"  value="{{ $item->protocol }}" name="eProtocolo">
-                                            <textarea style="display:inline-block;" type="text" name="contain" class="form-control" rows="2" required>
-                                                                
-                                            </textarea>
-                                            <button type="submit" style="display:inline-block; margin-left:-60px;" class="btn btn-primary" > <i class="fa fa-plus"></i> </button>
+                                            <textarea style="display:inline-block;" type="text" name="contain" class="form-control" rows="2" required></textarea>
+                                            <button type="submit" style="display:inline-block; margin-left:0px; " class="btn btn-primary" > <i class="fa fa-plus"></i> </button>
                                     {{Form::close()}}
                                 </td >
                             </tr>                
