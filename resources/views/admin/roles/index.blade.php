@@ -29,6 +29,9 @@
     </script>
 @stop
 
+
+
+
 @section('content')
     <div class="card card-default">
         <div class="card-header">
@@ -89,7 +92,7 @@
                         </div>
                     </td>
                     @endcan
-                    <td class="align-middle">{{ $item->name }}</td>
+                    <td class="align-middle">{{ $item->name }} </td>
                     <td class="align-middle">
                         @foreach ($item->permissions()->pluck('name') as $permission)
                             <span class="badge badge-info">{{ $permission }}</span>

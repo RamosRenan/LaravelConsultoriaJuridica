@@ -45,7 +45,7 @@ class RegistryController extends Controller {
         $this->files = FileManager::getFiles()->pluck('route_id', 'id')->countBy();
 
         /*
-         **********************************************
+         * ********************************************
          * @ Código comentado abaixo - Modo 1
          * ********************************************
          * ° Versão que busca os protocolos.

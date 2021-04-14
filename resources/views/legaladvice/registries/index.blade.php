@@ -174,13 +174,21 @@
                                     'route' => ['legaladvice.registries.destroy', $item->id])) }}
                                 {{ Form::close() }}
                                 <div class="btn-group">
-                                    <a href="{{ route('legaladvice.registries.show',[$item->id]) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i> </a>
-                                    <a href="{{ route('legaladvice.registries.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>  </a>
+                                    @if(auth()->user()->can('legaladvice.registries.show') || auth()->user()->can('@@ superadmin @@') || auth()->user()->can('@@ admin @@')) 
+                                        <a href="{{ route('legaladvice.registries.show',[$item->id]) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i> </a>
+                                    @endif
                                     
-                                    @can('isAdmin')
+                                    @if(auth()->user()->can('legaladvice.registries.edit') || auth()->user()->can('@@ superadmin @@') || auth()->user()->can('@@ admin @@')) 
+                                        <a href="{{ route('legaladvice.registries.edit',[$item->id]) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>  </a>
+                                    @endif
+                                    
+                                    @if(auth()->user()->can('legaladvice.registries.destroy') || auth()->user()->can('@@ superadmin @@') || auth()->user()->can('@@ admin @@')) 
                                         {{ Form::button('<i class="fa fa-trash"></i> ', ['type' => 'button', 'data-form' => 'deleteItem'.$item->id, 'class' => 'btn btn-sm btn-danger deleteItem']) }}
-                                    @endcan
-                                    <a onclick="note(this)" class="btn btn-sm btn-light"> <i class="far fa-folder-open"></i>  </a>
+                                    @endif
+
+                                    @if(auth()->user()->can('legaladvice.registries.note') || auth()->user()->can('@@ superadmin @@') || auth()->user()->can('@@ admin @@')) 
+                                        <a onclick="note(this)" class="btn btn-sm btn-light"> <i class="far fa-folder-open"></i>  </a>
+                                    @endif
                                 </div>
                             </td> 
 

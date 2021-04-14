@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class RolesController extends Controller
 {
@@ -22,6 +23,8 @@ class RolesController extends Controller
      */
     public function index(Request $request) {
         $search = $request->query('search');
+
+        $user = Auth::user();
 
         $items = Role::select('roles.*')
             ->where('name', 'ilike', '%'.$search.'%')

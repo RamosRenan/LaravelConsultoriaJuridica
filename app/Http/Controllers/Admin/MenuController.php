@@ -27,7 +27,7 @@ class MenuController extends Controller
         $items = Menu::where('name', 'ilike', '%'.$search.'%')
             ->orderby('name', 'asc')
             ->paginate(50);
-
+       
         return view('admin.menu.index', compact('items', 'search'));
     }
 

@@ -48,14 +48,6 @@ Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'manager
     Route::post('roles_mass_destroy', ['uses' => 'Manager\RolesController@massDestroy', 'as' => 'roles.mass_destroy']);
 });
 
-Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'siscop', 'as' => 'siscop.'], function () {
-    Route::resource('solicitations', 'Siscop\SolicitationController');
-    Route::get('cities_list', ['uses' => 'Siscop\SolicitationController@citiesAjax', 'as' => 'cities.list']);
-    Route::post('solicitations_mass_destroy', ['uses' => 'Siscop\SolicitationController@massDestroy', 'as' => 'siscop.mass_destroy']);
-   
-});
-
-
 
 Route::group(['middleware' => ['auth', 'auth.unique.user'], 'prefix' => 'refectory', 'as' => 'refectory.'], function () {
     Route::resource('units', 'Refectory\UnitController');

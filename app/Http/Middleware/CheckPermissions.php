@@ -19,18 +19,18 @@ class CheckPermissions {
      */
     public function handle($request, Closure $next) {
         $action = app('request')->route()->getAction();
-        $controller = class_basename($action['controller']);
+        // $controller = class_basename($action['controller']);
         //$permission = str_replace($action['namespace'].'\\', '', $action['controller']);
         $permission = $action['as'];
-
-        if ( Gate::allows('@@ superadmin @@') || Gate::allows('@@ admin @@') && strstr($permission, 'manager.') ) {
+         
+        // No if é para validar os administradores 
+        if ( Gate::allows('@@ admin @@') || Gate::allows('@@ superadmin @@')) {
             return $next($request);
         } else {
             if (! Gate::allows($permission)) {
                 return abort(401);
             }
         }
-
         return $next($request);
     }
 }
