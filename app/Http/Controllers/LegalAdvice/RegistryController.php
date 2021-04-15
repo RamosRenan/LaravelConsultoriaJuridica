@@ -282,10 +282,10 @@ class RegistryController extends Controller {
             'subject' => __('legaladvice.registries.fields.subject'),
         ]);
 
-        $date_in = $request->date_in ? $this->dateBR($request->date_in) : '';
-        $deadline = $request->deadline ? $this->dateBR($request->deadline) : '';
-        $date_out = $request->date_out ? $this->dateBR($request->date_out) : '';
-        $date_return = $request->date_return ? $this->dateBR($request->date_return) : '';
+        $date_in = $request->date_in ;//? $this->dateBR($request->date_in) : '';
+        $deadline = $request->deadline ;//? $this->dateBR($request->deadline) : '';
+        $date_out = $request->date_out ;//? $this->dateBR($request->date_out) : '';
+        $date_return = $request->date_return ;//? $this->dateBR($request->date_return) : '';
 
         $form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return', 'key_words');
         $form += [ 
@@ -305,7 +305,6 @@ class RegistryController extends Controller {
                 'id_protocolo' => $id->id, 'id_keyword' => $kw_arr[$i],
             ]);
         }
-
 
         return redirect()->route('legaladvice.registries.edit', $id->id)->with('success', __('global.app_msg_store_success'));
     }
@@ -369,20 +368,21 @@ class RegistryController extends Controller {
         $places     = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $note_registry   = DB::select(DB::raw("SELECT * FROM public.registries join notes on notes.registries_id=$id and registries.id=$id"));
         // return $note_registry ;
+        $Key_words  = DB::table('key_words')->select('*')->get()->pluck('name', 'id');
 
         $registry->date_in = $registry->date_in ? date("d/m/Y", strtotime($registry->date_in)) : '';
         $registry->deadline = $registry->deadline ? date("d/m/Y", strtotime($registry->deadline)) : '';
         $registry->date_out = $registry->date_out ? date("d/m/Y", strtotime($registry->date_out)) : '';
         $registry->date_return = $registry->date_return ? date("d/m/Y", strtotime($registry->date_return)) : '';
     
-	    $procedures->each( function($item){
+	    $procedures->each(function($item){
             $item->dateBR = date("d/m/Y", strtotime($item->date));
         });
 
         $userId = \Auth::user()->id;
         $registryRoute = 'legaladvice.registries.edit';
 
-        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry'));
+        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words'));
     }
 
     /**
@@ -469,24 +469,23 @@ class RegistryController extends Controller {
             'subject' => __('legaladvice.registries.fields.subject'),
         ]);
 
-	$item = Registry::findOrFail($id);
+	    $item = Registry::findOrFail($id);
 
-        $date_in = $request->date_in ? $this->dateBR($request->date_in) : '';
-        $deadline = $request->deadline ? $this->dateBR($request->deadline) : '';
-        $date_out = $request->date_out ? $this->dateBR($request->date_out) : '';
-        $date_return = $request->date_return ? $this->dateBR($request->date_return) : '';
+        $date_in = $request->date_in ;//? $this->dateBR($request->date_in) : '';
+        $deadline = $request->deadline ;//? $this->dateBR($request->deadline) : '';
+        $date_out = $request->date_out ;//? $this->dateBR($request->date_out) : '';
+        $date_return = $request->date_return ;//? $this->dateBR($request->date_return) : '';
 	
-	$form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return');
-	$form['urgent'] = $request->urgent;
-	$form += [ 
-		'date_in' => $date_in, 
-		'deadline' => $deadline, 
-		'date_out' => $date_out, 
-		'date_return' => $date_return,
-	];
+        $form = $request->except('source_file', 'date_in', 'deadline', 'date_out', 'date_return', 'key_words');
+        $form['urgent'] = $request->urgent;
+        $form += [ 
+            'date_in' => $date_in, 
+            'deadline' => $deadline, 
+            'date_out' => $date_out, 
+            'date_return' => $date_return,
+        ];
 
-	//dd($request->date_in, $form);
-	$item->update($form);
+        $item->update($form);
 
         return redirect()->route('legaladvice.registries.index')->with('success', __('global.app_msg_update_success'));
     }
@@ -522,12 +521,12 @@ class RegistryController extends Controller {
         }
     }
 
-    public function dateBR($input) {
-        $d = explode('/', $input);
-	$date = $d[2].'-'.$d[1].'-'.$d[0];
+    // public function dateBR($input) {
+    //     $d = explode('/', $input);
+	// $date = $d[2].'-'.$d[1].'-'.$d[0];
 
-        return $date;
-    }
+    //     return $date;
+    // }
 
     public function note(Request $request){
         // return $request->input('contain');

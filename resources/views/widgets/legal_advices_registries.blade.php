@@ -26,7 +26,6 @@
             <thead>
                 <tr>
                     <th class="text-center">@lang('legaladvice.registries.fields.protocol')</th>
-                    <th class="text-center"><i class="fa fa-skull"></i></th>
                     <th class="text-center"><i class="fa fa-hourglass-end"></i></th>
                     <th class="text-center"><i class="fa fa-file"></i></th>
                     <th class="text-center"><i class="fa fa-share"></i></th>
