@@ -367,9 +367,19 @@ class RegistryController extends Controller {
         $priorities = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $places     = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $note_registry   = DB::select(DB::raw("SELECT * FROM public.registries join notes on notes.registries_id=$id and registries.id=$id"));
-        // return $note_registry ;
         $Key_words  = DB::table('key_words')->select('*')->get()->pluck('name', 'id');
 
+        $sharedKeyWordsProcol = DB::table('protocolo_kw')->where('id_protocolo', '=', $id)->get();
+
+        $retriveOnlyIdKeyWords = array_column(json_decode($sharedKeyWordsProcol), 'id_keyword');
+        
+        $allProtocolWithFoundIdWords = DB::table('protocolo_kw')
+        ->whereIn('id_keyword', $retriveOnlyIdKeyWords)
+        ->join('registries', 'registries.id', '=', 'protocolo_kw.id_protocolo')
+        ->take(5)->get();
+
+        $allProtocolWithFoundIdWords = json_decode($allProtocolWithFoundIdWords);
+ 
         $registry->date_in = $registry->date_in ? date("d/m/Y", strtotime($registry->date_in)) : '';
         $registry->deadline = $registry->deadline ? date("d/m/Y", strtotime($registry->deadline)) : '';
         $registry->date_out = $registry->date_out ? date("d/m/Y", strtotime($registry->date_out)) : '';
@@ -382,7 +392,7 @@ class RegistryController extends Controller {
         $userId = \Auth::user()->id;
         $registryRoute = 'legaladvice.registries.edit';
 
-        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words'));
+        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words', 'allProtocolWithFoundIdWords'));
     }
 
     /**

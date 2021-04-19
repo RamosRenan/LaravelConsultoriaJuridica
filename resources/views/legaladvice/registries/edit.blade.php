@@ -188,6 +188,40 @@
             {{ Form::close() }}
 
             <div class="container shadow p-3 mb-5 bg-body rounded">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <span> <strong> Protocolos relacionados a palavra chave. </strong> </span>
+                        <p> </p> 
+                        @if(isset($allProtocolWithFoundIdWords) && count($allProtocolWithFoundIdWords)>0)
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">Protocolo</th>
+                                <th scope="col">Interessado     </th>
+                                <th scope="col">Natureza         </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                    @foreach($allProtocolWithFoundIdWords as $key => $value)
+                                        <tr>
+                                            <td> {{$value->protocol}}          </td>
+                                            <td> {{$value->interested}}        </td>
+                                            <td colspan="2">{{$value->source}} </td>
+                                        </tr>  
+                                    @endforeach   
+                            </tbody>
+                        </table>
+                            @else
+                                Não há registros no sistema
+                        @endif                        
+                    </div>
+                </div>
+            </div>
+            <!-- container -->
+
+
+            <div class="container shadow p-3 mb-5 bg-body rounded">
                 <!-- Insere um novo documento -->
                 <div class="row">
                     <div class="col-md-12 form-group">
@@ -200,6 +234,7 @@
                 </div>
             </div>
             <!-- container -->
+
 
             <div class="container shadow p-3 mb-5 bg-body rounded">
                 <div class="row">
@@ -217,7 +252,8 @@
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <span> <strong> Anotações. </strong> </span>
-                        <p><samp><small>Total.: {{count($note_registry)}}</small></samp></p> 
+                        <p> </p> 
+                        @if(isset($note_registry) && count($note_registry)>0)
                         <table class="table">
                             <thead>
                                 <tr>
@@ -236,9 +272,12 @@
                                         <td colspan="2">{{$value->contain}}      </td>
                                         <td>                                     </td>
                                     </tr>  
-                                @endforeach                           
+                                @endforeach 
                             </tbody>
                         </table>
+                            @else
+                                <p>Não há registros no sistema</p>
+                        @endif                          
                     </div>
                 </div>
             </div>
@@ -248,4 +287,6 @@
             {{ Form::button(__('global.app_edit'), ['onclick' => "event.preventDefault(); document.getElementById('editForm').submit();", 'class' => 'btn btn-primary']) }}
         </div>
     </div>
+
+    <br>
 @stop

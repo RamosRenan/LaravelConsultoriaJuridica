@@ -42,7 +42,7 @@ return [
     'app_file_exists' => 'Este arquivo já existe no sistema',
     'app_file_destroy_fail' => 'Não foi possível excluir o arquivo',
     'app_file_select' => 'Selecionar arquivo',
-    'app_file_none' => 'Sem arquivos',
+    'app_file_none' => 'Não há registros no sistema',
     'app_file_title' => "Título do arquivo",
     'app_file_type' => "Tipo",
     'app_file_size' => "Tamanho",
