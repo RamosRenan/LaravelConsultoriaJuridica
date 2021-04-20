@@ -360,14 +360,17 @@ class RegistryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        $registry   = Registry::findOrFail($id);
-        $procedures = Procedure::where('registry_id', $id)->orderBy('date', 'desc')->get();
-        $doctypes   = Doctype::orderBy('order')->get()->pluck('name', 'id');
-        $statuses   = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
-        $priorities = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
-        $places     = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
-        $note_registry   = DB::select(DB::raw("SELECT * FROM public.registries join notes on notes.registries_id=$id and registries.id=$id"));
-        $Key_words  = DB::table('key_words')->select('*')->get()->pluck('name', 'id');
+        $registry       = Registry::findOrFail($id);
+        $procedures     = Procedure::where('registry_id', $id)->orderBy('date', 'desc')->get();
+        $doctypes       = Doctype::orderBy('order')->get()->pluck('name', 'id');
+        $statuses       = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $priorities     = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $places         = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
+        $note_registry  = DB::select(DB::raw("SELECT * FROM public.registries join notes on notes.registries_id=$id and registries.id=$id"));
+        $Key_words      = DB::table('key_words')->select('*')->get()->pluck('name', 'id');
+        $protocolFromSameInterested = Registry::where('id', '=', $id)->when($registry, function($query, $registry){
+            $query->orWhere('interested', '=', $registry->interested);
+        })->take(5)->get();
 
         $sharedKeyWordsProcol = DB::table('protocolo_kw')->where('id_protocolo', '=', $id)->get();
 
@@ -392,7 +395,7 @@ class RegistryController extends Controller {
         $userId = \Auth::user()->id;
         $registryRoute = 'legaladvice.registries.edit';
 
-        return view('legaladvice.registries.edit', compact('id', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words', 'allProtocolWithFoundIdWords'));
+        return view('legaladvice.registries.edit', compact('id', 'protocolFromSameInterested', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words', 'allProtocolWithFoundIdWords'));
     }
 
     /**
