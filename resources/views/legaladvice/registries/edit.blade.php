@@ -30,13 +30,11 @@
         $('#modalBox').on('hide.bs.modal', function (event) {
             loadCalls();
         }); 
-        
     });
- 
-
+  
 </script>
 @stop
-
+ 
 @section('content')
     <div class="modal fade" id="modalBox" role="dialog">
         <div class="modal-dialog modal-xl">
@@ -133,38 +131,46 @@
                     <div class="row">
                         <div class="col-md-2 form-group">
                             {{ Form::label('date_in', __('legaladvice.registries.fields.date_in'), ['class' => 'control-label']) }}
-                            <input type="date" name="date_in" class="form-control" required>
+                            <input type="date" name="date_in" class="form-control" value="{{$dateI}}" required>
+                              
                             @if($errors->has('date_in'))
                                 <span class="text-danger">{{ $errors->first('date_in') }}</span>
                             @endif
                         </div>
                         <div class="col-md-2 form-group">
                             {{ Form::label('deadline', __('legaladvice.registries.fields.deadline'), ['class' => 'control-label']) }}
-                            <input type="date" name="deadline" class="form-control" required>
+                            <input type="date" name="deadline" class="form-control" value="{{$dateDl}}" required>
                             @if($errors->has('deadline'))
                                 <span class="text-danger">{{ $errors->first('deadline') }}</span>
                             @endif
                         </div>
                         <div class="col-md-2 form-group">
                             {{ Form::label('date_out', __('legaladvice.registries.fields.date_out'), ['class' => 'control-label']) }}
-                            <input type="date" name="date_out" class="form-control" required>
+                            <input type="date" name="date_out" class="form-control" value="{{$dateDo}}" required>
                             @if($errors->has('date_out'))
                                 <span class="text-danger">{{ $errors->first('date_out') }}</span>
                             @endif
                         </div>
                         <div class="col-md-2 form-group">
                             {{ Form::label('date_return', __('legaladvice.registries.fields.date_return'), ['class' => 'control-label']) }}
-                            <input type="date" name="date_return" class="form-control" required>
+                            <input type="date" name="date_return" class="form-control" value="{{$dateRt}}" placeholder=" " required>
                             @if($errors->has('date_return'))
                                 <span class="text-danger">{{ $errors->first('date_return') }}</span>
                             @endif
                         </div>
                         <div class="col-md-4 form-group">
-                            {{ Form::label('email', 'email', ['class' => 'control-label']) }} 
+                            {{ Form::label('email', 'email', ['class' => 'control-label',  ]) }} 
                             {{ Form::text('email', old('email'), ['class' => 'form-control', 'placeholder' => '']) }}
                             @if($errors->has('email'))
                                 <span class="text-danger">{{ $errors->first('email') }}</span>
                             @endif
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {{ Form::label('Palavras chaves', 'Palavras chaves', ['class' => 'control-label',  ]) }} 
+                            <br>
+                            @foreach($keyWordsThisProtocol as $key)
+                                <span class="badge badge-secondary">{{$key->name}}</span>
+                            @endforeach
                         </div>
                         <div class="col-md-12 form-group">
                             {{ Form::label('key_words', 'Palavra chave', ['class' => 'control-label']) }}<br />
@@ -196,9 +202,10 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                <th scope="col">Protocolo</th>
-                                <th scope="col">Interessado     </th>
-                                <th scope="col">Natureza         </th>
+                                    <th scope="col">Protocolo       </th>
+                                    <th scope="col">Interessado     </th>
+                                    <th scope="col">Natureza        </th>
+                                    <th scope="col">Palavra chave   </th>
                                 </tr>
                             </thead>
 
@@ -207,7 +214,8 @@
                                         <tr>
                                             <td> {{$value->protocol}}          </td>
                                             <td> {{$value->interested}}        </td>
-                                            <td colspan="2">{{$value->source}} </td>
+                                            <td >{{$value->source}} </td>
+                                            <td > <span class="badge badge-secondary">{{$value->name}} </span></td>
                                         </tr>  
                                     @endforeach   
                             </tbody>

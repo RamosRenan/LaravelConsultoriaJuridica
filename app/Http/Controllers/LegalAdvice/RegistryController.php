@@ -362,12 +362,18 @@ class RegistryController extends Controller {
     public function edit($id) {
         $registry       = Registry::findOrFail($id);
         $procedures     = Procedure::where('registry_id', $id)->orderBy('date', 'desc')->get();
+        $dateI          = $registry->date_in;
+        $dateDl         = $registry->deadline;
+        $dateDo         = $registry->date_out;
+        $dateRt         = $registry->date_return;
         $doctypes       = Doctype::orderBy('order')->get()->pluck('name', 'id');
         $statuses       = Status::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $priorities     = Priority::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $places         = Place::orderBy('order', 'asc')->get()->pluck('name', 'id');
         $note_registry  = DB::select(DB::raw("SELECT * FROM public.registries join notes on notes.registries_id=$id and registries.id=$id"));
         $Key_words      = DB::table('key_words')->select('*')->get()->pluck('name', 'id');
+        $keyWordsThisProtocol = Protocol_kw::where('id_protocolo', '=', $id)->join('key_words', 'key_words.id', '=', 'protocolo_kw.id_keyword')->get();
+         
         $protocolFromSameInterested = Registry::where('id', '=', $id)->when($registry, function($query, $registry){
             $query->orWhere('interested', '=', $registry->interested);
         })->take(5)->get();
@@ -377,9 +383,14 @@ class RegistryController extends Controller {
         $retriveOnlyIdKeyWords = array_column(json_decode($sharedKeyWordsProcol), 'id_keyword');
         
         $allProtocolWithFoundIdWords = DB::table('protocolo_kw')
+        // ->where('id_protocolo', '=', $id)
         ->whereIn('id_keyword', $retriveOnlyIdKeyWords)
         ->join('registries', 'registries.id', '=', 'protocolo_kw.id_protocolo')
+        ->join('key_words', 'key_words.id', 'protocolo_kw.id_keyword')
         ->take(5)->get();
+
+        dd(json_decode($allProtocolWithFoundIdWords, true));
+        exit;
 
         $allProtocolWithFoundIdWords = json_decode($allProtocolWithFoundIdWords);
  
@@ -395,7 +406,7 @@ class RegistryController extends Controller {
         $userId = \Auth::user()->id;
         $registryRoute = 'legaladvice.registries.edit';
 
-        return view('legaladvice.registries.edit', compact('id', 'protocolFromSameInterested', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words', 'allProtocolWithFoundIdWords'));
+        return view('legaladvice.registries.edit', compact('dateI', 'keyWordsThisProtocol', 'id', 'dateDl', 'dateDo', 'dateRt', 'protocolFromSameInterested', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words', 'allProtocolWithFoundIdWords'));
     }
 
     /**
