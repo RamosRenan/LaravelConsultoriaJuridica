@@ -386,11 +386,64 @@ class RegistryController extends Controller {
         // ->where('id_protocolo', '=', $id)
         ->whereIn('id_keyword', $retriveOnlyIdKeyWords)
         ->join('registries', 'registries.id', '=', 'protocolo_kw.id_protocolo')
+        ->orderBy('registries.created_at', 'Desc')
         ->join('key_words', 'key_words.id', 'protocolo_kw.id_keyword')
-        ->take(5)->get();
+        ->take(100)->get();
 
-        dd(json_decode($allProtocolWithFoundIdWords, true));
-        exit;
+
+
+        // TRansforma json para array
+        $arrayProtocolos = json_decode($allProtocolWithFoundIdWords, true);
+
+        // Array base que armazena todos os arrays de protocolos agrupados
+        $baseGrupoProtocol = [];
+
+        // Checa se o protocolo já foi visitado no foreach abaixo
+        $visitado = [];
+
+        $tmp = '';
+
+        $tmpArrayGroup = [];
+        
+        $cont=0;
+
+        /** 
+         * agrupa protocolos em um único array, um para cada protocolo, 
+         * com todas as suas palavras chaves atreladas
+         */
+        for($i=0; $i<count($arrayProtocolos); $i++) { // 1
+            for($y=0; $y<count($arrayProtocolos); $y++) { // 2, 3
+                if($arrayProtocolos[$i]["id_protocolo"] == $arrayProtocolos[$y]["id_protocolo"] && $arrayProtocolos[$i]["id_keyword"] != $arrayProtocolos[$y]["id_keyword"] && !in_array($arrayProtocolos[$y]["id_protocolo"], $visitado)){
+                    if(array_key_exists("name", $arrayProtocolos[$i]) && !is_array($arrayProtocolos[$i]["name"])){
+                        $tmp = $arrayProtocolos[$i]["name"];
+                        $arrayProtocolos[$i]["name"] = [$tmp];
+                    }// if
+
+                    array_push($arrayProtocolos[$i]["name"], $arrayProtocolos[$y]["name"]);
+                    array_push($visitado, $arrayProtocolos[$y]["id_protocolo"]);
+                    array_push($tmpArrayGroup, $arrayProtocolos[$i]);
+
+                }// if
+
+                if($arrayProtocolos[$i]["id_protocolo"]==$arrayProtocolos[$y]["id_protocolo"] && $y!=$i){
+                    $cont=$cont+1;
+                }
+            }// for
+            
+            if($cont==0){
+                if(array_key_exists("name", $arrayProtocolos[$i]) && !is_array($arrayProtocolos[$i]["name"])){
+                    $tmp2 = $arrayProtocolos[$i]["name"];
+                    $arrayProtocolos[$i]["name"] = [$tmp2];
+                    array_push($tmpArrayGroup, $arrayProtocolos[$i]);
+                }// if
+            }else{
+                $cont=0;
+            }
+        }// for
+        
+        // dd($tmpArrayGroup);
+        // exit;
+
 
         $allProtocolWithFoundIdWords = json_decode($allProtocolWithFoundIdWords);
  
@@ -403,10 +456,12 @@ class RegistryController extends Controller {
             $item->dateBR = date("d/m/Y", strtotime($item->date));
         });
 
+
         $userId = \Auth::user()->id;
         $registryRoute = 'legaladvice.registries.edit';
 
-        return view('legaladvice.registries.edit', compact('dateI', 'keyWordsThisProtocol', 'id', 'dateDl', 'dateDo', 'dateRt', 'protocolFromSameInterested', 'registry', 'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words', 'allProtocolWithFoundIdWords'));
+        return view('legaladvice.registries.edit', compact('dateI', 'keyWordsThisProtocol', 'id', 'dateDl', 'dateDo', 'dateRt', 'protocolFromSameInterested', 'registry', 
+        'procedures', 'doctypes', 'statuses', 'priorities', 'places', 'userId', 'registryRoute', 'note_registry', 'Key_words', 'tmpArrayGroup'));
     }
 
     /**

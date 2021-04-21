@@ -198,24 +198,32 @@
                     <div class="col-md-12 form-group">
                         <span> <strong> Protocolos relacionados a palavra chave. </strong> </span>
                         <p> </p> 
-                        @if(isset($allProtocolWithFoundIdWords) && count($allProtocolWithFoundIdWords)>0)
+                        @if(isset($tmpArrayGroup) && count($tmpArrayGroup)>0)
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Protocolo       </th>
                                     <th scope="col">Interessado     </th>
                                     <th scope="col">Natureza        </th>
-                                    <th scope="col">Palavra chave   </th>
+                                    <th scope="col">Entrada        </th>
+                                    <th scope="col" style="text-align:center;"><span>Palavras chaves</span></th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                    @foreach($allProtocolWithFoundIdWords as $key => $value)
+                                    @foreach($tmpArrayGroup as $key => $value)
                                         <tr>
-                                            <td> {{$value->protocol}}          </td>
-                                            <td> {{$value->interested}}        </td>
-                                            <td >{{$value->source}} </td>
-                                            <td > <span class="badge badge-secondary">{{$value->name}} </span></td>
+                                            <td> <a href="{{ route('legaladvice.registries.edit',[$value['id_protocolo']]) }}">{{$value["protocol"]}}</a> </td>
+                                            <td> {{$value["interested"]}}        </td>
+                                            <td >{{$value["source"]}} </td>
+                                            <td >{{$value["created_at"]}} </td>
+                                            <td  style="text-align:center;"> 
+                                                @for($ir = 0; $ir < count($value["name"]); $ir++)
+                                                    <span class="badge badge-secondary">
+                                                        {{$value["name"][$ir]}}
+                                                    </span>
+                                                @endfor
+                                            </td>
                                         </tr>  
                                     @endforeach   
                             </tbody>
